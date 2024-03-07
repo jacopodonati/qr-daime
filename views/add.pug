@@ -3,7 +3,7 @@ extends layout
 block content
     h1= title
 
-    form(action="/add", method="POST")
+    form(id="addForm" action="/add", method="POST")
         label(for="issuerFirstName") First Name:
         input(type="text", id="issuerFirstName", name="issuerFirstName")
         br
@@ -11,3 +11,29 @@ block content
         input(type="text", id="issuerLastName", name="issuerLastName")
         br
         button(type="submit") Submit
+
+    script.
+        const addForm = document.getElementById('addForm');
+        addForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(addForm);
+            try {
+            const response = await fetch('/add', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (response.ok) {
+                window.location.href = `/doc/${data.insertedId}`;
+            } else {
+                const errorContainer = document.createElement('div');
+                errorContainer.textContent = data.error || 'An error occurred';
+                addForm.appendChild(errorContainer);
+            }
+            } catch (error) {
+            console.error('An error occurred:', error);
+            const errorContainer = document.createElement('div');
+            errorContainer.textContent = 'An error occurred';
+            addForm.appendChild(errorContainer);
+            }
+        });
