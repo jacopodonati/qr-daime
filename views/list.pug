@@ -3,7 +3,7 @@ extends layout
 block content
     h1= title
 
-    table.list-of-docs
+    table.table.table-striped.table-hover
         thead
             tr 
                 th date of issue
@@ -17,4 +17,4 @@ block content
                 td #{document.issuerFirstName}
                 td #{document.issuerLastName}
                 td 
-                    a(href=`/doc/${document._id}`) view doc
+                    a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm view doc
