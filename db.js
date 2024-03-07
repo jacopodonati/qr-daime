@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const { mongodbURI } = require('./config');
 
 const client = new MongoClient(mongodbURI);
@@ -20,4 +20,7 @@ async function getClient() {
     return client;
 }
 
-module.exports = getClient;
+module.exports = {
+    getClient: getClient,
+    ObjectId: ObjectId
+};
