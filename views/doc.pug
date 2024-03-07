@@ -3,6 +3,8 @@ extends layout
 block content
     h1= title
 
+    img(src=`${qr}`, alt="QR Code")
+
     p #{document.dateOfIssue}
 
     p #{document.issuerFirstName} #{document.issuerLastName}
