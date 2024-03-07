@@ -14,20 +14,17 @@ router.post('/', async (req, res) => {
         const database = client.db('da1me');
         const collection = database.collection('documents');
 
-        // Accedi ai dati inviati dal client (nome e cognome)
         const { issuerFirstName, issuerLastName } = req.body;
 
-        // Ottieni la data corrente
-        const currentDate = new Date().toISOString();;
+        const currentDate = new Date();
 
-        // Inserisci i dati nel database, incluso il campo "data di inserimento"
         const result = await collection.insertOne({
             issuerFirstName,
             issuerLastName,
-            dateOfIssue: currentDate // Aggiungi la data di inserimento
+            dateOfIssue: currentDate,
+            lastEdit: currentDate
         });
 
-        // Invia una risposta al client per confermare l'inserimento
         res.status(201).json({ message: 'New entry added to the database', insertedId: result.insertedId });
     } catch (error) {
         console.error('Error inserting data into the database:', error);
