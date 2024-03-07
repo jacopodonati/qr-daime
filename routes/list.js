@@ -4,7 +4,6 @@ const getClient = require('../db');
 
 router.get('/', async (req, res) => {
     try {
-      console.log('test')
         const client = await getClient(); 
         const database = client.db('da1me');
         const collection = database.collection('documents');

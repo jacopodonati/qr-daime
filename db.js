@@ -13,6 +13,7 @@ async function connectToMongo() {
 }
 
 async function getClient() {
+    // FIXME: check if connection has been established
     // if (!client.isConnected()) {
     //     await connectToMongo();
     // }
