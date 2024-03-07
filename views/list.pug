@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    h1= title
+
+    table.list-of-docs
+        thead
+            tr 
+                th date of issue
+                th First Name 
+                th Last Name
+                th
+        tbody 
+        each document in documents
+            tr 
+                td #{document.dateOfIssue}
+                td #{document.issuerFirstName}
+                td #{document.issuerLastName}
+                td 
+                    a(href=`/doc/${document._id}`) view doc
