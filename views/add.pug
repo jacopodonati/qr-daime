@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+
+    form(action="/add", method="POST")
+        label(for="issuerFirstName") First Name:
+        input(type="text", id="issuerFirstName", name="issuerFirstName")
+        br
+        label(for="issuerLastName") Last Name:
+        input(type="text", id="issuerLastName", name="issuerLastName")
+        br
+        button(type="submit") Submit
