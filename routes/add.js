@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { getClient } = require('../db');
-
+const i18n = require('i18n');
 
 router.get('/', (req, res) => {
-    res.render('add', { title: 'Add new document' });
+    res.render('add', {
+        title: i18n.__('addpage_title') + ' - ' + i18n.__('app_name'),
+    });
 });
-
 
 router.post('/', async (req, res) => {
     try {

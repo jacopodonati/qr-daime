@@ -1,16 +1,11 @@
 extends layout
 
 block content
-    h1= title
+    h1 #{__('addpage_title')}
+
 
     form(id="addForm" action="/add", method="POST")
-        label(for="issuerFirstName") First Name:
-        input(type="text", id="issuerFirstName", name="issuerFirstName")
-        br
-        label(for="issuerLastName") Last Name:
-        input(type="text", id="issuerLastName", name="issuerLastName")
-        br
-        button(type="submit") Submit
+        button(type="submit").btn.btn-primary #{__("submit_button")}
 
     script.
         const addForm = document.getElementById('addForm');

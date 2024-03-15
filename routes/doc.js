@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const { getClient, ObjectId } = require('../db');
+const i18n = require('i18n');
 const QRCode = require('qrcode');
 const { domain } = require('../config');
 
@@ -42,7 +43,7 @@ router.get('/:hash', async (req, res) => {
             console.log(fullURL)
             const qrCodePath = await getQRCode(hash, fullURL);
             res.render('doc', {
-                title: 'Issue: ' + document._id,
+                title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
                 qr: qrCodePath
             });

@@ -1,0 +1,16 @@
+{
+	"app_name": "DaimExpress",
+	"homepage_welcome": "Benvenuto al DaimExpress!",
+	"homepage_title": "Pagina principale",
+	"listpage_title": "Tutti i documenti",
+	"addpage_title": "Aggiungi un nuovo documento",
+	"editpage_title": "Modifica il documento n.",
+	"list_docs": "Elenca tutti i documenti",
+	"add_doc": "Aggiungi un nuovo documento",
+	"submit_button": "Invia",
+	"view_button": "Mostra",
+	"edit_button": "Modifica",
+	"doc_date_of_issue": "Data di emissione",
+    "document": "Documento",
+    "document_no": "Documento n."
+}

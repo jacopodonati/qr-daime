@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const i18n = require('i18n');
 
 const indexRouter = require('./routes/index');
 const listRouter = require('./routes/list');
@@ -10,9 +11,15 @@ const docRouter = require('./routes/doc');
 const addRouter = require('./routes/add');
 const editRouter = require('./routes/edit');
 
+i18n.configure({
+    locales: ['en', 'pt', 'it'],
+    directory: __dirname + '/locales',
+    defaultLocale: 'pt'
+});
 
 const app = express();
 
+app.use(i18n.init);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getClient, ObjectId } = require('../db');
+const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     try {
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
 
         const documents = await collection.find({}).toArray();
         res.render('list', {
-            title: 'List of docs',
+            title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
             documents: documents
         });
 

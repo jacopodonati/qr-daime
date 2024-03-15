@@ -1,7 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  a(href="/list").btn.btn-primary List of docs
-  a(href="/add").btn.btn-primary Add a new doc
+  h1 #{__("app_name")}
+
+  p #{__("homepage_welcome")}
+  a(href="/list").btn.btn-primary #{__("list_docs")}
+  a(href="/add").btn.btn-primary #{__("add_doc")}

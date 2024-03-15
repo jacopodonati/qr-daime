@@ -1,20 +1,17 @@
 extends layout
 
 block content
-    h1= title
+    h1 #{__("list_docs")}
 
     table.table.table-striped.table-hover
         thead
             tr 
-                th date of issue
-                th First Name 
-                th Last Name
+                th #{__("doc_date_of_issue")}
                 th
         tbody 
         each document in documents
             tr 
                 td #{document.dateOfIssue}
-                td #{document.issuerFirstName}
-                td #{document.issuerLastName}
                 td 
-                    a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm view doc
+                    a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+                    a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
