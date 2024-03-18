@@ -1,26 +1,20 @@
-const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const { mongodbURI } = require('./config');
 
-const client = new MongoClient(mongodbURI);
+mongoose.set('debug', true);
 
-async function connectToMongo() {
+mongoose.connect(mongodbURI);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Errore di connessione al database:'));
+db.once('open', async () => {
+    console.log('Connessione al database MongoDB avvenuta con successo');
+    
     try {
-        await client.connect();
-        console.log('Connected to MongoDB');
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
+        const collections = await mongoose.connection.db.collections();
+    } catch (err) {
+        console.error('Errore durante l\'ottenimento dei nomi delle collezioni:', err);
     }
-}
+});
 
-async function getClient() {
-    // FIXME: check if connection has been established
-    // if (!client.isConnected()) {
-    //     await connectToMongo();
-    // }
-    return client;
-}
-
-module.exports = {
-    getClient: getClient,
-    ObjectId: ObjectId
-};
+module.exports = mongoose;
