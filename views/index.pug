@@ -3,6 +3,13 @@ extends layout
 block content
   h1 #{__("app_name")}
 
-  p #{__("homepage_welcome")}
-  a(href="/list").btn.btn-primary #{__("list_docs")}
-  a(href="/add").btn.btn-primary #{__("add_doc")}
+  div.col-lg-6
+    p.fs-5 #{__("homepage_welcome")}
+
+    a(href="/list", role="button").btn.btn-primary.me-2
+      i.bi.bi-list-ul.me-2
+      | #{__("list_docs")}
+
+    a(href="/add", role="button").btn.btn-primary
+      i.bi.bi-plus.me-2
+      | #{__("add_doc")}
