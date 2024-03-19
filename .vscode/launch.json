@@ -12,12 +12,7 @@
         "outFiles": [],
         "env": {
           "NODE_ENV": "development"
-        },
-        "serverReadyAction": {
-            "pattern": "Port: ([0-9]+)",
-            "uriFormat": "http://localhost:%s",
-            "action": "debugWithChrome"
-          }
+        }
       }
     ]
   }
