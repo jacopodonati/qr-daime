@@ -1,34 +1,7 @@
 extends layout
 
 block content
-    h1 #{__('addpage_title')}
+    h1.mb-5 #{__("addpage_title")}
 
-
-    form(id="addForm" action="/add", method="POST")
-        button(type="submit").btn.btn-primary #{__("submit_button")}
-
-    script.
-        const addForm = document.getElementById('addForm');
-        addForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(addForm);
-            try {
-            const response = await fetch('/add', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            if (response.ok) {
-                window.location.href = `/doc/${data.insertedId}`;
-            } else {
-                const errorContainer = document.createElement('div');
-                errorContainer.textContent = data.error || 'An error occurred';
-                addForm.appendChild(errorContainer);
-            }
-            } catch (error) {
-            console.error('An error occurred:', error);
-            const errorContainer = document.createElement('div');
-            errorContainer.textContent = 'An error occurred';
-            addForm.appendChild(errorContainer);
-            }
-        });
+    .row.mb-3
+        .col-6
