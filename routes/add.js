@@ -20,7 +20,6 @@ router.get('/', async function(req, res, next) {
 router.post('/', async (req, res) => {
     try {
         const formDataArray = req.body;
-
         const fields = formDataArray.map(formData => {
             const fieldData = formData.fields.map(field => ({
                 _id: field._id,
@@ -29,6 +28,7 @@ router.post('/', async (req, res) => {
 
             return {
                 _id: formData._id,
+                public: formData.public,
                 fields: fieldData
             };
         });

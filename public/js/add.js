@@ -268,17 +268,23 @@ form.addEventListener('submit', function(event) {
     event.preventDefault();
     const formData = new FormData(form);
     const formDataArray = [];
-    console.log(formData)
+    let publicValue = false;
+    
     for (const [key, value] of formData.entries()) {
         if (key === 'id') {
             const newObj = { _id: value, fields: [] };
             formDataArray.push(newObj);
+        } else if (key === 'public') {
+            publicValue = value === 'on';
         } else {
             const lastObjIndex = formDataArray.length - 1;
             formDataArray[lastObjIndex].fields.push({ _id: key, value: value });
         }
     }
-    console.log(formDataArray)
+
+    formDataArray.forEach(obj => {
+        obj.public = publicValue;
+    });
 
     fetch('/add', {
         method: 'POST',
