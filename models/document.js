@@ -11,7 +11,11 @@ const fieldSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Information'
     },
-    fields: [fieldDataSchema]
+    fields: [fieldDataSchema],
+    public: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const documentSchema = new mongoose.Schema({
