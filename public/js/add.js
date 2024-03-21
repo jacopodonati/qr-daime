@@ -291,8 +291,7 @@ form.addEventListener('submit', function(event) {
         }
     })
     .then(data => {
-        const insertedId = data.insertedId;
-        window.location.href = `/doc/${insertedId}`;
+        window.location.href = `/doc/${data.savedDocument._id}`;
     })
     .catch(error => {
         console.error('Errore:', error);

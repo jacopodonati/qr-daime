@@ -38,8 +38,9 @@ router.post('/', async (req, res) => {
         });
 
         const savedDocument = await newDocument.save();
+        console.log(savedDocument)
 
-        res.status(201).json({ message: 'Nuovo documento salvato nel database', savedDocument });
+        res.status(201).json({ savedDocument });
     } catch (error) {
         console.error('Errore durante il salvataggio del documento:', error);
         res.status(500).json({ error: 'Errore interno del server' });
