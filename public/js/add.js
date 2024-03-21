@@ -211,11 +211,15 @@ function addFieldToForm(fieldData) {
     fieldInput.checked = true;
     const fieldLabel = document.createElement('label');
     fieldLabel.classList.add('btn', 'btn-primary', 'col-2')
-    fieldLabel.textContent = 'Pubblico';
-    fieldLabel.name = 'public';
+    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> Pubblico';
+    fieldInput.name = 'public';
     fieldLabel.addEventListener('mouseup', function() {
         fieldInput.checked = !fieldInput.checked;
-        fieldLabel.textContent = fieldInput.checked ? 'Pubblico' : 'Privato';
+        if (fieldInput.checked) {
+            fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> Pubblico';
+        } else {
+            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> Privato';
+        }
     });
     footer.appendChild(fieldInput);
     footer.appendChild(fieldLabel);
