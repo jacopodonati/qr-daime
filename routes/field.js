@@ -131,4 +131,37 @@ router.post('/add', validateFieldData, async (req, res) => {
     }
 });
 
+router.post('/labels', async (req, res) => {
+    try {
+        const infoIds = req.body.infoIds;
+        const labels = [];
+
+        for (const infoIdObj of infoIds) {
+            const information = await Information.findOne({ _id: infoIdObj._id });
+            if (information) {
+                const infoLabels = {
+                    id: infoIdObj._id,
+                    labels: information.labels,
+                    fields: []
+                };
+                for (const fieldId of infoIdObj.fields) {
+                    const field = information.fields.find(field => field._id.toString() === fieldId.toString());
+                    if (field) {
+                        infoLabels.fields.push({
+                            id: field._id,
+                            labels: field.labels
+                        });
+                    }
+                }
+                labels.push(infoLabels);
+            }
+        }
+
+        res.json(labels);
+    } catch (error) {
+        console.error('Errore durante il recupero delle label dei campi:', error);
+        res.status(500).json({ error: 'Errore durante il recupero delle label dei campi' });
+    }
+});
+
 module.exports = router;
