@@ -12,6 +12,7 @@ block content
         each document in documents
             tr 
                 td #{document.dateOfIssue}
-                td 
-                    a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-                    a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+                td
+                    .btn-group(role="group").float-end
+                        a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+                        a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
