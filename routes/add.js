@@ -2,35 +2,49 @@ const express = require('express');
 const router = express.Router();
 const { getClient } = require('../db');
 const i18n = require('i18n');
+const Document = require('../models/document')
 
-router.get('/', (req, res) => {
-    res.render('add', {
-        title: i18n.__('addpage_title') + ' - ' + i18n.__('app_name'),
-    });
+router.get('/', async function(req, res, next) {
+    try {
+        res.render('add', {
+            title: i18n.__('addpage_title') + ' - ' + i18n.__('app_name'),
+            locale: req.getLocale(),
+            fallbackLocale: i18n.getLocale()
+        });
+    } catch (error) {
+        console.error('Errore durante il recupero dei campi:', error);
+        next(error);
+    }
 });
 
 router.post('/', async (req, res) => {
     try {
-        const client = await getClient(); 
-        const database = client.db('da1me');
-        const collection = database.collection('documents');
+        const formDataArray = req.body;
 
-        const { issuerFirstName, issuerLastName } = req.body;
+        const fields = formDataArray.map(formData => {
+            const fieldData = formData.fields.map(field => ({
+                _id: field._id,
+                value: field.value
+            }));
 
-        const currentDate = new Date();
-
-        const result = await collection.insertOne({
-            issuerFirstName,
-            issuerLastName,
-            dateOfIssue: currentDate,
-            lastEdit: currentDate
+            return {
+                _id: formData._id,
+                fields: fieldData
+            };
         });
 
-        res.status(201).json({ message: 'New entry added to the database', insertedId: result.insertedId });
+        const newDocument = new Document({
+            fields: fields
+        });
+
+        const savedDocument = await newDocument.save();
+
+        res.status(201).json({ message: 'Nuovo documento salvato nel database', savedDocument });
     } catch (error) {
-        console.error('Error inserting data into the database:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Errore durante il salvataggio del documento:', error);
+        res.status(500).json({ error: 'Errore interno del server' });
     }
 });
+
 
 module.exports = router;

@@ -10,6 +10,7 @@ const listRouter = require('./routes/list');
 const docRouter = require('./routes/doc');
 const addRouter = require('./routes/add');
 const editRouter = require('./routes/edit');
+const fieldRouter = require('./routes/field');
 
 i18n.configure({
     locales: ['en', 'pt', 'it'],
@@ -35,6 +36,7 @@ app.use('/', indexRouter);
 app.use('/list', listRouter);
 app.use('/doc', docRouter);
 app.use('/add', addRouter);
+app.use('/field', fieldRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
