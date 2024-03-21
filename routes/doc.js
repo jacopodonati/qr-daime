@@ -29,6 +29,10 @@ async function getQRCode(hash, url) {
     });
 }
 
+router.get('/', async (req, res) => {
+    res.redirect('/list');
+});
+
 router.get('/:hash', async (req, res) => {
     const hash = req.params.hash;
     try {
