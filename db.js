@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const { mongodbURI } = require('./config');
 
-mongoose.set('debug', true);
-
 mongoose.connect(mongodbURI);
 
 const db = mongoose.connection;
