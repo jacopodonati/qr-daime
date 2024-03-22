@@ -96,10 +96,10 @@ router.get('/field.js', (req, res) => {
         }
 
         const translatedData = data
-            .replace('NO_FIELD_FOUND', i18n.__('NO_FIELD_FOUND'))
-            .replace('INPUT_LBL_REMOVE', i18n.__('INPUT_LBL_REMOVE'))
-            .replace('INPUT_LBL_PUBLIC', i18n.__('INPUT_LBL_PUBLIC'))
-            .replace('INPUT_LBL_PRIVATE', i18n.__('INPUT_LBL_PRIVATE'));
+            .replace(/NO_FIELD_FOUND/g, i18n.__('NO_FIELD_FOUND'))
+            .replace(/INPUT_LBL_REMOVE/g, i18n.__('INPUT_LBL_REMOVE'))
+            .replace(/INPUT_LBL_PUBLIC/g, i18n.__('INPUT_LBL_PUBLIC'))
+            .replace(/INPUT_LBL_PRIVATE/g, i18n.__('INPUT_LBL_PRIVATE'));
 
 
         res.type('application/javascript').send(translatedData);
