@@ -12,6 +12,7 @@
 	"edit_button": "Modifica",
 	"doc_date_of_issue": "Data di emissione",
     "document": "Documento",
+	"document_no": "Documento n.",
     "NO_FIELD_FOUND": "Nessun campo trovato",
     "INPUT_LBL_PUBLIC": "Pubblico",
     "INPUT_LBL_PRIVATE": "Privato",

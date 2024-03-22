@@ -12,6 +12,7 @@
     "edit_button": "Edit",
     "doc_date_of_issue": "Date of Issue",
     "document": "Document",
+    "document_no": "Document no.",
     "NO_FIELD_FOUND": "No field found",
     "INPUT_LBL_PUBLIC": "Public",
     "INPUT_LBL_PRIVATE": "Private",
