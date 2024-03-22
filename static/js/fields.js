@@ -155,7 +155,7 @@ function displaySearchResults(data) {
     } else {
         const noResultsItem = document.createElement('li');
         noResultsItem.classList.add('list-group-item', 'fst-italic');
-        noResultsItem.textContent = 'Nessun campo trovato';
+        noResultsItem.textContent = 'NO_FIELD_FOUND';
         searchResultsList.appendChild(noResultsItem);
         searchResults.classList.remove('d-none');
         searchResults.classList.add('d-block');
@@ -211,14 +211,14 @@ function addFieldToForm(fieldData) {
     fieldInput.checked = true;
     const fieldLabel = document.createElement('label');
     fieldLabel.classList.add('btn', 'btn-primary', 'col-2')
-    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> Pubblico';
+    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
     fieldInput.name = 'public';
     fieldLabel.addEventListener('mouseup', function() {
         fieldInput.checked = !fieldInput.checked;
         if (fieldInput.checked) {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> Pubblico';
+            fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
         } else {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> Privato';
+            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
         }
     });
     footer.appendChild(fieldInput);
@@ -226,7 +226,7 @@ function addFieldToForm(fieldData) {
 
     if (!fieldData.default) {
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'Rimuovi';
+        removeButton.textContent = 'INPUT_LBL_REMOVE';
         removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
         removeButton.addEventListener('mouseup', function() {
             fieldContainer.remove();

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
+const fs = require('fs');
 const { MET } = require('bing-translate-api');
 const Information = require('../models/information');
 
@@ -56,7 +57,7 @@ function validateFieldData(req, res, next) {
 
 async function translateText(text, sourceLanguage, targetLanguage) {
     try {
-        const translation = await MET.translate(text, sourceLanguage, targetLanguage); // Utilizza la funzione di traduzione da Bing
+        const translation = await MET.translate(text, sourceLanguage, targetLanguage);
         return translation[0].translations[0].text;
     } catch (error) {
         throw new Error(`Errore durante la traduzione: ${error}`);
@@ -81,6 +82,27 @@ router.get('/get', async (req, res) => {
         console.error('Errore durante il recupero dei campi:', error);
         res.status(500).json({ error: 'Errore durante il recupero dei campi' });
     }
+});
+
+router.get('/field.js', (req, res) => {
+    const acceptLanguage = req.headers['accept-language'] || 'en';
+    const language = acceptLanguage.split(',')[0].split('-')[0];
+    i18n.setLocale(language);
+
+    fs.readFile(__dirname + '/../static/js/fields.js', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading fields.js file:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        const translatedData = data
+            .replace('NO_FIELD_FOUND', i18n.__('NO_FIELD_FOUND'))
+            .replace('INPUT_LBL_PUBLIC', i18n.__('INPUT_LBL_PUBLIC'))
+            .replace('INPUT_LBL_PRIVATE', i18n.__('INPUT_LBL_PRIVATE'));
+
+
+        res.type('application/javascript').send(translatedData);
+    });
 });
 
 router.post('/add', validateFieldData, async (req, res) => {

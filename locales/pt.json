@@ -12,5 +12,8 @@
 	"edit_button": "Editar",
 	"doc_date_of_issue": "Data de emissão",
     "document": "Documento",
-    "document_no": "Documento n°"
+    "NO_FIELD_FOUND": "Nenhum campo encontrado",
+    "INPUT_LBL_PUBLIC": "Público",
+    "INPUT_LBL_PRIVATE": "Privado",
+    "INPUT_LBL_REMOVE": "Remova"
 }
