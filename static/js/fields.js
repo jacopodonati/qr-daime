@@ -1,3 +1,5 @@
+var number_of_info = 0;
+
 function addInfoField() {
     const infoLabelInput = document.getElementById('infoLabel');
     const addedInfoList = document.getElementById('addedInfoList');
@@ -187,6 +189,11 @@ function addFieldToForm(fieldStructure, fieldData) {
     hiddenId.name = 'id';
     hiddenId.value = fieldStructure._id;
     fieldBody.appendChild(hiddenId)
+    const hiddenSort = document.createElement('input');
+    hiddenSort.type = 'hidden';
+    hiddenSort.name = 'sort';
+    hiddenSort.value = number_of_info++;
+    fieldBody.appendChild(hiddenSort)
 
     fieldStructure.fields.forEach(field => {
         const fieldDiv = document.createElement('div');
@@ -323,3 +330,11 @@ function getField(id, value) {
             console.error('Errore durante il recupero del campo appena salvato:', error);
         });
 }
+
+const sort_infos = new Sortable(document.getElementById('doc-form'), { onSort: function (event) {
+    const hiddenInputs = document.querySelectorAll('input[name="sort"]');
+        hiddenInputs.forEach((input, index) => {
+            input.value = `${index + 1}`;
+        });
+  }
+});
