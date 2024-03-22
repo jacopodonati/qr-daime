@@ -35,7 +35,7 @@ function saveField() {
 
     const fieldLabel = fieldLabelInput.value.trim();
     const fieldLocale = fieldLocaleInput.value.trim();
-console.log(fieldLocale)
+
     const fieldInfos = [];
     fieldInfoList.querySelectorAll('li').forEach(item => {
         const infoText = item.firstChild.textContent;
@@ -274,6 +274,7 @@ function getDefaultFields() {
         })
         .then(defaultFields => {
             defaultFields.forEach(fieldData => {
+                console.log(fieldData)
                 addFieldToForm(fieldData);
             });
         })
