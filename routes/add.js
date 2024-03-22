@@ -38,7 +38,6 @@ router.post('/', async (req, res) => {
         });
 
         const savedDocument = await newDocument.save();
-        console.log(savedDocument)
 
         res.status(201).json({ savedDocument });
     } catch (error) {
