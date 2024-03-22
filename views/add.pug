@@ -5,12 +5,12 @@ block content
 
     .row.mb-3
         .col-6
-            label(for='addFieldInput', class='form-label') Aggiungi campo:
-            input#addFieldInput.form-control(type='text', placeholder='Cerca il campo', onkeyup="searchField()")
+            label(for='addFieldInput', class='form-label') #{__("search_field")}:
+            input#addFieldInput.form-control(type='text', placeholder=`${__("search_placeholder")}`, onkeyup="searchField()")
 
     #searchResults.d-none
         ul#searchResultsList.list-group.mb-3
-        button(type='button', class='btn btn-primary', data-bs-toggle='modal', data-bs-target='#addFieldModal') Aggiungi Campo
+        button(type='button', class='btn btn-primary', data-bs-toggle='modal', data-bs-target='#addFieldModal') #{__("add_new_field")}
 
     form(id="addForm" action=`/add` method="post")
         hr
