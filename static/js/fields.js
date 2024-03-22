@@ -12,7 +12,7 @@ function addInfoField() {
         listItem.appendChild(infoText);
 
         const removeIcon = document.createElement('span');
-        removeIcon.innerHTML = 'Rimuovi';
+        removeIcon.innerHTML = 'INPUT_LBL_REMOVE';
         removeIcon.classList.add('btn', 'btn-danger', 'btn-sm');
         removeIcon.style.cursor = 'pointer';
         removeIcon.addEventListener('click', function() {
