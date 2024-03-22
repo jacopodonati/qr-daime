@@ -20,16 +20,18 @@ block content
         }
 
     each info in document.fields
-        - let info_id = 'id-' + info._id
-        div
-            h2(id=info_id)
-            ul
-                each field in info.fields
-                    - let field_id = 'id-' + field._id
-                    li
-                        span(id=field_id).field-id #{field._id}
-                        | : 
-                        span.field-value #{field.value}
+        if (isAdmin || info.public)
+            - let info_id = 'id-' + info._id
+            - let classes = info.public ? '' : 'bg-secondary-subtle'
+            div(class=`${classes}`)
+                h2(id=info_id)
+                ul
+                    each field in info.fields
+                        - let field_id = 'id-' + field._id
+                        li
+                            span(id=field_id).field-id #{field._id}
+                            | : 
+                            span.field-value #{field.value}
     
     script.
         function getLabel(labels, locale) {

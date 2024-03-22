@@ -35,6 +35,9 @@ router.get('/', async (req, res) => {
 
 router.get('/:hash', async (req, res) => {
     const hash = req.params.hash;
+    const isAdmin = req.query.admin === 'true';
+    console.log(isAdmin)
+
     try {
         const document = await Document.findById(hash);
 
@@ -44,7 +47,8 @@ router.get('/:hash', async (req, res) => {
             res.render('doc', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
-                qr: qrCodePath
+                qr: qrCodePath,
+                isAdmin
             });
         } else {
             res.redirect('/list');
