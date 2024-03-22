@@ -162,33 +162,33 @@ function displaySearchResults(data) {
     }
 }
 
-function addFieldToForm(fieldData) {
-    const existingFieldContainer = document.getElementById('id' + fieldData._id);
+function addFieldToForm(fieldStructure, fieldData) {
+    const existingFieldContainer = document.getElementById('id' + fieldStructure._id);
     if (existingFieldContainer) {
         return;
     }
-
+    
     const fieldBody = document.createElement('div')
     fieldBody.classList.add('card-body')
     const fieldContainer = document.createElement('div');
-    fieldContainer.id = 'id' + fieldData._id;
+    fieldContainer.id = 'id' + fieldStructure._id;
     fieldContainer.classList.add('card', 'mb-2');
     fieldContainer.appendChild(fieldBody)
 
     const userLanguage = navigator.language || navigator.userLanguage;
     const locale = userLanguage.substr(0, 2);
     const rootLabel = document.createElement('h5');
-    const rootLabelText = fieldData.labels.find(label => label.locale === locale).text;
+    const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
     rootLabel.textContent = rootLabelText;
     rootLabel.classList.add('card-title')
     fieldBody.appendChild(rootLabel);
     const hiddenId = document.createElement('input');
     hiddenId.type = 'hidden';
     hiddenId.name = 'id';
-    hiddenId.value = fieldData._id;
+    hiddenId.value = fieldStructure._id;
     fieldBody.appendChild(hiddenId)
 
-    fieldData.fields.forEach(field => {
+    fieldStructure.fields.forEach(field => {
         const fieldDiv = document.createElement('div');
         fieldDiv.classList.add('mb-3', 'row', 'mx-1');
         const fieldLabel = document.createElement('label');
@@ -198,6 +198,12 @@ function addFieldToForm(fieldData) {
         fieldInput.type = 'text';
         fieldInput.name = field._id;
         fieldInput.classList.add('col-form-control', 'col-10')
+
+        if (fieldData !== undefined) {
+            let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
+            fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
+        }
+
         fieldDiv.appendChild(fieldLabel);
         fieldDiv.appendChild(fieldInput);
         fieldBody.appendChild(fieldDiv);
@@ -208,11 +214,18 @@ function addFieldToForm(fieldData) {
     const fieldInput = document.createElement('input');
     fieldInput.type = 'checkbox';
     fieldInput.classList.add('btn-check', 'col-2')
-    fieldInput.checked = true;
-    const fieldLabel = document.createElement('label');
-    fieldLabel.classList.add('btn', 'btn-primary', 'col-2')
-    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
     fieldInput.name = 'public';
+    const fieldLabel = document.createElement('label');
+    fieldLabel.classList.add('btn', 'btn-primary', 'col-2');
+
+    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
+    fieldInput.checked = true;
+    
+    if (fieldData !== undefined && !fieldData.public) {
+        fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
+        fieldInput.checked = false;
+    }
+
     fieldLabel.addEventListener('mouseup', function() {
         fieldInput.checked = !fieldInput.checked;
         if (fieldInput.checked) {
@@ -224,7 +237,7 @@ function addFieldToForm(fieldData) {
     footer.appendChild(fieldInput);
     footer.appendChild(fieldLabel);
 
-    if (!fieldData.default) {
+    if (!fieldStructure.default) {
         const removeButton = document.createElement('button');
         removeButton.textContent = 'INPUT_LBL_REMOVE';
         removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
@@ -242,9 +255,9 @@ function addFieldToForm(fieldData) {
     fieldBody.appendChild(footer);
 
     const formSep = document.querySelector('#form-sep');
-
-    const addForm = document.getElementById('addForm');
-    addForm.insertBefore(fieldContainer, formSep);
+    
+    const docForm = document.getElementById('doc-form');
+    docForm.insertBefore(fieldContainer, formSep);
 
     // const isFormHidden = addForm.classList.contains('d-none');
     // if (isFormHidden) {
@@ -274,7 +287,6 @@ function getDefaultFields() {
         })
         .then(defaultFields => {
             defaultFields.forEach(fieldData => {
-                console.log(fieldData)
                 addFieldToForm(fieldData);
             });
         })
@@ -294,3 +306,20 @@ document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', fun
     document.getElementById('error-hr').classList.remove('d-block');
     document.getElementById('error-hr').classList.add('d-none');
 });
+
+function getField(id, value) {
+    fetch(`/field/get?id=${id}`)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Errore durante il recupero del campo appena salvato');
+            }
+        })
+        .then(field => {
+            addFieldToForm(field, value);
+        })
+        .catch(error => {
+            console.error('Errore durante il recupero del campo appena salvato:', error);
+        });
+}

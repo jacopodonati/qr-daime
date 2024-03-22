@@ -1,0 +1,65 @@
+extends layout
+
+block content
+    h1.mb-5 #{__("edit_doc_title")} #{document._id}
+
+    include partials/form_search_field.pug
+
+    form(id="doc-form" action=`/edit` method="post")
+        hr
+
+        hr#form-sep
+
+        button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
+    
+    include partials/modal_add_field.pug
+
+    script(src="/field/field.js")
+    each field in document.fields
+            script.
+                getField("#{field._id}", !{JSON.stringify(field)});
+    script.
+        const form = document.getElementById('doc-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const formDataArray = [];
+            let publicValue = false;
+            
+            for (const [key, value] of formData.entries()) {
+                if (key === 'id') {
+                    const newObj = { _id: value, fields: [] };
+                    formDataArray.push(newObj);
+                } else if (key === 'public') {
+                    publicValue = value === 'on';
+                } else {
+                    const lastObjIndex = formDataArray.length - 1;
+                    formDataArray[lastObjIndex].fields.push({ _id: key, value: value });
+                }
+            }
+
+            formDataArray.forEach(obj => {
+                obj.public = publicValue;
+            });
+
+            fetch('/edit/#{document._id}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDataArray)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Errore durante l\'invio dei dati al server');
+                }
+            })
+            .then(data => {
+                window.location.href = `/doc/${data.savedDocument._id}`;
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
+        });

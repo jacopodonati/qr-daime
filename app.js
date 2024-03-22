@@ -36,6 +36,7 @@ app.use('/', indexRouter);
 app.use('/list', listRouter);
 app.use('/doc', docRouter);
 app.use('/add', addRouter);
+app.use('/edit', editRouter);
 app.use('/field', fieldRouter);
 
 // catch 404 and forward to error handler
