@@ -7,7 +7,7 @@ const Document = require('../models/document')
 router.get('/', async function(req, res, next) {
     try {
         res.render('add', {
-            title: i18n.__('addpage_title') + ' - ' + i18n.__('app_name'),
+            title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
             locale: req.getLocale(),
             fallbackLocale: i18n.getLocale()
         });
