@@ -5,7 +5,7 @@ block content
 
     include partials/form_search_field.pug
 
-    form(id="addForm" action=`/add` method="post")
+    form(id="doc-form" action=`/add` method="post")
         hr
 
         hr#form-sep
@@ -16,7 +16,7 @@ block content
 
     script(src="/field/field.js")
     script.
-        const form = document.getElementById('addForm');
+        const form = document.getElementById('doc-form');
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(form);
