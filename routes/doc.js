@@ -47,7 +47,6 @@ router.get('/', async (req, res) => {
 router.get('/:hash', async (req, res) => {
     const hash = req.params.hash;
     const isAdmin = req.query.admin === 'true';
-    console.log(isAdmin)
 
     try {
         const document = await Document.findById(hash);
