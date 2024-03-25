@@ -6,12 +6,23 @@ const i18n = require('i18n');
 const QRCode = require('qrcode');
 const { domain } = require('../config');
 
-QR_CODE_DIR = './static/qr/'
+QR_DIR = './static/qr/';
+QR_LINK_DIR = 'link/';
 
-// TODO: check if `QR_CODE_DIR` exists and make it.
+function createQRDirectory() {
+    try {
+        if (!fs.existsSync(QR_DIR)) {
+            fs.mkdirSync(QR_DIR);
+        }
 
-async function getQRCode(hash, url) {
-    const qrCodePath = QR_CODE_DIR + hash + '.png';
+        if (!fs.existsSync(QR_DIR + QR_LINK_DIR)) {
+            fs.mkdirSync(QR_DIR + QR_LINK_DIR);
+        }
+
+    } catch (err) {
+        console.error('Si è verificato un errore durante la creazione delle cartelle per i QR:', err);
+    }
+}
 
     return new Promise((resolve, reject) => {
         fs.access(qrCodePath, fs.constants.F_OK, async (err) => {
@@ -43,11 +54,11 @@ router.get('/:hash', async (req, res) => {
 
         if (document) {
             const fullURL = `${domain}${req.originalUrl}`;
-            const qrCodePath = await getQRCode(hash, fullURL);
+            const qrLinkPath = await getQRLink(hash, fullURL);
             res.render('doc', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
-                qr: qrCodePath,
+                qr_link: qrLinkPath,
                 isAdmin
             });
         } else {

@@ -3,7 +3,7 @@ extends layout
 block content
     h1 #{__("document_no")} #{document._id}
 
-    img(src=`${qr}`, alt="QR Code")
+    img(src=`${qr_link}`, alt="QR Code")
 
     p #{document.dateOfIssue}
 
