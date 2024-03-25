@@ -7,9 +7,14 @@ function addInfoField() {
 
     if (infoLabel) {
         const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-start', 'align-items-center');
+
+        const handleIcon = document.createElement('i');
+        handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
+        listItem.appendChild(handleIcon);
         
         const infoText = document.createElement('span');
+        infoText.classList.add('flex-fill');
         infoText.textContent = infoLabel;
         listItem.appendChild(infoText);
 
@@ -40,9 +45,10 @@ function saveField() {
 
     const fieldInfos = [];
     fieldInfoList.querySelectorAll('li').forEach(item => {
-        const infoText = item.firstChild.textContent;
+        const infoText = item.childNodes[1].textContent;
         fieldInfos.push(infoText);
     });
+    console.log(fieldInfos)
     
     fetch('/field/add', {
         method: 'POST',
@@ -337,4 +343,8 @@ const sort_infos = new Sortable(document.getElementById('doc-form'), { onSort: f
             input.value = `${index + 1}`;
         });
   }
+});
+
+const sort_fields = new Sortable(document.getElementById('addedInfoList'), {
+    handle: '.field-handle'
 });
