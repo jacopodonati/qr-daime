@@ -1,17 +1,17 @@
 // document.js
 const mongoose = require('mongoose');
 
-const fieldDataSchema = new mongoose.Schema({
+const fieldSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     value: String
 });
 
-const fieldSchema = new mongoose.Schema({
+const informationSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Information'
     },
-    fields: [fieldDataSchema],
+    fields: [fieldSchema],
     public: {
         type: Boolean,
         default: false
@@ -28,12 +28,12 @@ const documentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    fields: [fieldSchema]
+    information: [informationSchema]
 });
 
 documentSchema.post('find', function(docs) {
     docs.forEach(doc => {
-        doc.fields.forEach(field => {
+        doc.information.forEach(field => {
             field.fields.sort((a, b) => a.sort - b.sort);
         });
     });
