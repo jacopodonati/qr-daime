@@ -19,7 +19,7 @@ block content
             return '';
         }
 
-    each info in document.fields
+    each info in document.information
         if (isAdmin || info.public)
             - let info_id = 'id-' + info._id
             - let classes = info.public ? '' : 'bg-secondary-subtle'
@@ -33,6 +33,8 @@ block content
                             | : 
                             span.field-value #{field.value}
     
+    img(src=`${qr_doc}`, alt="QR Code")
+
     script.
         function getLabel(labels, locale) {
             for (const label of labels) {
@@ -99,9 +101,9 @@ block content
 
         let doc =  !{JSON.stringify(document)};
         let infoIds = [];
-        for (const field of doc.fields) {
-            let fields = field.fields.map(info => info._id);
-            infoIds.push({ _id: field._id, fields });
+        for (const info of doc.information) {
+            let fields = info.fields.map(info => info._id);
+            infoIds.push({ _id: info._id, fields });
         }
         fetchLabels(infoIds)
             .then(labels => {
