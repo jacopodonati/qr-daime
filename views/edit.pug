@@ -16,9 +16,9 @@ block content
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js") 
     script(src="/field/field.js")
-    each field in document.fields
+    each info in document.information
             script.
-                getField("#{field._id}", !{JSON.stringify(field)});
+                getField("#{info._id}", !{JSON.stringify(info)});
     script.
         const form = document.getElementById('doc-form');
         form.addEventListener('submit', function(event) {
