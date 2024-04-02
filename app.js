@@ -6,6 +6,7 @@ const logger = require('morgan');
 const i18n = require('i18n');
 
 const indexRouter = require('./routes/index');
+const setupRouter = require('./routes/setup');
 const listRouter = require('./routes/list');
 const docRouter = require('./routes/doc');
 const addRouter = require('./routes/add');
@@ -33,6 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/setup', setupRouter);
 app.use('/list', listRouter);
 app.use('/doc', docRouter);
 app.use('/add', addRouter);
