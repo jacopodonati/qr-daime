@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const i18n = require('i18n');
 
+require('dotenv').config();
+
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
 const listRouter = require('./routes/list');

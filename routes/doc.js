@@ -5,7 +5,6 @@ const Information = require('../models/information');
 const fs = require('fs');
 const i18n = require('i18n');
 const QRCode = require('qrcode');
-const { domain } = require('../config');
 
 QR_DIR = './static/qr/';
 QR_LINK_DIR = 'link/';
@@ -105,7 +104,7 @@ router.get('/:hash', async (req, res) => {
         const document = await Document.findById(hash);
 
         if (document) {
-            const fullURL = `${domain}${req.originalUrl}`;
+            const fullURL = `${process.env.DOMAIN}${req.originalUrl}`;
             const qrLinkPath = await getQRLink(hash, fullURL);
             const qrDocPath = await getQRDocument(document);
             res.render('doc', {

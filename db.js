@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const { mongodbURI } = require('./config');
 
-mongoose.connect(mongodbURI);
+mongoose.connect(process.env.MONGODB_URI);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Errore di connessione al database:'));

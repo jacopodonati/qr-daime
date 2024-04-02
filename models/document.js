@@ -1,4 +1,3 @@
-// document.js
 const mongoose = require('mongoose');
 
 const fieldSchema = new mongoose.Schema({
