@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const i18n = require('i18n');
-const serverless = require('serverless-http');
 
 require('dotenv').config();
 
@@ -55,13 +54,9 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-if (process.env.MODE === 'local') {
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-        console.log(`Port: ${port}`);
-    });
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Port: ${port}`);
+});
 
-    module.exports = app;
-} else {
-    module.exports.handler = serverless(app);
-}
+module.exports = app;
