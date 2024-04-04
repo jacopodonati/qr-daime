@@ -14,8 +14,8 @@ block content
     
     include partials/modal_add_field.pug
 
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js") 
-    script(src="/field/field.js")
+    include partials/fields_scripts.pug
+
     script.
         const form = document.getElementById('doc-form');
         form.addEventListener('submit', function(event) {

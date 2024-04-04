@@ -13,9 +13,9 @@ block content
         button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
     
     include partials/modal_add_field.pug
+    
+    include partials/fields_scripts.pug
 
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js") 
-    script(src="/field/field.js")
     each info in document.information
             script.
                 getField("#{info._id}", !{JSON.stringify(info)});
