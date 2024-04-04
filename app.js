@@ -4,8 +4,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const i18n = require('i18n');
+const mongoose = require('mongoose');
 
 require('dotenv').config();
+
+mongoose.connect(process.env.MONGODB_URI);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Errore di connessione al database:'));
+db.once('open', async () => {
+    console.log('Connessione al database MongoDB avvenuta con successo');
+});
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
