@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getClient } = require('../db');
 const i18n = require('i18n');
-const Document = require('../models/document')
+const Document = require('../models/document');
 
 router.get('/', async function(req, res, next) {
     try {
@@ -45,6 +44,5 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Errore interno del server' });
     }
 });
-
 
 module.exports = router;
