@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         });
 
         const newDocument = new Document({
-            fields: fields
+            information: fields
         });
 
         const savedDocument = await newDocument.save();

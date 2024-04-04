@@ -30,7 +30,7 @@ router.post('/:hash', async (req, res) => {
         const document = await Document.findById(req.params.hash);
 
         if (document) {
-            document.set('fields', newData);
+            document.set('information', newData);
             document.set('lastEdit', new Date());
             let savedDocument = await document.save();
             return res.status(200).json({ savedDocument });
