@@ -54,7 +54,7 @@ block content
                 }
             })
             .then(data => {
-                window.location.href = `/doc/${data.savedDocument._id}`;
+                window.location.href = `/doc/${data.updatedDocument._id}`;
             })
             .catch(error => {
                 console.error('Errore:', error);

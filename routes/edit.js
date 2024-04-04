@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
 const Document = require('../models/document');
+const { getQRCodeString, getQRDocumentContent } = require('../qr');
+
 router.use(express.json());
 
 router.get('/:hash', async (req, res) => {
@@ -32,6 +34,9 @@ router.post('/:hash', async (req, res) => {
         if (document) {
             document.set('information', newData);
             document.set('lastEdit', new Date());
+            let doc = await getQRDocumentContent(document);
+            let qrDoc = await getQRCodeString(doc);
+            document.set('qrDocument', qrDoc)
             let savedDocument = await document.save();
             return res.status(200).json({ savedDocument });
         } 
@@ -40,7 +45,5 @@ router.post('/:hash', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
 
 module.exports = router;

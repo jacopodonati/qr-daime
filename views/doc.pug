@@ -3,7 +3,7 @@ extends layout
 block content
     h1 #{__("document_no")} #{document._id}
 
-    img(src=`${qr_link}`, alt="QR Code")
+    img(src=`${document.qrUrl}`, alt="Link")
 
     p #{document.dateOfIssue}
 
@@ -33,7 +33,7 @@ block content
                             | : 
                             span.field-value #{field.value}
     
-    img(src=`${qr_doc}`, alt="QR Code")
+    img(src=`${document.qrDocument}`, alt="Document")
 
     script.
         function getLabel(labels, locale) {
