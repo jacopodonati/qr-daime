@@ -18,15 +18,16 @@
 	"search_placeholder": "Inserisci almeno tre lettere",
 	"add_new_field": "Aggiungi un campo",
 	"modal_close": "Chiudi",
-    "modal_cancel": "Annulla",
-    "modal_save": "Salva",
-    "modal_new_field_title": "Titolo del campo",
+	"modal_cancel": "Annulla",
+	"modal_save": "Salva",
+	"modal_new_field_title": "Titolo del campo",
 	"modal_new_field_error": "Si è verificato un errore durante il salvataggio del campo",
 	"modal_new_field_placeholder": "Inserisci il titolo del campo",
 	"modal_new_field_info_placeholder": "Inserisci il nome dell'informazione",
 	"modal_new_field_info_add": "Aggiungi",
-    "NO_FIELD_FOUND": "Nessun campo trovato",
+	"NO_FIELD_FOUND": "Nessun campo trovato",
 	"INPUT_LBL_PUBLIC": "Pubblico",
 	"INPUT_LBL_PRIVATE": "Privato",
-	"INPUT_LBL_REMOVE": "Rimuovi"
+	"INPUT_LBL_REMOVE": "Rimuovi",
+	"empty_database_message": "Nessun documento salvato"
 }

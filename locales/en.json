@@ -28,5 +28,6 @@
     "NO_FIELD_FOUND": "No field found",
     "INPUT_LBL_PUBLIC": "Public",
     "INPUT_LBL_PRIVATE": "Private",
-    "INPUT_LBL_REMOVE": "Remove"
+    "INPUT_LBL_REMOVE": "Remove",
+	"empty_database_message": "No document saved"
 }

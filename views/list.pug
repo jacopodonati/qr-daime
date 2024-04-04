@@ -3,16 +3,19 @@ extends layout
 block content
     h1 #{__("list_docs")}
 
-    table.table.table-striped.table-hover
-        thead
-            tr 
-                th #{__("doc_date_of_issue")}
-                th
-        tbody 
-        each document in documents
-            tr 
-                td #{document.dateOfIssue}
-                td
-                    .btn-group(role="group").float-end
-                        a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-                        a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+    - if (documents.length === 0)
+        div.alert.alert-primary #{__("empty_database_message")}
+    - else
+        table.table.table-striped.table-hover
+            thead
+                tr 
+                    th #{__("doc_date_of_issue")}
+                    th
+            tbody 
+            each document in documents
+                tr 
+                    td #{document.dateOfIssue}
+                    td
+                        .btn-group(role="group").float-end
+                            a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+                            a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
