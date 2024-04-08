@@ -20,13 +20,13 @@ block content
             script.
                 getField("#{info._id}", !{JSON.stringify(info)});
     script.
-        const form = document.getElementById('doc-form');
-        form.addEventListener('submit', function(event) {
+        $('#doc-form').on('submit', function(event) {
             event.preventDefault();
-            const formData = new FormData(form);
+            const formData = new FormData(this);
             const formDataArray = [];
             
-            for (const [key, value] of formData.entries()) {
+            formData.forEach(function(value, key) {
+                console.log(key, value)
                 if (key === 'id') {
                     const newObj = { _id: value, fields: [] };
                     formDataArray.push(newObj);
@@ -40,26 +40,20 @@ block content
                     const lastObjIndex = formDataArray.length - 1;
                     formDataArray[lastObjIndex].fields.push({ _id: key, value: value });
                 }
-            }
-
-            fetch('/edit/#{document._id}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formDataArray)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Errore durante l\'invio dei dati al server');
-                }
-            })
-            .then(data => {
-                window.location.href = `/doc/${data.savedDocument._id}`;
-            })
-            .catch(error => {
-                console.error('Errore:', error);
             });
+
+            console.log(formDataArray)
+
+            //- $.post({
+            //-     url: '/edit/#{document._id}',
+            //-     contentType: 'application/json',
+            //-     data: JSON.stringify(formDataArray),
+            //-     success: function(data) {
+            //-         window.location.href = `/doc/${data.savedDocument._id}`;
+            //-     },
+            //-     error: function(xhr, status, error) {
+            //-         console.error('Errore:', error);
+            //-     }
+            //- });
         });
+

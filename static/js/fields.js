@@ -1,350 +1,250 @@
+$(document).ready(function () {
+    getDefaultFields();
+
+    $('#doc-form').sortable({
+        update: function(event, ui) {
+            $('input[name="sort"]').each(function(index) {
+                $(this).val(index + 1);
+            });
+        }
+    });
+
+    $('#addedInfoList').sortable({
+        handle: '.field-handle'
+    });
+});
+
 var number_of_info = 0;
 
 function addInfoField() {
-    const infoLabelInput = document.getElementById('infoLabel');
-    const addedInfoList = document.getElementById('addedInfoList');
-    const infoLabel = infoLabelInput.value.trim();
+    const infoLabelInput = $('#infoLabel');
+    const addedInfoList = $('#addedInfoList');
+    const infoLabel = infoLabelInput.val().trim();
 
     if (infoLabel) {
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-start', 'align-items-center');
+        const listItem = $('<li>').addClass('list-group-item d-flex justify-content-start align-items-center');
+        const handleIcon = $('<i>').addClass('bi bi-grip-vertical me-2 field-handle');
+        listItem.append(handleIcon);
 
-        const handleIcon = document.createElement('i');
-        handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
-        listItem.appendChild(handleIcon);
-        
-        const infoText = document.createElement('span');
-        infoText.classList.add('flex-fill');
-        infoText.textContent = infoLabel;
-        listItem.appendChild(infoText);
+        const infoText = $('<span>').addClass('flex-fill').text(infoLabel);
+        listItem.append(infoText);
 
-        const removeIcon = document.createElement('span');
-        removeIcon.innerHTML = 'INPUT_LBL_REMOVE';
-        removeIcon.classList.add('btn', 'btn-danger', 'btn-sm');
-        removeIcon.style.cursor = 'pointer';
-        removeIcon.addEventListener('click', function() {
+        const removeIcon = $('<span>').addClass('btn btn-danger btn-sm').html('INPUT_LBL_REMOVE').css('cursor', 'pointer');
+        removeIcon.on('click', function () {
             listItem.remove();
         });
-        listItem.appendChild(removeIcon);
+        listItem.append(removeIcon);
 
-        addedInfoList.appendChild(listItem);
-        addedInfoList.style.display = 'block';
-        infoLabelInput.value = '';
+        addedInfoList.append(listItem);
+        addedInfoList.css('display', 'block');
+        infoLabelInput.val('');
     }
 }
 
 function saveField() {
-    const fieldLabelInput = document.getElementById('fieldLabel');
-    const fieldInfoList = document.getElementById('addedInfoList');
-    const fieldLocaleInput = document.getElementById('localeInput');
-    const errorMessage = document.getElementById('error-message');
-    const errorSeparator = document.getElementById('error-hr');
+    const fieldLabelInput = $('#fieldLabel');
+    const fieldInfoList = $('#addedInfoList');
+    const fieldLocaleInput = $('#localeInput');
+    const errorMessage = $('#error-message');
+    const errorSeparator = $('#error-hr');
 
-    const fieldLabel = fieldLabelInput.value.trim();
-    const fieldLocale = fieldLocaleInput.value.trim();
+    const fieldLabel = fieldLabelInput.val().trim();
+    const fieldLocale = fieldLocaleInput.val().trim();
 
-    const fieldInfos = [];
-    fieldInfoList.querySelectorAll('li').forEach(item => {
-        const infoText = item.childNodes[1].textContent;
-        fieldInfos.push(infoText);
+    const fieldInfos = fieldInfoList.find('li').map(function() {
+        return $(this).children().eq(1).text();
+    }).get();
+
+    let payload = JSON.stringify({
+        locale: fieldLocale,
+        label: fieldLabel,
+        infos: fieldInfos
     });
-    console.log(fieldInfos)
     
-    fetch('/field/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
+    $.ajax({
+        url: '/field/add',
+        type: 'POST',
+        contentType: 'application/json',
+        data: payload,
+        dataType: 'json',
+        success: function(data) {
+            const insertedId = data.id;
+            $.get(`/field/get?id=${insertedId}`, function(field) {
+                addFieldToForm(field);
+                $('#addFieldModal').modal('hide');
+            }).fail(function(xhr, status, error) {
+                console.error('Errore durante il recupero del campo appena salvato:', error);
+            });
         },
-        body: JSON.stringify({
-            locale: fieldLocale,
-            label: fieldLabel,
-            infos: fieldInfos
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Errore durante il salvataggio del campo');
+        error: function(xhr, status, error) {
+            console.error('Errore:', error);
+            errorMessage.removeClass('d-none').addClass('d-block');
+            errorSeparator.removeClass('d-none').addClass('d-block');
         }
-    })
-    .then(data => {
-        const insertedId = data.id;
-    
-        fetch(`/field/get?id=${insertedId}`)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Errore durante il recupero del campo appena salvato');
-            }
-        })
-        .then(field => {
-            addFieldToForm(field);
-            closeModal();
-        })
-        .catch(error => {
-            console.error('Errore durante il recupero del campo appena salvato:', error);
-        });
-    })
-    .catch(error => {
-        console.error('Errore:', error);
-        errorMessage.classList.remove('d-none')
-        errorMessage.classList.add('d-block')
-        errorSeparator.classList.remove('d-none')
-        errorSeparator.classList.add('d-block')
-    });    
-}
-
-function closeModal() {
-    const modal_element = document.getElementById('addFieldModal');
-    const modal = bootstrap.Modal.getInstance(modal_element);
-    modal.hide();
+    });
 }
 
 function searchField() {
-    const addFieldInput = document.getElementById('addFieldInput');
-    const searchText = addFieldInput.value.trim();
+    const addFieldInput = $('#addFieldInput');
+    const searchText = addFieldInput.val().trim();
 
     if (searchText.length >= 3) {
-        fetch(`/field/search?q=${searchText}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Errore durante la ricerca dei campi');
-                }
-            })
-            .then(data => {
-                displaySearchResults(data);
-            })
-            .catch(error => {
-                console.error('Errore:', error);
-            });
+        $.get(`/field/search?q=${searchText}`)
+        .done(function(data) {
+            displaySearchResults(data);
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Errore:', error);
+        });
     } else {
-        hideSearchResults();
+        $('#searchResults').removeClass('d-block').addClass('d-none');
     }
 }
 
-function hideSearchResults() {
-    let searchResults = document.getElementById('searchResults');
-    searchResults.classList.add('d-none');
-    searchResults.classList.remove('d-block');
-}
-
-function clearSearchInput() {
-    const addFieldInput = document.getElementById('addFieldInput');
-    addFieldInput.value = '';
-    hideSearchResults();
-}
-
 function displaySearchResults(data) {
-    const searchResults = document.getElementById('searchResults');
-    const searchResultsList = document.getElementById('searchResultsList');
-    searchResultsList.innerHTML = '';
-    if (data.length > 0) {
-        data.forEach(information => {
-            const listItem = document.createElement('li');
-            listItem.classList.add('list-group-item');
-            listItem.dataset.object = JSON.stringify(information.result);
+    const searchResultsList = $('#searchResultsList');
+    searchResultsList.empty();
+
+    const existingFieldIds = $('#doc-form [name="id"]').map(function() {
+        return $(this).val();
+    }).get();
+
+    const filteredResults = data.filter(information => {
+        const fieldId = information.result._id;
+        return !existingFieldIds.includes(fieldId);
+    });
+
+    if (filteredResults.length > 0) {
+        filteredResults.forEach(information => {
             const subfields = information.result.fields
                 .flatMap(field => field.labels)
                 .filter(label => label.locale === information.locale)
                 .map(label => label.text)
                 .join(', ');
             const mainLabel = information.result.labels.find(label => label.locale === information.locale).text;
-            const finalLabel = `${mainLabel}: ${subfields}`
+            const finalLabel = `${mainLabel}: ${subfields}`;
             const highlightedLabel = finalLabel.replace(new RegExp(information.query, 'gi'), match => `<strong>${match}</strong>`);
-            listItem.innerHTML = highlightedLabel;
-            searchResultsList.appendChild(listItem);
+            const listItem = $('<li>').addClass('list-group-item').attr('data-object', JSON.stringify(information.result)).html(highlightedLabel);
+            searchResultsList.append(listItem);
         });
-        searchResults.classList.remove('d-none');
-        searchResults.classList.add('d-block');
+        $('#searchResults').removeClass('d-none').addClass('d-block');
     } else {
-        const noResultsItem = document.createElement('li');
-        noResultsItem.classList.add('list-group-item', 'fst-italic');
-        noResultsItem.textContent = 'NO_FIELD_FOUND';
-        searchResultsList.appendChild(noResultsItem);
-        searchResults.classList.remove('d-none');
-        searchResults.classList.add('d-block');
+        const noResultsItem = $('<li>').addClass('list-group-item fst-italic').text('NO_FIELD_FOUND');
+        searchResultsList.append(noResultsItem);
+        $('#searchResults').removeClass('d-none').addClass('d-block');
     }
 }
 
+
+$('#searchResultsList').on('mouseup', 'li', function(event) {
+    const listItem = $(this);
+    const object = listItem.data('object');
+    addFieldToForm(object);
+    $('#addFieldInput').val('');
+    $('#searchResults').removeClass('d-block').addClass('d-none');
+});
+
 function addFieldToForm(fieldStructure, fieldData) {
-    const existingFieldContainer = document.getElementById('id' + fieldStructure._id);
-    if (existingFieldContainer) {
+    const existingFieldContainer = $('#id' + fieldStructure._id);
+    if (existingFieldContainer.length) {
         return;
     }
-    
-    const fieldBody = document.createElement('div')
-    fieldBody.classList.add('card-body')
-    const fieldContainer = document.createElement('div');
-    fieldContainer.id = 'id' + fieldStructure._id;
-    fieldContainer.classList.add('card', 'mb-2');
-    fieldContainer.appendChild(fieldBody)
+
+    const fieldBody = $('<div>').addClass('card-body');
+    const fieldContainer = $('<div>').addClass('card mb-2').attr('id', 'id' + fieldStructure._id).append(fieldBody);
 
     const userLanguage = navigator.language || navigator.userLanguage;
     const locale = userLanguage.substr(0, 2);
-    const rootLabel = document.createElement('h5');
-    const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
-    rootLabel.textContent = rootLabelText;
-    rootLabel.classList.add('card-title')
-    fieldBody.appendChild(rootLabel);
-    const hiddenId = document.createElement('input');
-    hiddenId.type = 'hidden';
-    hiddenId.name = 'id';
-    hiddenId.value = fieldStructure._id;
-    fieldBody.appendChild(hiddenId)
-    const hiddenSort = document.createElement('input');
-    hiddenSort.type = 'hidden';
-    hiddenSort.name = 'sort';
-    hiddenSort.value = number_of_info++;
-    fieldBody.appendChild(hiddenSort)
+    const rootLabel = $('<h5>').addClass('card-title').text(fieldStructure.labels.find(label => label.locale === locale).text);
+    fieldBody.append(rootLabel);
+    const hiddenId = $('<input>').attr({type: 'hidden', name: 'id', value: fieldStructure._id});
+    fieldBody.append(hiddenId);
+    const hiddenSort = $('<input>').attr({type: 'hidden', name: 'sort', value: number_of_info++});
+    fieldBody.append(hiddenSort);
 
     fieldStructure.fields.forEach(field => {
-        const fieldDiv = document.createElement('div');
-        fieldDiv.classList.add('mb-3', 'row', 'mx-1');
-        const fieldLabel = document.createElement('label');
-        fieldLabel.classList.add('form-label', 'col-2')
-        fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
-        const fieldInput = document.createElement('input');
-        fieldInput.type = 'text';
-        fieldInput.name = field._id;
-        fieldInput.classList.add('col-form-control', 'col-10')
+        const fieldDiv = $('<div>').addClass('mb-3 row mx-1');
+        const fieldLabel = $('<label>')
+            .attr({for: 'id-' + field._id})
+            .addClass('form-label col-2')
+            .text(field.labels.find(label => label.locale === locale).text + ':');
+        const fieldInput = $('<input>')
+            .attr({type: 'text', name: field._id, id: 'id-' + field._id})
+            .addClass('col-form-control col-10');
 
         if (fieldData !== undefined) {
             let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
-            fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
+            fieldInput.val(fieldInDoc ? fieldInDoc.value : null);
         }
 
-        fieldDiv.appendChild(fieldLabel);
-        fieldDiv.appendChild(fieldInput);
-        fieldBody.appendChild(fieldDiv);
+        fieldDiv.append(fieldLabel);
+        fieldDiv.append(fieldInput);
+        fieldBody.append(fieldDiv);
     });
 
-    const footer = document.createElement('div');
-    footer.classList.add('row', 'mx-1')
-    const fieldInput = document.createElement('input');
-    fieldInput.type = 'checkbox';
-    fieldInput.classList.add('btn-check', 'col-2')
-    fieldInput.name = 'public';
-    const fieldLabel = document.createElement('label');
-    fieldLabel.classList.add('btn', 'btn-primary', 'col-2');
+    const footer = $('<div>').addClass('row mx-1');
+    const fieldInput = $('<input>')
+        .attr({type: 'checkbox', name: 'public', id: 'public-' + fieldStructure._id})
+        .addClass('btn-check col-2');
+    const fieldLabel = $('<label>')
+        .attr({for: 'public-' + fieldStructure._id})
+        .addClass('btn btn-primary col-2')
+        .html('<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC');
+    fieldInput.prop('checked', true);
 
-    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
-    fieldInput.checked = true;
-    
     if (fieldData !== undefined && !fieldData.public) {
-        fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
-        fieldInput.checked = false;
+        fieldLabel.html('<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE');
+        fieldInput.prop('checked', false);
     }
 
-    fieldLabel.addEventListener('mouseup', function() {
-        fieldInput.checked = !fieldInput.checked;
-        if (fieldInput.checked) {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
+    fieldLabel.on('click', function () {
+        fieldInput.prop('checked', !fieldInput.prop('checked'));
+        if (fieldInput.prop('checked')) {
+            fieldLabel.html('<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC');
         } else {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
+            fieldLabel.html('<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE');
         }
     });
-    footer.appendChild(fieldInput);
-    footer.appendChild(fieldLabel);
+    footer.append(fieldInput);
+    footer.append(fieldLabel);
 
     if (!fieldStructure.default) {
-        const removeButton = document.createElement('button');
-        removeButton.textContent = 'INPUT_LBL_REMOVE';
-        removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
-        removeButton.addEventListener('mouseup', function() {
+        const removeButton = $('<button>').text('INPUT_LBL_REMOVE').addClass('btn btn-danger col-md-2 offset-md-8');
+        removeButton.on('mouseup', function () {
             fieldContainer.remove();
-            // const remainingFields = document.querySelectorAll('#addForm .card').length;
-            // if (remainingFields === 0) {
-            //     const addForm = document.getElementById('addForm');
-            //     addForm.classList.add('d-none');
-            //     addForm.classList.remove('d-block');
-            // }
         });
-        footer.appendChild(removeButton);
+        footer.append(removeButton);
     }
-    fieldBody.appendChild(footer);
+    fieldBody.append(footer);
 
-    const formSep = document.querySelector('#form-sep');
-    
-    const docForm = document.getElementById('doc-form');
-    docForm.insertBefore(fieldContainer, formSep);
-
-    // const isFormHidden = addForm.classList.contains('d-none');
-    // if (isFormHidden) {
-    //     addForm.classList.remove('d-none');
-    //     addForm.classList.add('d-block');
-    // }
+    const formSep = $('#form-sep');
+    fieldContainer.insertBefore(formSep);
 }
-
-document.getElementById('searchResultsList').addEventListener('mouseup', function(event) {
-    const listItem = event.target.closest('li');
-    if (listItem) {
-        const objectString = listItem.dataset.object;
-        const object = JSON.parse(objectString);
-        addFieldToForm(object);
-        clearSearchInput();
-    }
-});
 
 function getDefaultFields() {
-    fetch('/field/get')
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Errore durante il recupero dei campi default');
-            }
-        })
-        .then(defaultFields => {
-            defaultFields.forEach(fieldData => {
-                addFieldToForm(fieldData);
-            });
-        })
-        .catch(error => {
-            console.error('Errore:', error);
+    $.get('/field/get', function(defaultFields) {
+        defaultFields.forEach(function(fieldData) {
+            addFieldToForm(fieldData);
         });
+    })
+    .fail(function(xhr, status, error) {
+        console.error('Errore:', error);
+    });
 }
 
-document.addEventListener('DOMContentLoaded', getDefaultFields);
-
-document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', function () {
-    document.getElementById('infoLabel').value = '';
-    document.getElementById('fieldLabel').value = '';
-    document.getElementById('addedInfoList').innerHTML = '';
-    document.getElementById('error-message').classList.remove('d-block');
-    document.getElementById('error-message').classList.add('d-none');
-    document.getElementById('error-hr').classList.remove('d-block');
-    document.getElementById('error-hr').classList.add('d-none');
+$('#addFieldModal').on('hidden.bs.modal', function () {
+    $('#infoLabel').val('');
+    $('#fieldLabel').val('');
+    $('#addedInfoList').empty();
+    $('#error-message').removeClass('d-block').addClass('d-none');
+    $('#error-hr').removeClass('d-block').addClass('d-none');
 });
 
 function getField(id, value) {
-    fetch(`/field/get?id=${id}`)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Errore durante il recupero del campo appena salvato');
-            }
-        })
-        .then(field => {
-            addFieldToForm(field, value);
-        })
-        .catch(error => {
-            console.error('Errore durante il recupero del campo appena salvato:', error);
-        });
+    $.get(`/field/get?id=${id}`, function(response) {
+        addFieldToForm(response, value);
+    })
+    .fail(function(xhr, status, error) {
+        console.error('Errore durante il recupero del campo appena salvato:', error);
+    });
 }
-
-const sort_infos = new Sortable(document.getElementById('doc-form'), { onSort: function (event) {
-    const hiddenInputs = document.querySelectorAll('input[name="sort"]');
-        hiddenInputs.forEach((input, index) => {
-            input.value = `${index + 1}`;
-        });
-  }
-});
-
-const sort_fields = new Sortable(document.getElementById('addedInfoList'), {
-    handle: '.field-handle'
-});

@@ -47,7 +47,7 @@ router.get('/search', async (req, res) => {
 });
 
 function validateFieldData(req, res, next) {
-    const { label, infos } = req.body;
+    const { locale, label, infos } = req.body;
 
     if (!label || !infos.length) {
         return res.status(400).json({ error: 'I campi labels e informations sono richiesti' });
@@ -110,7 +110,8 @@ router.post('/add', validateFieldData, async (req, res) => {
     try {
         const { label, infos, locale } = req.body;
         const supportedLocales = i18n.getLocales().filter(item => item !== locale);
-        
+        console.log(label, infos, locale)
+        console.log(req.body)
         let infos_obj = []
         for (const info of infos) {
             let labels = [{
