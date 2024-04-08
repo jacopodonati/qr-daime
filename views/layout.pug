@@ -11,6 +11,8 @@ html(data-bs-theme="auto")
       nav.navbar.navbar-expand-lg.navbar-light.bg-light
         div.container-fluid
           a.navbar-brand(href="/") #{__("app_name")}
+          if isAdmin
+            i.bi.bi-unlock(aria-hidden="true")
           button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
             span.navbar-toggler-icon
           div#navbarNav.collapse.navbar-collapse

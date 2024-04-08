@@ -2,25 +2,42 @@ extends layout
 
 block content
     h1 #{__("list_docs")}
-
+    
     - if (documents.length === 0)
         div.alert.alert-primary #{__("empty_database_message")}
     - else
         table#docTable.table.table-striped.table-hover
             thead
                 tr 
+                    if isAdmin 
+                        th
                     th ID
                     th#dateHeader(data-sorting="asc") #{__("doc_date_of_issue")}
                         i.ms-3.bi.bi-sort-numeric-down
                     th
             each document in documents
-                tr(data-sort=document.dateOfIssue)
+                - let queryString = ""
+                - if (isAdmin)
+                    - queryString = "?admin"
+                - let status
+                - if (document.deleted)
+                    - status = "deleted"
+                - else
+                    - status = "available"
+                tr(data-sort=document.dateOfIssue, data-status=`${status}`)
+                    if isAdmin
+                        if document.deleted
+                            td ⛔️
+                        else
+                            td ✅
                     td #{document._id}
                     td.date #{document.dateOfIssue}
                     td
                         .btn-group(role="group").float-end
-                            a(href=`/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
-                            a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+                            a(href=`/edit/${document._id}${queryString}`).btn.btn-success.btn-sm #{__("edit_button")}
+                            a(href=`/doc/${document._id}${queryString}`).btn.btn-primary.btn-sm #{__("view_button")}
+                            - if (!document.deleted)
+                                a(href=`/delete/${document._id}${queryString}`).btn.btn-danger.btn-sm #{__("delete_button")}
     script.
         document.addEventListener('DOMContentLoaded', function() {
             const dates = document.querySelectorAll('.date');

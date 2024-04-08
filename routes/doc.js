@@ -9,10 +9,15 @@ router.get('/', async (req, res) => {
 
 router.get('/:hash', async (req, res) => {
     const hash = req.params.hash;
-    const isAdmin = req.query.admin === 'true';
-
+    const isAdmin = req.query.hasOwnProperty('admin');
+    
     try {
-        const document = await Document.findById(hash);
+        let document;
+        if (isAdmin) {
+            document = await Document.findById(hash);
+        } else {
+            document = await Document.findOne({ _id: hash, deleted: false });
+        }
 
         if (document) {
             res.render('doc', {

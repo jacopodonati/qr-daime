@@ -7,10 +7,17 @@ const { getQRCodeString, getQRDocumentContent } = require('../qr');
 router.use(express.json());
 
 router.get('/:hash', async (req, res) => {
+    const isAdmin = req.query.hasOwnProperty('admin');
+
     try {
         const id = req.params.hash;
 
-        const document = await Document.findById(id);
+        let document;
+        if (isAdmin) {
+            document = await Document.findById(hash);
+        } else {
+            document = await Document.findOne({ _id: hash, deleted: false });
+        }
 
         if (!document) {
             res.redirect('/');
@@ -27,9 +34,15 @@ router.get('/:hash', async (req, res) => {
 });
 
 router.post('/:hash', async (req, res) => {
+    const isAdmin = req.query.hasOwnProperty('admin');
     try {
         const newData = req.body;
-        const document = await Document.findById(req.params.hash);
+        let document;
+        if (isAdmin) {
+            document = await Document.findById(hash);
+        } else {
+            document = await Document.findOne({ _id: hash, deleted: false });
+        }
 
         if (document) {
             document.set('information', newData);
