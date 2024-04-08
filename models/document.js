@@ -27,6 +27,10 @@ const documentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     qrDocument: String,
     qrUrl: String,
     information: [informationSchema]

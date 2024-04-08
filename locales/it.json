@@ -10,6 +10,8 @@
 	"submit_button": "Invia",
 	"view_button": "Mostra",
 	"edit_button": "Modifica",
+	"delete_button": "Elimina",
+	"cancel_button": "Annulla",
 	"doc_date_of_issue": "Data di emissione",
 	"document": "Documento",
 	"document_no": "Documento n.",
@@ -29,5 +31,6 @@
 	"INPUT_LBL_PUBLIC": "Pubblico",
 	"INPUT_LBL_PRIVATE": "Privato",
 	"INPUT_LBL_REMOVE": "Rimuovi",
-	"empty_database_message": "Nessun documento salvato"
+	"empty_database_message": "Nessun documento salvato",
+	"delete_document_no": "Vuoi eliminare il documento n."
 }

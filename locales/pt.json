@@ -9,6 +9,8 @@
 	"add_doc": "Adicionar um novo documento",
 	"submit_button": "Enviar",
 	"view_button": "Mostrar",
+	"delete_button": "Excluir",
+	"cancel_button": "Cancele",
 	"edit_button": "Editar",
 	"doc_date_of_issue": "Data de emissão",
 	"document": "Documento",
@@ -29,5 +31,6 @@
 	"INPUT_LBL_PUBLIC": "Público",
 	"INPUT_LBL_PRIVATE": "Privado",
 	"INPUT_LBL_REMOVE": "Remova",
-	"empty_database_message": "Nenhum documento armazenado"
+	"empty_database_message": "Nenhum documento armazenado",
+	"delete_document_no": "Quer excluir o documento n°"
 }

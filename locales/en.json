@@ -9,6 +9,8 @@
     "add_doc": "Add a new document",
     "submit_button": "Submit",
     "view_button": "View",
+	"cancel_button": "Cancel",
+	"delete_button": "Delete",
     "edit_button": "Edit",
     "doc_date_of_issue": "Date of Issue",
     "document": "Document",
@@ -29,5 +31,6 @@
     "INPUT_LBL_PUBLIC": "Public",
     "INPUT_LBL_PRIVATE": "Private",
     "INPUT_LBL_REMOVE": "Remove",
-	"empty_database_message": "No document saved"
+	"empty_database_message": "No document saved",
+	"delete_document_no": "Do you really want to delete document no."
 }

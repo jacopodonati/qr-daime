@@ -22,6 +22,7 @@ const listRouter = require('./routes/list');
 const docRouter = require('./routes/doc');
 const addRouter = require('./routes/add');
 const editRouter = require('./routes/edit');
+const deleteRouter = require('./routes/delete');
 const fieldRouter = require('./routes/field');
 
 i18n.configure({
@@ -49,6 +50,7 @@ app.use('/list', listRouter);
 app.use('/doc', docRouter);
 app.use('/add', addRouter);
 app.use('/edit', editRouter);
+app.use('/delete', deleteRouter);
 app.use('/field', fieldRouter);
 
 app.use(function (req, res, next) {
