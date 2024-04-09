@@ -1,0 +1,17 @@
+if !hideNavbar
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        div.container-fluid
+          a.navbar-brand(href="/") #{__("app_name")}
+          if isAdmin
+            i.bi.bi-unlock(aria-hidden="true")
+          button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
+            span.navbar-toggler-icon
+          div#navbarNav.collapse.navbar-collapse
+            ul.navbar-nav
+              li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
+                ul.dropdown-menu
+                  li.dropdown-item
+                    a.nav-link(href="/add") #{__("add_doc_title")}
+                  li.dropdown-item
+                    a.nav-link(href="/list") #{__("listpage_title")}
