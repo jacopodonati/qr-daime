@@ -49,7 +49,7 @@ function saveField() {
         fieldInfos.push(infoText);
     });
     
-    fetch('/field/add', {
+    fetch('/info/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ function saveField() {
     .then(data => {
         const insertedId = data.id;
     
-        fetch(`/field/get?id=${insertedId}`)
+        fetch(`/info/${insertedId}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -110,7 +110,7 @@ function searchField() {
     const searchText = addFieldInput.value.trim();
 
     if (searchText.length >= 3) {
-        fetch(`/field/search?q=${searchText}`)
+        fetch(`/info/list/search?q=${searchText}`)
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -293,7 +293,7 @@ document.getElementById('searchResultsList').addEventListener('mouseup', functio
 });
 
 function getDefaultFields() {
-    fetch('/field/get')
+    fetch('/info/list/default')
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -324,7 +324,7 @@ document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', fun
 });
 
 function getField(id, value) {
-    fetch(`/field/get?id=${id}`)
+    fetch(`/info/${id}`)
         .then(response => {
             if (response.ok) {
                 return response.json();

@@ -25,7 +25,9 @@ const docSingleRouter = require('./routes/documents/single');
 const docAddRouter = require('./routes/documents/add');
 const docEditRouter = require('./routes/documents/edit');
 const docDeleteRouter = require('./routes/documents/delete');
-const fieldRouter = require('./routes/field');
+const infoSingleRouter = require('./routes/info/single');
+const infoListRouter = require('./routes/info/list');
+const infoAddRouter = require('./routes/info/add');
 
 i18n.configure({
     locales: ['en', 'pt', 'it'],
@@ -68,7 +70,9 @@ app.use('/doc', docSingleRouter);
 app.use('/add', docAddRouter);
 app.use('/edit', docEditRouter);
 app.use('/delete', docDeleteRouter);
-app.use('/field', fieldRouter);
+app.use('/info/', infoSingleRouter);
+app.use('/info/list', infoListRouter);
+app.use('/info/add', infoAddRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));
