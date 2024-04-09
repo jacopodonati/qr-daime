@@ -48,7 +48,6 @@ function saveField() {
         const infoText = item.childNodes[1].textContent;
         fieldInfos.push(infoText);
     });
-    console.log(fieldInfos)
     
     fetch('/field/add', {
         method: 'POST',
