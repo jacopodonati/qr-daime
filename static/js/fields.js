@@ -74,7 +74,7 @@ function saveField() {
     .then(data => {
         const insertedId = data.id;
     
-        fetch(`/info/${insertedId}`)
+        fetch(`/info/id/${insertedId}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -324,7 +324,7 @@ document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', fun
 });
 
 function getField(id, value) {
-    fetch(`/info/${id}`)
+    fetch(`/info/id/${id}`)
         .then(response => {
             if (response.ok) {
                 return response.json();

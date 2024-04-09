@@ -1,6 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
+const i18n = require('i18n');
+const acceptLanguageParser = require('accept-language-parser');
+
+router.get('/', async (req, res) => {
+    try {
+        const isAdmin = req.query.hasOwnProperty('admin');
+        const queryString = isAdmin ? {} : { deleted: false };
+        const info = await Information.find(queryString);
+
+        const acceptLanguage = req.headers['accept-language'];
+        const languages = acceptLanguageParser.parse(acceptLanguage);
+        const locale = languages[0].code;
+        
+        res.render('info/list', {
+            title: i18n.__('list_info') + ' - ' + i18n.__('app_name'),
+            information: info,
+            locale: locale,
+            isAdmin: isAdmin
+        });
+
+    } catch (error) {
+        console.error('Errore durante la query al database:', error);
+        res.status(500).json({ error: 'Errore del server interno' });
+    }
+});
 
 router.get('/search', async (req, res) => {
     try {

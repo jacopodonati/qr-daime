@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+    h1 #{__("list_info")}
+
+    - if (information.length === 0)
+        div.alert.alert-primary #{__("empty_database_message")}
+    - else
+        table#docTable.table.table-striped.table-hover
+            thead
+                tr 
+                    if isAdmin 
+                        th
+                    th #{__("info_title")}
+                    th #{__("info_content")}
+                    th
+            each info in information
+                - let queryString = ""
+                - if (isAdmin)
+                    - queryString = "?admin"
+                - let status
+                - if (info.deleted)
+                    - status = "deleted"
+                - else
+                    - status = "available"
+                tr(data-status=`${status}`)
+                    if isAdmin
+                        if info.deleted
+                            td ⛔️
+                        else
+                            td ✅
+                    
+                    td #{info.labels.find(label => label.locale === locale) ? info.labels.find(label => label.locale === locale).text : ''}
+                    td #{info.fields.map(field => field.labels.find(label => label.locale === locale).text).join(', ')}
+                    td
+                        //- .btn-group(role="group").float-end
+                        //-     a(href=`/info/edit/${info._id}${queryString}`).btn.btn-success.btn-sm #{__("edit_button")}
+                        //-     a(href=`/info/id/${info._id}${queryString}`).btn.btn-primary.btn-sm #{__("view_button")}
+                        //-     - if (!info.deleted)
+                        //-         a(href=`/info/delete/${info._id}${queryString}`).btn.btn-danger.btn-sm #{__("delete_button")}

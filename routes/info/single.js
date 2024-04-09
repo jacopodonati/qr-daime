@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
 
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
     try {
         const field = await Information.findById(req.params.id)
         res.json(field);

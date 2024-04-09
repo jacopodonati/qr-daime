@@ -33,5 +33,11 @@
 	"INPUT_LBL_REMOVE": "Remova",
 	"empty_database_message": "Nenhum documento armazenado",
 	"delete_document_no": "Quer excluir o documento n°",
-	"missing_labels_or_infos": "você precisa definir o nome e pelo menos um campo."
+	"missing_labels_or_infos": "você precisa definir o nome e pelo menos um campo.",
+	"navbar_documents": "Documentos",
+	"navbar_info": "Informaçoes",
+	"navbar_info_list": "Liste todas as informações disponíveis",
+	"list_info": "Liste todas as informações",
+	"info_title": "Nome",
+	"info_content": "Conteúdo"
 }

@@ -33,5 +33,11 @@
     "INPUT_LBL_REMOVE": "Remove",
 	"empty_database_message": "No document saved",
 	"delete_document_no": "Do you really want to delete document no.",
-	"missing_labels_or_infos": "you need to set the name and at least one field."
+	"missing_labels_or_infos": "you need to set the name and at least one field.",
+	"navbar_documents": "Documents",
+	"navbar_info": "Information",
+	"navbar_info_list": "List all available information",
+	"list_info": "List all information",
+	"info_title": "Title",
+	"info_content": "Fields"
 }
