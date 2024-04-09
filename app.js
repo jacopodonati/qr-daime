@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const acceptLanguageParser = require('accept-language-parser');
 const i18n = require('i18n');
 const mongoose = require('mongoose');
 
@@ -43,6 +44,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Workaround per forzare la localizzazione dei titoli delle pagine.
+app.use((req, res, next) => {
+    if (req.method === 'GET') {
+        const acceptLanguage = req.headers['accept-language'];
+        const languages = acceptLanguageParser.parse(acceptLanguage);
+        const primaryLanguage = languages[0].code;
+
+        if (primaryLanguage) {
+            i18n.setLocale(primaryLanguage);
+        }
+    }
+    next();
+});
 
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
