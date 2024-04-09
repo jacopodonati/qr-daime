@@ -1,0 +1,42 @@
+h1 #{__("info_no")} #{information._id}
+
+div.row.row-cols-lg-auto.g-3.align-items-center
+    div.col-12
+        label(for="language-selector") #{__("language_dropdown")}: 
+        select#language-selector.form-select
+            each locale in available_locales
+                option(value=`${locale.code}`) #{locale.name}
+
+each label in information.labels
+    h2(lang=`${label.locale}`) #{label.text}
+
+ul
+    each field in information.fields
+        each field_label in field.labels
+            li(lang=`${field_label.locale}`) #{field_label.text}
+
+script.
+    document.addEventListener('DOMContentLoaded', function() {
+        const browserLocale = (navigator.language || navigator.userLanguage).substring(0, 2);
+        changeLocale(browserLocale);
+
+        const languageSelect = document.getElementById('language-selector');
+        languageSelect.addEventListener('change', function(event) {
+            changeLocale(event.target.value);
+        });
+
+        function changeLocale(locale) {
+            document.querySelectorAll('h2, li').forEach(element => {
+                element.style.display = 'none';
+            });
+
+            const languageSelect = document.getElementById('language-selector');
+            languageSelect.value = locale;
+
+            const elementsToShow = document.querySelectorAll(`h2[lang='${locale}'], li[lang='${locale}']`);
+            elementsToShow.forEach(element => {
+                element.style.display = 'block';
+            });
+        }
+    });
+    

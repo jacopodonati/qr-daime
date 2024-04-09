@@ -39,5 +39,7 @@
 	"navbar_info_list": "Liste todas as informações disponíveis",
 	"list_info": "Liste todas as informações",
 	"info_title": "Nome",
-	"info_content": "Conteúdo"
+	"info_content": "Conteúdo",
+	"info_no": "Informação n°",
+	"language_dropdown": "Selecione um idioma"
 }

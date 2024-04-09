@@ -33,7 +33,8 @@ block content
                     td #{info.labels.find(label => label.locale === locale) ? info.labels.find(label => label.locale === locale).text : ''}
                     td #{info.fields.map(field => field.labels.find(label => label.locale === locale).text).join(', ')}
                     td
-                        //- .btn-group(role="group").float-end
+                        .btn-group(role="group").float-end
+                            a(href=`/info/view/${info._id}${queryString}`).btn.btn-primary.btn-sm #{__("view_button")}
                         //-     a(href=`/info/edit/${info._id}${queryString}`).btn.btn-success.btn-sm #{__("edit_button")}
                         //-     a(href=`/info/id/${info._id}${queryString}`).btn.btn-primary.btn-sm #{__("view_button")}
                         //-     - if (!info.deleted)
