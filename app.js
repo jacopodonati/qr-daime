@@ -19,11 +19,11 @@ db.once('open', async () => {
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
-const listRouter = require('./routes/list');
-const docRouter = require('./routes/doc');
-const addRouter = require('./routes/add');
-const editRouter = require('./routes/edit');
-const deleteRouter = require('./routes/delete');
+const docViewListRouter = require('./routes/documents/list');
+const docViewSingleDocRouter = require('./routes/documents/single');
+const docAddRouter = require('./routes/documents/add');
+const docEditRouter = require('./routes/documents/edit');
+const docDeleteRouter = require('./routes/documents/delete');
 const fieldRouter = require('./routes/field');
 
 i18n.configure({
@@ -61,11 +61,11 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
-app.use('/list', listRouter);
-app.use('/doc', docRouter);
-app.use('/add', addRouter);
-app.use('/edit', editRouter);
-app.use('/delete', deleteRouter);
+app.use('/list', docViewListRouter);
+app.use('/doc', docViewSingleDocRouter);
+app.use('/add', docAddRouter);
+app.use('/edit', docEditRouter);
+app.use('/delete', docDeleteRouter);
 app.use('/field', fieldRouter);
 
 app.use(function (req, res, next) {

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
-const Document = require('../models/document');
-const { getQRCodeString, getQRDocumentContent } = require('../qr');
+const Document = require('../../models/document');
+const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 
 function getDocLink(id) {
     return process.env.DOMAIN + '/doc/' + id
