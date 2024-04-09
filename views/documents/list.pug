@@ -66,8 +66,8 @@ block content
                 let sorting = dateHeader.dataset.sorting === 'desc' ? 'asc' : 'desc';
                 const icon = dateHeader.querySelector('i');
                 icon.classList.remove('bi-sort-numeric-up', 'bi-sort-numeric-down');
-                let iconClass = dateHeader.dataset.sorting === 'asc' ? 'bi-sort-numeric-up-alt' : 'bi-sort-numeric-down'
-                icon.classList.add(iconClass);
+                icon.classList.remove(dateHeader.dataset.sorting === 'desc' ? 'bi-sort-numeric-up' : 'bi-sort-numeric-down');
+                icon.classList.add(dateHeader.dataset.sorting === 'desc' ? 'bi-sort-numeric-down' : 'bi-sort-numeric-up');
                 dateHeader.dataset.sorting = sorting;
                 const sortedRows = rows.sort((a, b) => {
                     const dateA = a.dataset.sort;
