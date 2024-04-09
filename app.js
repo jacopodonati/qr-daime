@@ -19,6 +19,7 @@ db.once('open', async () => {
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
+const staticRouter = require('./routes/static');
 const docViewListRouter = require('./routes/documents/list');
 const docViewSingleDocRouter = require('./routes/documents/single');
 const docAddRouter = require('./routes/documents/add');
@@ -61,6 +62,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
+app.use('/static', staticRouter);
 app.use('/list', docViewListRouter);
 app.use('/doc', docViewSingleDocRouter);
 app.use('/add', docAddRouter);
