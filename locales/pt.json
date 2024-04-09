@@ -32,5 +32,6 @@
 	"INPUT_LBL_PRIVATE": "Privado",
 	"INPUT_LBL_REMOVE": "Remova",
 	"empty_database_message": "Nenhum documento armazenado",
-	"delete_document_no": "Quer excluir o documento n°"
+	"delete_document_no": "Quer excluir o documento n°",
+	"missing_labels_or_infos": "você precisa definir o nome e pelo menos um campo."
 }

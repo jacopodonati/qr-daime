@@ -6,7 +6,8 @@
                 button(type='button', class='btn-close', data-bs-dismiss='modal', aria-label=`${__("modal_close")}`)
             .modal-body
                 #error-message.alert.alert-danger.d-none
-                    | #{__("modal_new_field_error")}
+                    | #{__("modal_new_field_error")}: 
+                    span#modal-error-panel
                 hr#error-hr.d-none
                 
                 input#localeInput(type='hidden', name='locale', value=`${locale}`)

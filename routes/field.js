@@ -47,10 +47,11 @@ router.get('/search', async (req, res) => {
 });
 
 function validateFieldData(req, res, next) {
-    const { label, infos } = req.body;
-
+    const { locale, label, infos } = req.body;
+    i18n.setLocale(locale);
+    
     if (!label || !infos.length) {
-        return res.status(400).json({ error: 'I campi labels e informations sono richiesti' });
+        return res.status(400).json({ error: i18n.__('missing_labels_or_infos') });
     }
     next();
 }

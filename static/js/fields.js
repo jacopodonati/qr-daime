@@ -64,7 +64,11 @@ function saveField() {
         if (response.ok) {
             return response.json();
         } else {
-            throw new Error('Errore durante il salvataggio del campo');
+            return response.json().then(error => {
+                const modalMessagePanel = document.getElementById('modal-error-panel');
+                modalMessagePanel.textContent = error.error;
+                throw new Error('Errore durante il salvataggio del campo: ' + error.error);
+            });
         }
     })
     .then(data => {
