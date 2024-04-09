@@ -41,5 +41,6 @@
 	"info_title": "Title",
 	"info_content": "Fields",
 	"info_no": "Information no.",
-	"language_dropdown": "Select a language"
+	"language_dropdown": "Select a language",
+	"delete_info_no": "Delete information no."
 }

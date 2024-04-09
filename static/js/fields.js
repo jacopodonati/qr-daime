@@ -110,7 +110,11 @@ function searchField() {
     const searchText = addFieldInput.value.trim();
 
     if (searchText.length >= 3) {
-        fetch(`/info/list/search?q=${searchText}`)
+        let apiUrl = `/info/list/search?q=${searchText}`;
+        if (window.location.href.includes('admin')) {
+            apiUrl += '&admin';
+        }
+        fetch(apiUrl)
             .then(response => {
                 if (response.ok) {
                     return response.json();

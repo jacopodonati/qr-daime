@@ -29,6 +29,7 @@ router.get('/', async (req, res) => {
 
 router.get('/search', async (req, res) => {
     try {
+        const isAdmin = req.query.hasOwnProperty('admin');
         const q = req.query.q;
 
         const acceptLanguage = req.headers['accept-language'];
@@ -39,15 +40,22 @@ router.get('/search', async (req, res) => {
             locale = locales[0].trim().substring(0, 2);
         }
 
-        const fields = await Information.find({
+        let searchQuery = {
             $or: [
                 { 'labels.text': { $regex: q, $options: 'i' } },
                 { 'fields.labels.text': { $regex: q, $options: 'i' } }
             ],
             'labels.locale': locale,
             'fields.labels.locale': locale,
-            default: false
-        });
+            default: false,
+            deleted: false
+        }
+
+        if (isAdmin) {
+            delete searchQuery.deleted;
+        }
+
+        const fields = await Information.find(searchQuery);
         
         const searchResults = fields.map(field => ({
             locale: locale,

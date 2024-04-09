@@ -41,5 +41,6 @@
 	"info_title": "Nome",
 	"info_content": "Conteúdo",
 	"info_no": "Informação n°",
-	"language_dropdown": "Selecione um idioma"
+	"language_dropdown": "Selecione um idioma",
+	"delete_info_no": "Cancele informação n°"
 }
