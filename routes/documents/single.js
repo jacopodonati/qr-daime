@@ -20,7 +20,7 @@ router.get('/:hash', async (req, res) => {
         }
 
         if (document) {
-            res.render('doc', {
+            res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
                 isAdmin

@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
             res.redirect('/');
         }
 
-        res.render('edit', {
+        res.render('documents/edit', {
             title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
             document 
         });

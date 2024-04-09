@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const queryString = isAdmin ? {} : { deleted: false };
         const documents = await Document.find(queryString);
         
-        res.render('list', {
+        res.render('documents/list', {
             title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
             documents: documents,
             isAdmin: isAdmin

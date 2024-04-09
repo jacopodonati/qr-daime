@@ -11,7 +11,7 @@ router.get('/:hash', async (req, res) => {
         const document = await Document.findById(hash);
 
         if (document) {
-            res.render('delete', {
+            res.render('documents/delete', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
                 isAdmin

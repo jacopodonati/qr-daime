@@ -10,7 +10,7 @@ function getDocLink(id) {
 
 router.get('/', async function(req, res, next) {
     try {
-        res.render('add', {
+        res.render('documents/add', {
             title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
             locale: req.getLocale(),
             fallbackLocale: i18n.getLocale()

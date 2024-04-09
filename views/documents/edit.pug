@@ -1,21 +1,24 @@
-extends layout
+extends ../layout
 
 block content
-    h1.mb-5 #{__("add_doc_title")}
+    h1.mb-5 #{__("edit_doc_title")} #{document._id}
 
-    include partials/form_search_field.pug
+    include ../partials/form_search_field.pug
 
-    form(id="doc-form" action=`/add` method="post")
+    form(id="doc-form" action=`/edit` method="post")
         hr
 
         hr#form-sep
 
         button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
     
-    include partials/modal_add_field.pug
+    include ../partials/modal_add_field.pug
+    
+    include ../partials/fields_scripts.pug
 
-    include partials/fields_scripts.pug
-
+    each info in document.information
+            script.
+                getField("#{info._id}", !{JSON.stringify(info)});
     script.
         const form = document.getElementById('doc-form');
         form.addEventListener('submit', function(event) {
@@ -39,7 +42,7 @@ block content
                 }
             }
 
-            fetch('/add', {
+            fetch('/edit/#{document._id}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -54,7 +57,7 @@ block content
                 }
             })
             .then(data => {
-                window.location.href = `/doc/${data.updatedDocument._id}`;
+                window.location.href = `/doc/${data.savedDocument._id}`;
             })
             .catch(error => {
                 console.error('Errore:', error);
