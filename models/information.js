@@ -15,7 +15,11 @@ const informationSchema = new mongoose.Schema({
     default: {
         type: Boolean,
         default: false
-    }
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const Information = mongoose.model('Information', informationSchema);
