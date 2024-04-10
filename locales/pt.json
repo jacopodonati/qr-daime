@@ -42,5 +42,6 @@
 	"info_content": "Conteúdo",
 	"info_no": "Informação n°",
 	"language_dropdown": "Selecione um idioma",
-	"delete_info_no": "Cancele informação n°"
+	"delete_info_no": "Cancele informação n°",
+	"restore_button": "Restaurar"
 }

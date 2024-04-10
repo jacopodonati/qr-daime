@@ -42,5 +42,6 @@
 	"info_content": "Fields",
 	"info_no": "Information no.",
 	"language_dropdown": "Select a language",
-	"delete_info_no": "Delete information no."
+	"delete_info_no": "Delete information no.",
+	"restore_button": "Restore"
 }
