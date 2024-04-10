@@ -30,6 +30,7 @@ const infoSingleRouter = require('./routes/info/single');
 const infoListRouter = require('./routes/info/list');
 const infoAddRouter = require('./routes/info/add');
 const infoDeleteRouter = require('./routes/info/delete');
+const infoRestoreRouter = require('./routes/info/restore');
 
 i18n.configure({
     locales: ['en', 'pt', 'it'],
@@ -77,6 +78,7 @@ app.use('/info/', infoSingleRouter);
 app.use('/info/list', infoListRouter);
 app.use('/info/add', infoAddRouter);
 app.use('/info/delete', infoDeleteRouter);
+app.use('/info/restore', infoRestoreRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));
