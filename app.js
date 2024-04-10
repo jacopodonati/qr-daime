@@ -33,7 +33,7 @@ const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
 
 i18n.configure({
-    locales: ['en', 'pt', 'it'],
+    locales: ['en', 'it', 'pt'],
     directory: __dirname + '/locales',
     defaultLocale: 'pt'
 });
