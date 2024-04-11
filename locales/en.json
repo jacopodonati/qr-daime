@@ -43,5 +43,8 @@
 	"info_no": "Information no.",
 	"language_dropdown": "Select a language",
 	"delete_info_no": "Delete information no.",
-	"restore_button": "Restore"
+	"information_required": "Information required",
+	"information_not_required": "Information not required",
+	"information_deleted": "information deleted",
+	"information_not_deleted": "information not deleted"
 }

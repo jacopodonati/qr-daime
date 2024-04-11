@@ -18,10 +18,10 @@ router.get('/view/:id', async (req, res) => {
     const id = req.params.id;
     const isAdmin = req.query.hasOwnProperty('admin');
     const locale_codes = i18n.getLocales();
-    let available_locales = []
+    let availableLocales = []
     locale_codes.forEach(code => {
         const name = iso6391.getNativeName(code);
-        available_locales.push({ code, name })
+        availableLocales.push({ code, name })
     });
 
     try {
@@ -36,7 +36,7 @@ router.get('/view/:id', async (req, res) => {
             res.render('info/single', {
                 title: i18n.__("info_no") + ' ' + info._id + ' - ' + i18n.__('app_name'),
                 information: info,
-                available_locales: available_locales,
+                availableLocales,
                 isAdmin
             });
         } else {
