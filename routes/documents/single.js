@@ -7,16 +7,16 @@ router.get('/', async (req, res) => {
     res.redirect('/list');
 });
 
-router.get('/:hash', async (req, res) => {
-    const hash = req.params.hash;
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
     const isAdmin = req.query.hasOwnProperty('admin');
     
     try {
         let document;
         if (isAdmin) {
-            document = await Document.findById(hash);
+            document = await Document.findById(id);
         } else {
-            document = await Document.findOne({ _id: hash, deleted: false });
+            document = await Document.findOne({ _id: id, deleted: false });
         }
 
         if (document) {
