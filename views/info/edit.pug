@@ -166,11 +166,6 @@ block content
             event.preventDefault();
             const formData = new FormData(form);
 
-            let adminStatus = false;
-            if (window.location.href.includes('admin')) {
-                adminStatus = true;
-            }
-
             const defaultCheck = document.querySelector('[id*=default]');
             const deletedCheck = document.querySelector('[id*=deleted]');
             let deletedCheckStatus = false;
@@ -179,7 +174,7 @@ block content
             }
 
             const dataToSubmit = {
-                admin: adminStatus,
+                admin: window.location.href.includes('admin'),
                 labels: [],
                 fields: [],
                 default: defaultCheck.checked,
