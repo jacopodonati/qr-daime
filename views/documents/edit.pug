@@ -24,30 +24,41 @@ block content
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(form);
-            const formDataArray = [];
+            //- const deletedCheck = document.querySelector('[id*=deleted]');
+            //- let deletedCheckStatus = false;
+            //- if (deletedCheck) {
+            //-     deletedCheckStatus = deletedCheck.checked;
+            //- }
+
+            const dataToSubmit = {
+                admin: window.location.href.includes('admin'),
+                fields: [],
+                //- deleted: deletedCheckStatus
+            };
             
             for (const [key, value] of formData.entries()) {
                 if (key === 'id') {
                     const newObj = { _id: value, fields: [] };
-                    formDataArray.push(newObj);
+                    dataToSubmit.fields.push(newObj);
                 } else if (key === 'public') {
-                    const lastObjIndex = formDataArray.length - 1;
-                    formDataArray[lastObjIndex].public = value === 'on';
+                    const lastObjIndex = dataToSubmit.fields.length - 1;
+                    dataToSubmit.fields[lastObjIndex].public = value === 'on';
                 } else if (key === 'sort') {
-                    const lastObjIndex = formDataArray.length - 1;
-                    formDataArray[lastObjIndex].sort = value;
+                    const lastObjIndex = dataToSubmit.fields.length - 1;
+                    dataToSubmit.fields[lastObjIndex].sort = value;
                 } else {
-                    const lastObjIndex = formDataArray.length - 1;
-                    formDataArray[lastObjIndex].fields.push({ _id: key, value: value });
+                    const lastObjIndex = dataToSubmit.fields.length - 1;
+                    dataToSubmit.fields[lastObjIndex].fields.push({ _id: key, value: value });
                 }
             }
 
+            console.log(JSON.stringify(dataToSubmit))
             fetch('/edit/#{document._id}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formDataArray)
+                body: JSON.stringify(dataToSubmit)
             })
             .then(response => {
                 if (response.ok) {

@@ -33,15 +33,18 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/:hash', async (req, res) => {
-    const isAdmin = req.query.hasOwnProperty('admin');
+router.post('/:id', async (req, res) => {
+    const isAdmin = req.body.admin;
+    const id = req.params.id;
+
     try {
-        const newData = req.body;
+        const newData = req.body.fields;
+
         let document;
         if (isAdmin) {
-            document = await Document.findById(hash);
+            document = await Document.findById(id);
         } else {
-            document = await Document.findOne({ _id: hash, deleted: false });
+            document = await Document.findOne({ _id: id, deleted: false });
         }
 
         if (document) {
