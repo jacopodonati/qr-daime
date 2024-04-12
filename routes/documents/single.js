@@ -34,6 +34,4 @@ router.get('/:hash', async (req, res) => {
     }
 });
 
-router.use('/static', express.static('static'));
-
 module.exports = router;
