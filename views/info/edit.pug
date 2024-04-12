@@ -1,0 +1,240 @@
+extends ../layout
+
+block content
+    h1.mb-5 #{__("edit_info_title")} #{information._id}
+
+    ul#langSelector.nav.nav-tabs
+        each loc in availableLocales
+            li.nav-item
+                a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
+
+    form#infoForm
+        each loc in availableLocales
+            include ../partials/panel_info_edit.pug
+        hr
+        button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js" integrity="sha512-TelkP3PCMJv+viMWynjKcvLsQzx6dJHvIGhfqzFtZKgAjKM1YPqcwzzDEoTc/BHjf43PcPzTQOjuTr4YdE8lNQ==", crossorigin="anonymous", referrerpolicy="no-referrer")
+    script.
+        const removeButtonLabels = !{JSON.stringify(removeButtonLabels)};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            function changeLocaleFocus(locale) {
+                const langTabs = document.querySelectorAll('.lang-tab');
+                const oldActiveTab = document.querySelector('.active')
+                if (oldActiveTab) {
+                    oldActiveTab.classList.remove('active');
+                }
+                const newActiveTab = document.querySelector(`.lang-tab[data-lang*="${locale}"]`)
+                newActiveTab.classList.add('active');
+                const localizedPanels = document.querySelectorAll('.localizedPanel');
+                localizedPanels.forEach(function(localizedPanel) {
+                    localizedPanel.classList.add('d-none');
+                });
+                const newActiveLocalizedPanel = document.querySelector(`.localizedPanel[data-lang*="${locale}"]`)
+                newActiveLocalizedPanel.classList.remove('d-none');
+                newActiveLocalizedPanel.classList.add('d-block');
+            }
+
+            const langTabs = document.querySelectorAll('.lang-tab');
+            langTabs.forEach(function(langTab) {
+                langTab.addEventListener('click', function() {
+                    changeLocaleFocus(this.dataset.lang)
+                })
+            })
+
+            changeLocaleFocus("#{currentLocale}");
+
+            function sortListByIds(list, itemIds) {
+                const listLocale = list.dataset.lang;
+
+                var clonedItems = itemIds.map(function(itemId) {
+                    const newId = listLocale + itemId.substring(2);
+                    var item = document.getElementById(newId);
+                    return item ? item.cloneNode(true) : null;
+                });
+
+                while (list.firstChild) {
+                    list.removeChild(list.firstChild);
+                }
+
+                clonedItems.forEach(function(clonedItem) {
+                    if (clonedItem) {
+                        list.appendChild(clonedItem);
+                    }
+                });
+            }
+
+            var lists = document.querySelectorAll('.addedInfoList');
+            lists.forEach(function(list) {
+                new Sortable(list, {
+                    handle: '.field-handle',
+                    onUpdate: function() {
+                        var itemIds = [];
+                        list.querySelectorAll('li').forEach(function(item) {
+                            itemIds.push(item.id);
+                        });
+
+                        lists.forEach(function(otherList) {
+                            if (otherList !== list) {
+                                sortListByIds(otherList, itemIds);
+                            }
+                        });
+                    }
+                });
+            });
+
+            function removeItemFromEveryList(itemId) {
+                var lists = document.querySelectorAll('.addedInfoList');
+                lists.forEach(function(list) {
+                    const listLocale = list.dataset.lang;
+                    const listItem = document.getElementById(listLocale + itemId.substring(2));
+                    listItem.remove();
+                });
+            }
+
+            let removeButtons = document.querySelectorAll('.remove-button');
+            removeButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    removeItemFromEveryList(this.parentElement.parentElement.parentElement.id);
+                });
+            });
+
+            let addButtons = document.querySelectorAll('.add-button');
+            addButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const currentTimestamp = Date.now();
+                    const infoLists = document.querySelectorAll('.addedInfoList');
+                    infoLists.forEach(function(infoList) {
+                        const currentLocale = infoList.dataset.lang;
+                        const newItemId = `${currentLocale}-tmp-${currentTimestamp}`;
+
+                        const listItem = document.createElement('li');
+                        listItem.id = newItemId;
+                        listItem.classList.add('list-group-item');
+
+                        const listRow = document.createElement('div');
+                        listRow.classList.add('row', 'row-cols-lg-auto', 'g-3', 'align-items-center');
+                        listItem.appendChild(listRow);
+
+                        const handleIcon = document.createElement('i');
+                        handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
+                        listRow.appendChild(handleIcon);
+
+                        const inputWrapper = document.createElement('div');
+                        inputWrapper.classList.add('col-10');
+                        listRow.appendChild(inputWrapper);
+                        
+                        const infoText = document.createElement('input');
+                        infoText.type = 'text';
+                        infoText.name = newItemId;
+                        infoText.classList.add('form-control', 'field-label');
+                        inputWrapper.appendChild(infoText);
+
+                        const buttonWrapper = document.createElement('div');
+                        buttonWrapper.classList.add('col-2');
+                        listRow.appendChild(buttonWrapper);
+
+                        const removeIcon = document.createElement('span');
+                        removeIcon.innerHTML = removeButtonLabels[currentLocale];
+                        removeIcon.classList.add('btn', 'btn-danger', 'remove-button');
+                        removeIcon.style.cursor = 'pointer';
+                        removeIcon.addEventListener('click', function() {
+                            removeItemFromEveryList(newItemId);
+                        });
+                        buttonWrapper.appendChild(removeIcon);
+
+                        infoList.appendChild(listItem);
+                    });
+                });
+            });
+
+            let checkboxes = document.querySelectorAll('.form-check-input');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const checkedStatus = this.checked;
+                    const otherCheckboxes = document.querySelectorAll(`[id*=${this.id.substring(3)}]`);
+                    otherCheckboxes.forEach(function(otherCheckbox) {
+                        otherCheckbox.checked = checkedStatus;
+                    });
+                })
+            });
+        });
+
+        const form = document.getElementById('infoForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            let adminStatus = false;
+            if (window.location.href.includes('admin')) {
+                adminStatus = true;
+            }
+
+            const defaultCheck = document.querySelector('[id*=default]');
+            const deletedCheck = document.querySelector('[id*=deleted]');
+            let deletedCheckStatus = false;
+            if (deletedCheck) {
+                deletedCheckStatus = deletedCheck.checked;
+            }
+
+            const dataToSubmit = {
+                admin: adminStatus,
+                labels: [],
+                fields: [],
+                default: defaultCheck.checked,
+                deleted: deletedCheckStatus
+            };
+
+            const localizedPanels = document.querySelectorAll('.localizedPanel');
+            localizedPanels.forEach(function(localizedPanel) {
+                const panelLocale = localizedPanel.dataset.lang;
+                dataToSubmit.labels.push({
+                    'locale': panelLocale,
+                    'text': localizedPanel.querySelector('[id*=title]').value
+                });
+                const fields = localizedPanel.querySelectorAll('.field-label');
+                fields.forEach(function(field) {
+                    const fieldId = field.name.substring(3);
+                    const fieldIndex = dataToSubmit.fields.findIndex(function(field) {
+                        return field._id === fieldId;
+                    });
+
+                    if (fieldIndex !== -1) {
+                        dataToSubmit.fields[fieldIndex].labels.push({
+                            locale: panelLocale,
+                            text: field.value
+                        });
+                    } else {
+                        dataToSubmit.fields.push({
+                            _id: fieldId,
+                            labels: [{
+                                locale: panelLocale,
+                                text: field.value
+                            }]
+                        });
+                    }
+                });
+            });
+            
+            fetch('/info/edit/#{information._id}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSubmit)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Errore durante l\'invio dei dati al server');
+                }
+            })
+            .then(data => {
+                window.location.href = `/info/view/${data.savedInformation._id}`;
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
+        });

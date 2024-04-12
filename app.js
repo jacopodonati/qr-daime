@@ -29,6 +29,7 @@ const docRestoreRouter = require('./routes/documents/restore');
 const infoSingleRouter = require('./routes/info/single');
 const infoListRouter = require('./routes/info/list');
 const infoAddRouter = require('./routes/info/add');
+const infoEditRouter = require('./routes/info/edit');
 const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
 
@@ -77,6 +78,7 @@ app.use('/restore', docRestoreRouter);
 app.use('/info/', infoSingleRouter);
 app.use('/info/list', infoListRouter);
 app.use('/info/add', infoAddRouter);
+app.use('/info/edit', infoEditRouter);
 app.use('/info/delete', infoDeleteRouter);
 app.use('/info/restore', infoRestoreRouter);
 

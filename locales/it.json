@@ -43,8 +43,14 @@
 	"info_no": "Informazione n.",
 	"language_dropdown": "Seleziona una lingua",
 	"delete_info_no": "Cancella informazione n.",
+	"restore_button": "Ripristina",
+	"edit_info_title": "Modifica informazione n.",
+	"default": "Default",
+	"deleted": "Cancellato",
 	"information_required": "Informazione richiesta",
 	"information_not_required": "Informazione non richiesta",
 	"information_deleted": "informazione cancellata",
-	"information_not_deleted": "informazione non cancellata"
+	"information_not_deleted": "informazione non cancellata",
+	"missing_label_text_in_field": "L'etichetta del campo deve essere compilata in almeno una lingua",
+	"missing_label_text": "Il titolo dell'informazione deve essere compilato in almeno una lingua"
 }
