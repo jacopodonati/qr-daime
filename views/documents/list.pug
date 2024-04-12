@@ -14,6 +14,7 @@ block content
                     th ID
                     th#dateHeader(data-sorting="asc") #{__("doc_date_of_issue")}
                         i.ms-3.bi.bi-sort-numeric-down
+                    th PDF
                     th
             each document in documents
                 - let queryString = ""
@@ -32,6 +33,9 @@ block content
                             td ✅
                     td #{document._id}
                     td.date #{document.dateOfIssue}
+                    td
+                        a(href=`/pdf/${document._id}`)
+                            i.bi.bi-postage-fill
                     td
                         .btn-group(role="group").float-end
                             a(href=`/edit/${document._id}${queryString}`).btn.btn-success.btn-sm #{__("edit_button")}

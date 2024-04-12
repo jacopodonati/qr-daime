@@ -34,7 +34,12 @@ async function getQRCodeString(text) {
     return await QRCode.toDataURL(text)
 }
 
+async function getQRCodeSVG(text) {
+    return await QRCode.toString(text, { type: 'svg' });
+}
+
 module.exports = {
     'getQRDocumentContent': getQRDocumentContent,
-    'getQRCodeString': getQRCodeString
+    'getQRCodeString': getQRCodeString,
+    'getQRCodeSVG': getQRCodeSVG
 }
