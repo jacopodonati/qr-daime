@@ -52,5 +52,11 @@
 	"information_deleted": "information deleted",
 	"information_not_deleted": "information not deleted",
 	"missing_label_text_in_field": "The field label must be filled in at least one language",
-	"missing_label_text": "The title of the information must be filled in at least one language"
+	"missing_label_text": "The title of the information must be filled in at least one language",
+	"navbar_template": "Templates",
+	"navbar_template_add": "Add a new template",
+	"navbar_template_list": "List every template",
+	"navbar_doc_add": "Add a new page",
+	"navbar_info_add": "Add a new information",
+	"navbar_doc_list": "List all documents"
 }

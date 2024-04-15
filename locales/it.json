@@ -52,5 +52,11 @@
 	"information_deleted": "informazione cancellata",
 	"information_not_deleted": "informazione non cancellata",
 	"missing_label_text_in_field": "L'etichetta del campo deve essere compilata in almeno una lingua",
-	"missing_label_text": "Il titolo dell'informazione deve essere compilato in almeno una lingua"
+	"missing_label_text": "Il titolo dell'informazione deve essere compilato in almeno una lingua",
+	"navbar_template": "Modelli",
+	"navbar_template_add": "Aggiungi un modello",
+	"navbar_template_list": "Elenca tutti i modelli",
+	"navbar_doc_add": "Aggiungi una nuova pagina",
+	"navbar_info_add": "Aggiungi un nuovo campo",
+	"navbar_doc_list": "Elenca tutti i documenti"
 }

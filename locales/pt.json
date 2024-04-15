@@ -52,5 +52,11 @@
 	"information_deleted": "informação excluída",
 	"information_not_deleted": "informação não excluída",
 	"missing_label_text_in_field": "O nome do campo deve ser preenchido em pelo menos um idioma",
-	"missing_label_text": "O título da informação deve ser preenchido em pelo menos um idioma"
+	"missing_label_text": "O título da informação deve ser preenchido em pelo menos um idioma",
+	"navbar_template": "Modelos",
+	"navbar_template_add": "Adicionar um modelo",
+	"navbar_template_list": "Listar todos os modelos",
+	"navbar_doc_add": "Adicionar uma nova pagina",
+	"navbar_info_add": "Adicionar uma nova informação",
+	"navbar_doc_list": "Listar todos os documentos"
 }

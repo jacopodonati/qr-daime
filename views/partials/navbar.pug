@@ -10,18 +10,31 @@ if !hideNavbar
             a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
             ul.dropdown-menu
               li.dropdown-item
-                a.nav-link(href=`/doc/add${isAdminQueryParam}`) #{__("add_doc_title")}
+                a.nav-link(href=`/doc/add${isAdminQueryParam}`)
+                  i.bi.bi-plus.me-3
+                  | #{__("navbar_doc_add")}
               li.dropdown-item
-                a.nav-link(href=`/doc/list${isAdminQueryParam}`) #{__("listpage_title")}
+                a.nav-link(href=`/doc/list${isAdminQueryParam}`)
+                  i.bi.bi-list-ul.me-3
+                  | #{__("navbar_doc_list")}
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_info")}
             ul.dropdown-menu
               li.dropdown-item
-                a.nav-link(href=`/info/list${isAdminQueryParam}`) #{__("navbar_info_list")}
-              li
-                hr.dropdown-divider
+                a.nav-link(href=`/info/add${isAdminQueryParam}`)
+                  i.bi.bi-plus.me-3
+                  | #{__("navbar_info_add")}
               li.dropdown-item
-                a.nav-link(href=`/info/list${isAdminQueryParam}`) #{__("navbar_info_list")}
+                a.nav-link(href=`/info/list${isAdminQueryParam}`)
+                  i.bi.bi-list-ul.me-3
+                  | #{__("navbar_info_list")}
+          //- li.nav-item.dropdown
+          //-   a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_template")}
+          //-   ul.dropdown-menu
+          //-     li.dropdown-item
+          //-       a.nav-link(href=`/template/add${isAdminQueryParam}`) #{__("navbar_template_add")}
+          //-     li.dropdown-item
+          //-       a.nav-link(href=`/template/list${isAdminQueryParam}`) #{__("navbar_template_list")}
       if isAdmin
         div.d-flex
           span.badge.rounded-pill.text-bg-danger 
