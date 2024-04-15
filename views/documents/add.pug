@@ -5,7 +5,7 @@ block content
 
     include ../partials/form_search_field.pug
 
-    form(id="doc-form" action=`/add` method="post")
+    form(id="doc-form" action=`/doc/add` method="post")
         hr
 
         hr#form-sep
@@ -39,7 +39,7 @@ block content
                 }
             }
 
-            fetch(`/add!{isAdminQueryParam}`, {
+            fetch(`/doc/add!{isAdminQueryParam}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

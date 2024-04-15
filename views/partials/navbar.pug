@@ -10,9 +10,9 @@ if !hideNavbar
             a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
             ul.dropdown-menu
               li.dropdown-item
-                a.nav-link(href=`/add${isAdminQueryParam}`) #{__("add_doc_title")}
+                a.nav-link(href=`/doc/add${isAdminQueryParam}`) #{__("add_doc_title")}
               li.dropdown-item
-                a.nav-link(href=`/list${isAdminQueryParam}`) #{__("listpage_title")}
+                a.nav-link(href=`/doc/list${isAdminQueryParam}`) #{__("listpage_title")}
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_info")}
             ul.dropdown-menu

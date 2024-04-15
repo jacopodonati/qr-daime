@@ -5,7 +5,7 @@ block content
 
     include ../partials/form_search_field.pug
 
-    form(id="doc-form" action=`/edit` method="post")
+    form(id="doc-form" action=`/doc/edit` method="post")
         hr
 
         hr#form-sep
@@ -52,7 +52,7 @@ block content
             }
 
             console.log(JSON.stringify(dataToSubmit))
-            fetch(`/edit/#{document._id}!{isAdminQueryParam}`, {
+            fetch(`/doc/edit/#{document._id}!{isAdminQueryParam}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

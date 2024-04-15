@@ -35,12 +35,12 @@ block content
                             i.bi.bi-postage-fill
                     td
                         .btn-group(role="group").float-end
-                            a(href=`/edit/${document._id}${isAdminQueryParam}`).btn.btn-success.btn-sm #{__("edit_button")}
+                            a(href=`/doc/edit/${document._id}${isAdminQueryParam}`).btn.btn-success.btn-sm #{__("edit_button")}
                             a(href=`/doc/${document._id}${isAdminQueryParam}`).btn.btn-primary.btn-sm #{__("view_button")}
                             - if (!document.deleted)
-                                a(href=`/delete/${document._id}${isAdminQueryParam}`).btn.btn-danger.btn-sm #{__("delete_button")}
+                                a(href=`/doc/delete/${document._id}${isAdminQueryParam}`).btn.btn-danger.btn-sm #{__("delete_button")}
                             - else
-                                a(href=`/restore/${document._id}${isAdminQueryParam}`).btn.btn-warning.btn-sm #{__("restore_button")}
+                                a(href=`/doc/restore/${document._id}${isAdminQueryParam}`).btn.btn-warning.btn-sm #{__("restore_button")}
     script.
         document.addEventListener('DOMContentLoaded', function() {
             const dates = document.querySelectorAll('.date');
