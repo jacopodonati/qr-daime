@@ -67,6 +67,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/static', express.static('static'));
+
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
 app.use('/static', staticRouter);
