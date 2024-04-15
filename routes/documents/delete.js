@@ -5,7 +5,6 @@ const i18n = require('i18n');
 
 router.get('/:hash', async (req, res) => {
     const hash = req.params.hash;
-    const isAdmin = req.query.hasOwnProperty('admin');
 
     try {
         const document = await Document.findById(hash);
@@ -13,8 +12,7 @@ router.get('/:hash', async (req, res) => {
         if (document) {
             res.render('documents/delete', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
-                document: document,
-                isAdmin
+                document: document
             });
         } else {
             res.redirect('/list');
@@ -27,11 +25,10 @@ router.get('/:hash', async (req, res) => {
 
 router.post('/:hash', async (req, res) => {
     const hash = req.params.hash;
-    const isAdmin = req.query.hasOwnProperty('admin');
 
     try {
         let document;
-        if (isAdmin) {
+        if (req.isAdmin) {
             document = await Document.findById(hash);
         } else {
             document = await Document.findOne({ _id: hash, deleted: false });

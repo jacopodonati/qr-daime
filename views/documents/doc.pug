@@ -77,7 +77,7 @@ script.
     }
 
     function fetchLabels(infoIds) {
-        return fetch('/info/list/labels', {
+        return fetch(`/info/list/labels!{isAdminQueryParam}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

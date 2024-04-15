@@ -102,13 +102,12 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/:id', validateAndTranslateData, async (req, res) => {
-    const isAdmin = req.body.admin;
     try {
         const id = req.params.id;
         const newData = req.body;
         let information;
         
-        if (isAdmin) {
+        if (req.isAdmin) {
             information = await Information.findById(id);
         } else {
             information = await Information.findOne({ _id: id, deleted: false });

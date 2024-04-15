@@ -4,9 +4,8 @@ const Information = require('../../models/information');
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const isAdmin = req.query.hasOwnProperty('admin');
 
-    if (isAdmin) {        
+    if (req.isAdmin) {        
         try {
             const information = await Information.findById(id);
             

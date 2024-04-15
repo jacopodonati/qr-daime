@@ -6,8 +6,7 @@ const acceptLanguageParser = require('accept-language-parser');
 
 router.get('/', async (req, res) => {
     try {
-        const isAdmin = req.query.hasOwnProperty('admin');
-        const queryString = isAdmin ? {} : { deleted: false };
+        const queryString = req.isAdmin ? {} : { deleted: false };
         const info = await Information.find(queryString);
 
         const acceptLanguage = req.headers['accept-language'];
@@ -17,8 +16,7 @@ router.get('/', async (req, res) => {
         res.render('info/list', {
             title: i18n.__('list_info') + ' - ' + i18n.__('app_name'),
             information: info,
-            locale: locale,
-            isAdmin: isAdmin
+            locale: locale
         });
 
     } catch (error) {
@@ -29,7 +27,6 @@ router.get('/', async (req, res) => {
 
 router.get('/search', async (req, res) => {
     try {
-        const isAdmin = req.query.hasOwnProperty('admin');
         const q = req.query.q;
 
         const acceptLanguage = req.headers['accept-language'];
@@ -51,7 +48,7 @@ router.get('/search', async (req, res) => {
             deleted: false
         }
 
-        if (isAdmin) {
+        if (req.isAdmin) {
             delete searchQuery.deleted;
         }
 

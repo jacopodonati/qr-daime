@@ -6,10 +6,10 @@ block content
   div.col-lg-6
     p.fs-5 #{__("homepage_welcome")}
 
-    a(href="/list", role="button").btn.btn-primary.me-2
+    a(href=`/list${isAdminQueryParam}`, role="button").btn.btn-primary.me-2
       i.bi.bi-list-ul.me-2
       | #{__("list_docs")}
 
-    a(href="/add", role="button").btn.btn-primary
+    a(href=`/add${isAdminQueryParam}`, role="button").btn.btn-primary
       i.bi.bi-plus.me-2
       | #{__("add_doc")}

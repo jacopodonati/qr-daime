@@ -7,13 +7,11 @@ const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 router.use(express.json());
 
 router.get('/:id', async (req, res) => {
-    const isAdmin = req.query.hasOwnProperty('admin');
-
     try {
         const id = req.params.id;
 
         let document;
-        if (isAdmin) {
+        if (req.isAdmin) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });
@@ -34,14 +32,13 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/:id', async (req, res) => {
-    const isAdmin = req.body.admin;
     const id = req.params.id;
 
     try {
         const newData = req.body.fields;
 
         let document;
-        if (isAdmin) {
+        if (req.isAdmin) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });

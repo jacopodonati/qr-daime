@@ -16,7 +16,6 @@ router.get('/id/:id', async (req, res) => {
 
 router.get('/view/:id', async (req, res) => {
     const id = req.params.id;
-    const isAdmin = req.query.hasOwnProperty('admin');
     const locale_codes = i18n.getLocales();
     let availableLocales = []
     locale_codes.forEach(code => {
@@ -26,7 +25,7 @@ router.get('/view/:id', async (req, res) => {
 
     try {
         let info;
-        if (isAdmin) {
+        if (req.isAdmin) {
             info = await Information.findById(id);
         } else {
             info = await Information.findOne({ _id: id, deleted: false });
@@ -36,8 +35,7 @@ router.get('/view/:id', async (req, res) => {
             res.render('info/single', {
                 title: i18n.__("info_no") + ' ' + info._id + ' - ' + i18n.__('app_name'),
                 information: info,
-                availableLocales,
-                isAdmin
+                availableLocales
             });
         } else {
             res.redirect('/info/list');

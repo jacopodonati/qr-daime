@@ -1,22 +1,29 @@
 if !hideNavbar
-      nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        div.container-fluid
-          a.navbar-brand(href="/") #{__("app_name")}
-          if isAdmin
-            i.bi.bi-unlock(aria-hidden="true")
-          button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
-            span.navbar-toggler-icon
-          div#navbarNav.collapse.navbar-collapse
-            ul.navbar-nav
-              li.nav-item.dropdown
-                a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
-                ul.dropdown-menu
-                  li.dropdown-item
-                    a.nav-link(href="/add") #{__("add_doc_title")}
-                  li.dropdown-item
-                    a.nav-link(href="/list") #{__("listpage_title")}
-              li.nav-item.dropdown
-                a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_info")}
-                ul.dropdown-menu
-                  li.dropdown-item
-                    a.nav-link(href="/info/list") #{__("navbar_info_list")}
+  nav.navbar.navbar-expand-lg.navbar-light.bg-light
+    div.container-fluid
+      a.navbar-brand(href="/") #{__("app_name")}
+      button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      div#navbarNav.collapse.navbar-collapse
+        ul.navbar-nav
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
+            ul.dropdown-menu
+              li.dropdown-item
+                a.nav-link(href=`/add${isAdminQueryParam}`) #{__("add_doc_title")}
+              li.dropdown-item
+                a.nav-link(href=`/list${isAdminQueryParam}`) #{__("listpage_title")}
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_info")}
+            ul.dropdown-menu
+              li.dropdown-item
+                a.nav-link(href=`/info/list${isAdminQueryParam}`) #{__("navbar_info_list")}
+              li
+                hr.dropdown-divider
+              li.dropdown-item
+                a.nav-link(href=`/info/list${isAdminQueryParam}`) #{__("navbar_info_list")}
+      if isAdmin
+        div.d-flex
+          span.badge.rounded-pill.text-bg-danger 
+            i.bi.bi-unlock.me-1(aria-hidden="true")
+            | admin

@@ -29,11 +29,10 @@ router.get('/', async (req, res) => {
 
 router.get('/:id/:what?', async (req, res) => {
     const id = req.params.id;
-    const isAdmin = req.query.hasOwnProperty('admin');
 
     try {
         let document;
-        if (isAdmin) {
+        if (req.isAdmin) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });

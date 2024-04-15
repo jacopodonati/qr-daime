@@ -40,9 +40,20 @@ i18n.configure({
     defaultLocale: 'pt'
 });
 
+function isAdmin(req, res, next) {
+    req.isAdmin = req.query.hasOwnProperty('admin');
+    next();
+}
+
 const app = express();
 
 app.use(i18n.init);
+
+app.use(isAdmin);
+app.use((req, res, next) => {
+    res.locals.isAdmin = req.isAdmin;
+    next();
+});
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

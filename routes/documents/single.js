@@ -9,11 +9,10 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const isAdmin = req.query.hasOwnProperty('admin');
     
     try {
         let document;
-        if (isAdmin) {
+        if (req.isAdmin) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });
@@ -22,8 +21,7 @@ router.get('/:id', async (req, res) => {
         if (document) {
             res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
-                document: document,
-                isAdmin
+                document: document
             });
         } else {
             res.redirect('/list');

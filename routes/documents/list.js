@@ -5,14 +5,12 @@ const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     try {
-        const isAdmin = req.query.hasOwnProperty('admin');
-        const queryString = isAdmin ? {} : { deleted: false };
+        const queryString = req.isAdmin ? {} : { deleted: false };
         const documents = await Document.find(queryString);
         
         res.render('documents/list', {
             title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
-            documents: documents,
-            isAdmin: isAdmin
+            documents: documents
         });
 
     } catch (error) {
