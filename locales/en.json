@@ -59,5 +59,6 @@
 	"navbar_doc_add": "Add a new page",
 	"navbar_info_add": "Add a new information",
 	"navbar_doc_list": "List all documents",
-	"info_add_title": "Add a new information"
+	"info_add_title": "Add a new information",
+	"pick_field": "Pick a field"
 }

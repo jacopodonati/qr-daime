@@ -266,6 +266,7 @@ function addFieldToForm(fieldStructure, fieldData) {
         removeButton.addEventListener('mouseup', function() {
             fieldContainer.remove();
             fields_added = fields_added.filter(id => id !== fieldStructure._id);
+            toggleFieldInDropdown(`dd-${fieldStructure._id}`)
         });
         footer.appendChild(removeButton);
     }
@@ -276,6 +277,19 @@ function addFieldToForm(fieldStructure, fieldData) {
     const docForm = document.getElementById('doc-form');
     docForm.insertBefore(fieldContainer, formSep);
     fields_added.push(fieldStructure._id);
+    toggleFieldInDropdown(`dd-${fieldStructure._id}`);
+}
+
+function toggleFieldInDropdown(id) {
+    const field = document.getElementById(id);
+    const disablingClass = 'disabled';
+    if (field) {
+        if (field.classList.contains(disablingClass)) {
+            field.classList.remove(disablingClass);
+        } else {
+            field.classList.add(disablingClass);
+        }
+    }
 }
 
 document.getElementById('searchResultsList').addEventListener('mouseup', function(event) {
@@ -286,6 +300,18 @@ document.getElementById('searchResultsList').addEventListener('mouseup', functio
         addFieldToForm(object);
         clearSearchInput();
     }
+});
+
+const dropdownItems = document.querySelectorAll('#findField li a');
+dropdownItems.forEach((item) => {
+    item.addEventListener('mouseup', function(event) {
+        const listItem = event.target.closest('li');
+        if (listItem) {
+            const objectString = listItem.dataset.object;
+            const object = JSON.parse(objectString);
+            addFieldToForm(object);
+        }
+    });
 });
 
 function getDefaultFields() {

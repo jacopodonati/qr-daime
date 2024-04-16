@@ -59,5 +59,6 @@
 	"navbar_doc_add": "Aggiungi una nuova pagina",
 	"navbar_info_add": "Aggiungi un nuovo campo",
 	"navbar_doc_list": "Elenca tutti i documenti",
-	"info_add_title": "Aggiungi informazione"
+	"info_add_title": "Aggiungi informazione",
+	"pick_field": "Scegli un campo"
 }

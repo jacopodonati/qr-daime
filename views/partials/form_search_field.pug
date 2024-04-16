@@ -1,8 +1,20 @@
 .row.mb-3
-    .col-6
-        label(for='addFieldInput', class='form-label') #{__("search_field")}:
+    label(for='addFieldInput', class='form-label') #{__("search_field")}:
+    .input-group
         input#addFieldInput.form-control(type='text', placeholder=`${__("search_placeholder")}`, onkeyup="searchField()")
-
+        button.btn.btn-outline-primary.dropdown-toggle(type="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("pick_field")}
+        ul#findField.dropdown-menu.dropdown-menu-end
+            each field in fields
+                - var summary = ''
+                each label in field.labels
+                    - if (label.locale == locale)
+                        - summary = label.text + ': '
+                each subfield in field.fields
+                    each sublabel in subfield.labels
+                        - if (sublabel.locale == locale)
+                            - summary += sublabel.text + ', '
+                li(data-object=`${JSON.stringify(field)}`)
+                    a.dropdown-item(id=`dd-${field._id}`, href="#")= summary.slice(0, -2)
     #searchResults.d-none
         ul#searchResultsList.list-group.mb-3
         button(type='button', class='btn btn-primary', data-bs-toggle='modal', data-bs-target='#addFieldModal') #{__("add_new_field")}
