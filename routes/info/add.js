@@ -31,7 +31,6 @@ router.get('/', async function(req, res, next) {
 });
 
 router.post('/', validateInformationData, async (req, res) => {
-    console.log(req.body)
     try {
         const { labels, fields } = req.body;
 
