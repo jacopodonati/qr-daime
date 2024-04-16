@@ -1,4 +1,5 @@
 var number_of_info = 0;
+var fields_added = [];
 
 function addInfoField() {
     const infoLabelInput = document.getElementById('infoLabel');
@@ -150,7 +151,8 @@ function displaySearchResults(data) {
     const searchResultsList = document.getElementById('searchResultsList');
     searchResultsList.innerHTML = '';
     if (data.length > 0) {
-        data.forEach(information => {
+        const filtered_data = data.filter(obj => !fields_added.some(id => id === obj.result._id));
+        filtered_data.forEach(information => {
             const listItem = document.createElement('li');
             listItem.classList.add('list-group-item');
             listItem.dataset.object = JSON.stringify(information.result);
@@ -263,12 +265,7 @@ function addFieldToForm(fieldStructure, fieldData) {
         removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
         removeButton.addEventListener('mouseup', function() {
             fieldContainer.remove();
-            // const remainingFields = document.querySelectorAll('#addForm .card').length;
-            // if (remainingFields === 0) {
-            //     const addForm = document.getElementById('addForm');
-            //     addForm.classList.add('d-none');
-            //     addForm.classList.remove('d-block');
-            // }
+            fields_added = fields_added.filter(id => id !== fieldStructure._id);
         });
         footer.appendChild(removeButton);
     }
@@ -278,12 +275,7 @@ function addFieldToForm(fieldStructure, fieldData) {
     
     const docForm = document.getElementById('doc-form');
     docForm.insertBefore(fieldContainer, formSep);
-
-    // const isFormHidden = addForm.classList.contains('d-none');
-    // if (isFormHidden) {
-    //     addForm.classList.remove('d-none');
-    //     addForm.classList.add('d-block');
-    // }
+    fields_added.push(fieldStructure._id);
 }
 
 document.getElementById('searchResultsList').addEventListener('mouseup', function(event) {
