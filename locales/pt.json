@@ -58,5 +58,6 @@
 	"navbar_template_list": "Listar todos os modelos",
 	"navbar_doc_add": "Adicionar uma nova pagina",
 	"navbar_info_add": "Adicionar uma nova informação",
-	"navbar_doc_list": "Listar todos os documentos"
+	"navbar_doc_list": "Listar todos os documentos",
+	"info_add_title": "Adicione uma nova informação"
 }
