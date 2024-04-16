@@ -61,7 +61,6 @@ async function translateText(text, sourceLanguage, targetLanguage) {
 }
 
 router.get('/:id', async (req, res) => {
-    const isAdmin = req.query.hasOwnProperty('admin');
     const localeCodes = i18n.getLocales();
     let availableLocales = [];
     let removeButtonLabels = {};
@@ -77,7 +76,7 @@ router.get('/:id', async (req, res) => {
         const id = req.params.id;
 
         let information;
-        if (isAdmin) {
+        if (req.isAdmin) {
             information = await Information.findById(id);
         } else {
             information = await Information.findOne({ _id: id, deleted: false });
@@ -90,7 +89,6 @@ router.get('/:id', async (req, res) => {
         res.render('info/edit', {
             title: i18n.__('edit_info_title') + ' ' + id + ' - ' + i18n.__('app_name'),
             information,
-            isAdmin,
             availableLocales,
             currentLocale,
             removeButtonLabels
