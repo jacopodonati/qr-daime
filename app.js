@@ -4,18 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const acceptLanguageParser = require('accept-language-parser');
-const i18n = require('i18n');
-const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI);
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Errore di connessione al database:'));
-db.once('open', async () => {
-    console.log('Connessione al database MongoDB avvenuta con successo');
-});
+const db = require('./config/db');
+const i18n = require('./config/i18n');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
@@ -33,12 +26,6 @@ const infoAddRouter = require('./routes/info/add');
 const infoEditRouter = require('./routes/info/edit');
 const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
-
-i18n.configure({
-    locales: ['en', 'it', 'pt'],
-    directory: __dirname + '/locales',
-    defaultLocale: 'pt'
-});
 
 function isAdmin(req, res, next) {
     req.isAdmin = req.query.hasOwnProperty('admin');
