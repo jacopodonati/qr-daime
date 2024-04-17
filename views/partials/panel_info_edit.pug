@@ -1,45 +1,45 @@
 container.localizedPanel.mt-3(data-lang=`${loc.code}`)
-    div.mb-3
-        - let info_title = { code: loc.code, text: '' }
+  div.mb-3
+    - let info_title = { code: loc.code, text: '' }
+    - if (information)
+      - info_title = information.labels.find(label => label.locale === loc.code);
+    label.form-label(for=`${loc.code}-title`) #{__({ phrase: "modal_new_field_title", locale: loc.code })}:
+    input.form-control(type="text", name=`${loc.code}-title`, id=`${loc.code}-title`, value=`${info_title.text}`, placeholder=`${__({ phrase: "modal_new_field_title", locale: loc.code })}`)
+  div.mb-3
+    div.form-check
+      - let default_status = false 
+      - if (information)
+        - default_status = information.default
+      - if (default_status)
+        input.form-check-input(type="checkbox", checked, name="default", id=`${loc.code}-default`)
+      - else 
+        input.form-check-input(type="checkbox" name="default", id=`${loc.code}-default`)
+      label.form-check-label(for=`${loc.code}-default`) #{__({ phrase: "default", locale: loc.code })}
+    - if (isAdmin)
+      div.form-check
+        - let deleted_status = false 
         - if (information)
-            - info_title = information.labels.find(label => label.locale === loc.code);
-        label.form-label(for=`${loc.code}-title`) #{__({ phrase: "modal_new_field_title", locale: loc.code })}:
-        input.form-control(type="text", name=`${loc.code}-title`, id=`${loc.code}-title`, value=`${info_title.text}`, placeholder=`${__({ phrase: "modal_new_field_title", locale: loc.code })}`)
-    div.mb-3
-        div.form-check
-            - let default_status = false 
-            - if (information)
-                - default_status = information.default
-            - if (default_status)
-                input.form-check-input(type="checkbox", checked, name="default", id=`${loc.code}-default`)
-            - else 
-                input.form-check-input(type="checkbox", name="default", id=`${loc.code}-default`)
-            label.form-check-label(for=`${loc.code}-default`) #{__({ phrase: "default", locale: loc.code })}
-        - if (isAdmin)
-            div.form-check
-                - let deleted_status = false 
-                - if (information)
-                    - deleted_status = information.deleted
-                - if (deleted_status)
-                    input.form-check-input(type="checkbox", checked, name="deleted", id=`${loc.code}-deleted`)
-                - else 
-                    input.form-check-input(type="checkbox", name="deleted", id=`${loc.code}-deleted`)
-                label.form-check-label(for=`${loc.code}-deleted`) #{__({ phrase: "deleted", locale: loc.code })}
-    hr
+          - deleted_status = information.deleted
+        - if (deleted_status)
+          input.form-check-input(type="checkbox", checked, name="deleted", id=`${loc.code}-deleted`)
+        - else 
+          input.form-check-input(type="checkbox" name="deleted", id=`${loc.code}-deleted`)
+        label.form-check-label(for=`${loc.code}-deleted`) #{__({ phrase: "deleted", locale: loc.code })}
+  hr
 
-    ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
-        - if (information)
-            each field in information.fields
-                - let field_label = field.labels.find(label => label.locale === loc.code);
-                li(class="list-group-item" id=`${loc.code}-${field._id}`, data-lang=`${loc.code}`)
-                    .row.row-cols-lg-auto.g-3.align-items-center
-                        i.bi.bi-grip-vertical.me-2.field-handle
-                        .col-10
-                            input.form-control.field-label(type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`)
-                        .col-2
-                            span.btn.btn-danger.remove-button #{__({ phrase: "INPUT_LBL_REMOVE", locale: loc.code })}
+  ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
+    - if (information)
+      each field in information.fields
+        - let field_label = field.labels.find(label => label.locale === loc.code);
+        li(class="list-group-item" id=`${loc.code}-${field._id}`, data-lang=`${loc.code}`)
+          .row.row-cols-lg-auto.g-3.align-items-center
+            i.bi.bi-grip-vertical.me-2.field-handle
+            .col-10
+              input.form-control.field-label(type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`)
+            .col-2
+              span.btn.btn-danger.remove-button #{__({ phrase: "INPUT_LBL_REMOVE", locale: loc.code })}
 
-    .mb-3
-        button.btn.btn-primary.add-button(type="button", data-lang=`${loc.code}`) #{__({ phrase: "modal_new_field_info_add", locale: loc.code })}
+  .mb-3
+    button.btn.btn-primary.add-button(type="button", data-lang=`${loc.code}`) #{__({ phrase: "modal_new_field_info_add", locale: loc.code })}
 
-    div.mb-3
+  div.mb-3

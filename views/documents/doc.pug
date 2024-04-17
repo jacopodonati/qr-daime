@@ -5,104 +5,104 @@ img(src=`${document.qrUrl}`, alt="Link")
 p #{document.dateOfIssue}
 
 script.
-    function getLabel(id) {
-        for (const field of document.fields) {
-            for (const info of field.fields) {
-                if (info._id === id) {
-                    return info.label;
-                }
-            }
+  function getLabel(id) {
+    for (const field of document.fields) {
+      for (const info of field.fields) {
+        if (info._id === id) {
+          return info.label;
         }
-        return '';
+      }
     }
+    return '';
+  }
 
 each info in document.information
-    if (isAdmin || info.public)
-        - let info_id = 'id-' + info._id
-        - let classes = info.public ? '' : 'bg-secondary-subtle'
-        div(class=`${classes}`)
-            h2(id=info_id)
-            ul
-                each field in info.fields
-                    - let field_id = 'id-' + field._id
-                    li
-                        span(id=field_id).field-id #{field._id}
-                        | : 
-                        span.field-value #{field.value}
+  if (isAdmin || info.public)
+    - let info_id = 'id-' + info._id
+    - let classes = info.public ? '' : 'bg-secondary-subtle'
+    div(class=`${classes}`)
+      h2(id=info_id)
+      ul
+        each field in info.fields
+          - let field_id = 'id-' + field._id
+          li
+            span(id=field_id).field-id #{field._id}
+            | : 
+            span.field-value #{field.value}
 
 img(src=`${document.qrDocument}`, alt="Document")
 
 script.
-    function getLabel(labels, locale) {
-        for (const label of labels) {
-            if (label.locale === locale) {
-                return label.text;
-            }
+  function getLabel(labels, locale) {
+    for (const label of labels) {
+      if (label.locale === locale) {
+        return label.text;
+      }
+    }
+
+    for (const label of labels) {
+      if (label.locale === 'en') {
+        return label.text;
+      }
+    }
+
+    return labels[0].text;
+  }
+
+  function setLabels(labels) {
+    const locale_complete = navigator.language || navigator.userLanguage;
+    const locale = locale_complete.substring(0, 2);
+
+    for (const block of labels) {
+      const infoId = 'id-' + block.id;
+      const h2Element = document.getElementById(infoId);
+
+      if (h2Element) {
+        const label = getLabel(block.labels, locale);
+
+        h2Element.innerText = label;
+      }
+
+      for (const field of block.fields) {
+        const fieldId = 'id-' + field.id;
+        const spanElement = document.getElementById(fieldId);
+
+        if (spanElement) {
+          const label = getLabel(field.labels, locale);
+
+          spanElement.innerText = label;
         }
-        
-        for (const label of labels) {
-            if (label.locale === 'en') {
-                return label.text;
-            }
-        }
-
-        return labels[0].text;
+      }
     }
+  }
 
-    function setLabels(labels) {
-        const locale_complete = navigator.language || navigator.userLanguage;
-        const locale = locale_complete.substring(0, 2);
+  function fetchLabels(infoIds) {
+    return fetch(`/info/list/labels!{isAdminQueryParam}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ infoIds })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Errore durante il recupero delle label dei campi');
+      }
+    })
+    .catch(error => {
+      console.error('Errore:', error);
+    });
+  }
 
-        for (const block of labels) {
-            const infoId = 'id-' + block.id;
-            const h2Element = document.getElementById(infoId);
-            
-            if (h2Element) {
-                const label = getLabel(block.labels, locale);
-                
-                h2Element.innerText = label;
-            }
-
-            for (const field of block.fields) {
-                const fieldId = 'id-' + field.id;
-                const spanElement = document.getElementById(fieldId);
-                
-                if (spanElement) {
-                    const label = getLabel(field.labels, locale);
-                    
-                    spanElement.innerText = label;
-                }
-            }
-        }
-    }
-
-    function fetchLabels(infoIds) {
-        return fetch(`/info/list/labels!{isAdminQueryParam}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ infoIds })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Errore durante il recupero delle label dei campi');
-            }
-        })
-        .catch(error => {
-            console.error('Errore:', error);
-        });
-    }
-
-    let doc =  !{JSON.stringify(document)};
-    let infoIds = [];
-    for (const info of doc.information) {
-        let fields = info.fields.map(info => info._id);
-        infoIds.push({ _id: info._id, fields });
-    }
-    fetchLabels(infoIds)
-        .then(labels => {
-            setLabels(labels);
-        });
+  let doc =  !{JSON.stringify(document)};
+  let infoIds = [];
+  for (const info of doc.information) {
+    let fields = info.fields.map(info => info._id);
+    infoIds.push({ _id: info._id, fields });
+  }
+  fetchLabels(infoIds)
+    .then(labels => {
+      setLabels(labels);
+    });

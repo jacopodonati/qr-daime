@@ -1,75 +1,75 @@
 extends ../layout
 
 block content
-    h1.mb-5 #{__("edit_doc_title")} #{document._id}
+  h1.mb-5 #{__("edit_doc_title")} #{document._id}
 
-    include ../partials/form_search_field.pug
+  include ../partials/form_search_field.pug
 
-    form(id="doc-form" action=`/doc/edit` method="post")
-        hr
+  form(id="doc-form" action=`/doc/edit` method="post")
+    hr
 
-        hr#form-sep
+    hr#form-sep
 
-        button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
-    
-    include ../partials/modal_add_field.pug
-    
-    include ../partials/fields_scripts.pug
+    button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
 
-    each info in document.information
-            script.
-                getField("#{info._id}", !{JSON.stringify(info)});
+  include ../partials/modal_add_field.pug
+
+  include ../partials/fields_scripts.pug
+
+  each info in document.information
     script.
-        const form = document.getElementById('doc-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(form);
-            //- const deletedCheck = document.querySelector('[id*=deleted]');
-            //- let deletedCheckStatus = false;
-            //- if (deletedCheck) {
-            //-     deletedCheckStatus = deletedCheck.checked;
-            //- }
+      getField("#{info._id}", !{JSON.stringify(info)});
+  script.
+    const form = document.getElementById('doc-form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      //- const deletedCheck = document.querySelector('[id*=deleted]');
+      //- let deletedCheckStatus = false;
+      //- if (deletedCheck) {
+      //-     deletedCheckStatus = deletedCheck.checked;
+      //- }
 
-            const dataToSubmit = {
-                fields: [],
-                //- deleted: deletedCheckStatus
-            };
-            
-            for (const [key, value] of formData.entries()) {
-                if (key === 'id') {
-                    const newObj = { _id: value, fields: [] };
-                    dataToSubmit.fields.push(newObj);
-                } else if (key === 'public') {
-                    const lastObjIndex = dataToSubmit.fields.length - 1;
-                    dataToSubmit.fields[lastObjIndex].public = value === 'on';
-                } else if (key === 'sort') {
-                    const lastObjIndex = dataToSubmit.fields.length - 1;
-                    dataToSubmit.fields[lastObjIndex].sort = value;
-                } else {
-                    const lastObjIndex = dataToSubmit.fields.length - 1;
-                    dataToSubmit.fields[lastObjIndex].fields.push({ _id: key, value: value });
-                }
-            }
+      const dataToSubmit = {
+        fields: [],
+        //- deleted: deletedCheckStatus
+      };
 
-            console.log(JSON.stringify(dataToSubmit))
-            fetch(`/doc/edit/#{document._id}!{isAdminQueryParam}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataToSubmit)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Errore durante l\'invio dei dati al server');
-                }
-            })
-            .then(data => {
-                window.location.href = `/doc/${data.savedDocument._id}!{isAdminQueryParam}`;
-            })
-            .catch(error => {
-                console.error('Errore:', error);
-            });
-        });
+      for (const [key, value] of formData.entries()) {
+        if (key === 'id') {
+          const newObj = { _id: value, fields: [] };
+          dataToSubmit.fields.push(newObj);
+        } else if (key === 'public') {
+          const lastObjIndex = dataToSubmit.fields.length - 1;
+          dataToSubmit.fields[lastObjIndex].public = value === 'on';
+        } else if (key === 'sort') {
+          const lastObjIndex = dataToSubmit.fields.length - 1;
+          dataToSubmit.fields[lastObjIndex].sort = value;
+        } else {
+          const lastObjIndex = dataToSubmit.fields.length - 1;
+          dataToSubmit.fields[lastObjIndex].fields.push({ _id: key, value: value });
+        }
+      }
+
+      console.log(JSON.stringify(dataToSubmit))
+      fetch(`/doc/edit/#{document._id}!{isAdminQueryParam}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSubmit)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante l\'invio dei dati al server');
+        }
+      })
+      .then(data => {
+        window.location.href = `/doc/${data.savedDocument._id}!{isAdminQueryParam}`;
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+      });
+    });

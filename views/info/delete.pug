@@ -1,17 +1,16 @@
 extends ../layout
 
 block content
-    .container
-        .row
-            .col-md-8.offset-md-2
-                .card.mt-5
-                    .card-header.bg-danger.text-white
-                        h3.card-title.text-center #{__("delete_info_no")} #{information._id}?
-                    .card-body
-                        include info.pug
-                    .card-footer.text-center
-                        form(action=`/info/delete/${information._id}${isAdminQueryParam}`, method='POST')
-                            a.btn.btn-primary.col-md-2(href=`/list${isAdminQueryParam}`) #{__("cancel_button")}
-                            button.btn.btn-danger.col-md-2.offset-md-8(type='submit') #{__("delete_button")}
+  .container
+    .row
+      .col-md-8.offset-md-2
+        .card.mt-5
+          .card-header.bg-danger.text-white
+            h3.card-title.text-center #{__("delete_info_no")} #{information._id}?
+          .card-body
+            include info.pug
+          .card-footer.text-center
+            form(action=`/info/delete/${information._id}${isAdminQueryParam}`, method='POST')
+              a.btn.btn-primary.col-md-2(href=`/list${isAdminQueryParam}`) #{__("cancel_button")}
+              button.btn.btn-danger.col-md-2.offset-md-8(type='submit') #{__("delete_button")}
 
-    

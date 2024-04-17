@@ -1,58 +1,57 @@
 h1 #{__("info_no")} #{information._id}
 
 ul#langSelector.nav.nav-tabs
-    each loc in availableLocales
-        li.nav-item
-            a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
+  each loc in availableLocales
+    li.nav-item
+      a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
 
 each loc in availableLocales
-    container.localizedPanel.mt-3(data-lang=`${loc.code}`)
-        - let info_title = information.labels.find(label => label.locale === loc.code);
-        h2(lang=`${loc.code}`) #{info_title.text}
-        - let delete_status = ''
-        - if (isAdmin)
-            - if (information.deleted)
-                - delete_status = `, ${__({phrase: 'information_deleted', locale: loc.code})}`
-            - else
-                - delete_status = `, ${__({phrase: 'information_not_deleted', locale: loc.code})}`
-        - if (information.default)
-            p #{__({phrase: 'information_required', locale: loc.code})}#{delete_status}
-        - else
-            p #{__({phrase: 'information_not_required', locale: loc.code})}#{delete_status}
-        ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
-            each field in information.fields
-                - let field_label = field.labels.find(label => label.locale === loc.code);
-                li(data-lang=`${loc.code}`) #{field_label.text}
+  container.localizedPanel.mt-3(data-lang=`${loc.code}`)
+    - let info_title = information.labels.find(label => label.locale === loc.code);
+    h2(lang=`${loc.code}`) #{info_title.text}
+    - let delete_status = ''
+    - if (isAdmin)
+      - if (information.deleted)
+        - delete_status = `, ${__({phrase: 'information_deleted', locale: loc.code})}`
+      - else
+        - delete_status = `, ${__({phrase: 'information_not_deleted', locale: loc.code})}`
+    - if (information.default)
+      p #{__({phrase: 'information_required', locale: loc.code})}#{delete_status}
+    - else
+      p #{__({phrase: 'information_not_required', locale: loc.code})}#{delete_status}
+    ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
+      each field in information.fields
+        - let field_label = field.labels.find(label => label.locale === loc.code);
+        li(data-lang=`${loc.code}`) #{field_label.text}
 
 script.
-    document.addEventListener('DOMContentLoaded', function() {
-        const browserLocale = (navigator.language || navigator.userLanguage).substring(0, 2);
-        
-        function changeLocaleFocus(locale) {
-            const langTabs = document.querySelectorAll('.lang-tab');
-            const oldActiveTab = document.querySelector('.active')
-            if (oldActiveTab) {
-                oldActiveTab.classList.remove('active');
-            }
-            const newActiveTab = document.querySelector(`.lang-tab[data-lang*="${locale}"]`)
-            newActiveTab.classList.add('active');
+  document.addEventListener('DOMContentLoaded', function() {
+    const browserLocale = (navigator.language || navigator.userLanguage).substring(0, 2);
 
-            const localizedPanels = document.querySelectorAll('.localizedPanel');
-            localizedPanels.forEach(function(localizedPanel) {
-                localizedPanel.classList.add('d-none');
-            });
-            const newActiveLocalizedPanel = document.querySelector(`.localizedPanel[data-lang*="${locale}"]`)
-            newActiveLocalizedPanel.classList.remove('d-none');
-            newActiveLocalizedPanel.classList.add('d-block');
-        }
+    function changeLocaleFocus(locale) {
+      const langTabs = document.querySelectorAll('.lang-tab');
+      const oldActiveTab = document.querySelector('.active')
+      if (oldActiveTab) {
+        oldActiveTab.classList.remove('active');
+      }
+      const newActiveTab = document.querySelector(`.lang-tab[data-lang*="${locale}"]`)
+      newActiveTab.classList.add('active');
 
-        const langTabs = document.querySelectorAll('.lang-tab');
-        langTabs.forEach(function(langTab) {
-            langTab.addEventListener('click', function() {
-                changeLocaleFocus(this.dataset.lang)
-            })
-        })
+      const localizedPanels = document.querySelectorAll('.localizedPanel');
+      localizedPanels.forEach(function(localizedPanel) {
+        localizedPanel.classList.add('d-none');
+      });
+      const newActiveLocalizedPanel = document.querySelector(`.localizedPanel[data-lang*="${locale}"]`)
+      newActiveLocalizedPanel.classList.remove('d-none');
+      newActiveLocalizedPanel.classList.add('d-block');
+    }
 
-        changeLocaleFocus(browserLocale);
-    });
-    
+    const langTabs = document.querySelectorAll('.lang-tab');
+    langTabs.forEach(function(langTab) {
+      langTab.addEventListener('click', function() {
+        changeLocaleFocus(this.dataset.lang)
+      })
+    })
+
+    changeLocaleFocus(browserLocale);
+  });
