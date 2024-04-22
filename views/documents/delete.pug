@@ -10,7 +10,7 @@ block content
           .card-body
             include doc.pug
           .card-footer.text-center
-            form(action=`/doc/delete/${document._id}${isAdminQueryParam}`, method='POST')
+            form(action=`/doc/delete/${document._id}`, method='POST')
               a.btn.btn-primary.col-md-2(href="/doc/list") #{__("cancel_button")}
               button.btn.btn-danger.col-md-2.offset-md-8(type='submit') #{__("delete_button")}
 

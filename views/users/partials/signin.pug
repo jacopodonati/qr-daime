@@ -1,0 +1,11 @@
+form#signin(action="/login" method="post")
+  input(type="hidden", name="action" value="signin")
+  .row
+    .mb-3
+      label.form-label(for="signin_email") #{__('form_signin_email')}:
+      input.form-control(type="email" id="signin_email" name="email", required)
+    .mb-3
+      label.form-label(for="signin_password") #{__('form_signin_password')}:
+      input.form-control(type="password" id="signin_password" name="password", required)
+  hr
+  button.btn.btn-primary(type="submit") #{__('form_signin_button')}

@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+  h1 #{__('login_title')}
+
+  ul#tabs.nav.nav-tabs.mb-3
+    li.nav-item(data-action="signin")
+      a.nav-link.active(href="#", aria-current="page") #{__('login_signin')}
+    li.nav-item(data-action="signup")
+      a.nav-link(href="#") #{__('login_signup')}
+
+  include partials/signin.pug
+  include partials/signup.pug
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      function changeForm(action) {
+        const signup_form = document.querySelector('#signup');
+        const signin_form = document.querySelector('#signin');
+        const signup_tab = document.querySelector('[data-action=signup] a');
+        const signin_tab = document.querySelector('[data-action=signin] a');
+        if (action == 'signup') {
+          signup_form.classList.replace('d-none', 'd-block');
+          signin_form.classList.replace('d-block', 'd-none');
+        } else {
+          signin_form.classList.replace('d-none', 'd-block');
+          signup_form.classList.replace('d-block', 'd-none');
+        }
+        signup_tab.classList.toggle('active');
+        signin_tab.classList.toggle('active');
+      }
+
+      const tabs = document.querySelectorAll('#tabs li');
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          changeForm(this.dataset.action);
+        })
+      })
+
+      document.querySelector('#signup').classList.add('d-none');
+      document.querySelector('#signin').classList.add('d-block');
+
+      
+    });

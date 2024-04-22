@@ -9,7 +9,7 @@ block content
     table#docTable.table.table-striped.table-hover
       thead
         tr 
-          if isAdmin 
+          if userPermissions.restore 
             th
           th #{__("info_title")}
           th #{__("info_content")}
@@ -21,7 +21,7 @@ block content
         - else
           - status = "available"
         tr(data-status=`${status}`)
-          if isAdmin
+          if userPermissions.restore
             if info.deleted
               td ⛔️
             else
@@ -31,9 +31,9 @@ block content
           td #{info.fields.map(field => field.labels.find(label => label.locale === locale).text).join(', ')}
           td
             .btn-group(role="group").float-end
-              a(href=`/info/view/${info._id}${isAdminQueryParam}`).btn.btn-primary.btn-sm #{__("view_button")}
-              a(href=`/info/edit/${info._id}${isAdminQueryParam}`).btn.btn-success.btn-sm #{__("edit_button")}
+              a(href=`/info/view/${info._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+              a(href=`/info/edit/${info._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               - if (!info.deleted)
-                a(href=`/info/delete/${info._id}${isAdminQueryParam}`).btn.btn-danger.btn-sm #{__("delete_button")}
+                a(href=`/info/delete/${info._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
               - else
-                a(href=`/info/restore/${info._id}${isAdminQueryParam}`).btn.btn-warning.btn-sm #{__("restore_button")}
+                a(href=`/info/restore/${info._id}`).btn.btn-warning.btn-sm #{__("restore_button")}

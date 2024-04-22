@@ -3,11 +3,15 @@ const router = express.Router();
 const Information = require('../../models/information');
 const i18n = require('i18n');
 const acceptLanguageParser = require('accept-language-parser');
+const { getUserPermissions } = require('../../config/permissions');
 
 router.get('/', async (req, res) => {
+    const role = getUserPermissions(req.session.user.role);
     try {
-        const queryString = req.isAdmin ? {} : { deleted: false };
+        const queryString = role.restore ? {} : { deleted: false };
         const info = await Information.find(queryString);
+        console.log(queryString)
+        console.log(info)
 
         const acceptLanguage = req.headers['accept-language'];
         const languages = acceptLanguageParser.parse(acceptLanguage);

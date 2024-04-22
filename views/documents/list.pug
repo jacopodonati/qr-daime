@@ -2,14 +2,14 @@ extends ../layout
 
 block content
   h1 #{__("list_docs")}
-
+  
   - if (documents.length === 0)
     div.alert.alert-primary #{__("empty_database_message")}
   - else
     table#docTable.table.table-striped.table-hover
       thead
         tr 
-          if isAdmin 
+          if userPermissions.restore 
             th
           th ID
           th#dateHeader(data-sorting="asc") #{__("doc_date_of_issue")}
@@ -23,7 +23,7 @@ block content
         - else
           - status = "available"
         tr(data-sort=document.dateOfIssue, data-status=`${status}`)
-          if isAdmin
+          if userPermissions.restore
             if document.deleted
               td ⛔️
             else
@@ -31,16 +31,18 @@ block content
           td #{document._id}
           td.date #{document.dateOfIssue}
           td
-            a(href=`/pdf/${document._id}!{isAdminQueryParam}`)
+            a(href=`/pdf/${document._id}`)
               i.bi.bi-postage-fill
           td
             .btn-group(role="group").float-end
-              a(href=`/doc/edit/${document._id}${isAdminQueryParam}`).btn.btn-success.btn-sm #{__("edit_button")}
-              a(href=`/doc/${document._id}${isAdminQueryParam}`).btn.btn-primary.btn-sm #{__("view_button")}
-              - if (!document.deleted)
-                a(href=`/doc/delete/${document._id}${isAdminQueryParam}`).btn.btn-danger.btn-sm #{__("delete_button")}
-              - else
-                a(href=`/doc/restore/${document._id}${isAdminQueryParam}`).btn.btn-warning.btn-sm #{__("restore_button")}
+              if userPermissions.edit
+                a(href=`/doc/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+              if userPermissions.read_public
+                a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+              if userPermissions.delete && !document.deleted
+                a(href=`/doc/delete/${document._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
+              if userPermissions.restore && document.deleted
+                a(href=`/doc/restore/${document._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
   script.
     document.addEventListener('DOMContentLoaded', function() {
       const dates = document.querySelectorAll('.date');

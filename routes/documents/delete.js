@@ -2,12 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
 const i18n = require('i18n');
+const { getUserPermissions } = require('../../config/permissions');
 
-router.get('/:hash', async (req, res) => {
-    const hash = req.params.hash;
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    if (!role.delete) {
+        return res.status(403).send('Operazione non consentita');
+    }
 
     try {
-        const document = await Document.findById(hash);
+        const document = await Document.findById(id);
 
         if (document) {
             res.render('documents/delete', {
@@ -23,16 +28,17 @@ router.get('/:hash', async (req, res) => {
     }
 });
 
-router.post('/:hash', async (req, res) => {
-    const hash = req.params.hash;
+router.post('/:id', async (req, res) => {
+    const id = req.params.id;
+    const role = getUserPermissions(req.session.user.role);
+
+    if (!role.delete) {
+        return res.status(403).send('Operazione non consentita');
+    }
 
     try {
-        let document;
-        if (req.isAdmin) {
-            document = await Document.findById(hash);
-        } else {
-            document = await Document.findOne({ _id: hash, deleted: false });
-        }
+        const queryString = role.restore ? { _id: id, deleted: false } : { _id: id }
+        const document = await Document.findById(queryString);
 
         if (document) {
             document.deleted = true;

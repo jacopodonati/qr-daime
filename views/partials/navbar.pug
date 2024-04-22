@@ -1,42 +1,39 @@
-if !hideNavbar
-  nav.navbar.navbar-expand-lg.navbar-light.bg-light
-    div.container-fluid
-      a.navbar-brand(href="/") #{__("app_name")}
-      button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
-        span.navbar-toggler-icon
-      div#navbarNav.collapse.navbar-collapse
-        ul.navbar-nav
-          li.nav-item.dropdown
-            a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_documents")}
-            ul.dropdown-menu
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  div.container-fluid
+    a.navbar-brand(href="/") #{__("app_name")}
+    button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+      span.navbar-toggler-icon
+    div#navbarNav.collapse.navbar-collapse
+      ul.navbar-nav.w-100
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_documents")}
+          ul.dropdown-menu
+            if userPermissions.write
               li.dropdown-item
-                a.nav-link(href=`/doc/add${isAdminQueryParam}`)
+                a.nav-link(href=`/doc/add`)
                   i.bi.bi-plus.me-3
                   | #{__("navbar_doc_add")}
+            if userPermissions.read_public
               li.dropdown-item
-                a.nav-link(href=`/doc/list${isAdminQueryParam}`)
+                a.nav-link(href=`/doc/list`)
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_doc_list")}
-          li.nav-item.dropdown
-            a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_info")}
-            ul.dropdown-menu
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_info")}
+          ul.dropdown-menu
+            if userPermissions.write
               li.dropdown-item
-                a.nav-link(href=`/info/add${isAdminQueryParam}`)
-                  i.bi.bi-plus.me-3
-                  | #{__("navbar_info_add")}
+              a.nav-link(href=`/info/add`)
+                i.bi.bi-plus.me-3
+                | #{__("navbar_info_add")}
+            if userPermissions.read_public
               li.dropdown-item
-                a.nav-link(href=`/info/list${isAdminQueryParam}`)
+                a.nav-link(href=`/info/list`)
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_info_list")}
-          //- li.nav-item.dropdown
-          //-   a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") #{__("navbar_template")}
-          //-   ul.dropdown-menu
-          //-     li.dropdown-item
-          //-       a.nav-link(href=`/template/add${isAdminQueryParam}`) #{__("navbar_template_add")}
-          //-     li.dropdown-item
-          //-       a.nav-link(href=`/template/list${isAdminQueryParam}`) #{__("navbar_template_list")}
-      if isAdmin
-        div.d-flex
-          span.badge.rounded-pill.text-bg-danger 
-            i.bi.bi-unlock.me-1(aria-hidden="true")
-            | admin
+        - if (!user)
+          li.nav-item.ms-auto
+            a.nav-link(href=`/login`) #{__('navbar_signin')}
+        - else 
+          li.nav-item.ms-auto 
+            a.nav-link(href=`/logout`) #{__('navbar_signout')}

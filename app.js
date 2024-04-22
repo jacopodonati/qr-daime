@@ -1,18 +1,21 @@
+require('dotenv').config();
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const acceptLanguageParser = require('accept-language-parser');
-
-require('dotenv').config();
-
+const session = require('express-session');
 const db = require('./config/db');
 const i18n = require('./config/i18n');
+const flash = require('connect-flash');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
 const staticRouter = require('./routes/static');
+const userLoginRouter = require('./routes/users/login');
+const userLogoutRouter = require('./routes/users/logout');
 const docListRouter = require('./routes/documents/list');
 const docSingleRouter = require('./routes/documents/single');
 const docPdfRouter = require('./routes/documents/pdf');
@@ -26,19 +29,24 @@ const infoAddRouter = require('./routes/info/add');
 const infoEditRouter = require('./routes/info/edit');
 const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
-
-function isAdmin(req, res, next) {
-    req.isAdmin = req.query.hasOwnProperty('admin');
-    next();
-}
+const { passUserToRoutes, passPermissionsToViews } = require('./middleware/users');
 
 const app = express();
 
-app.use(i18n.init);
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
-app.use(isAdmin);
+app.use(i18n.init);
+app.use(flash());
+
+app.use(passUserToRoutes);
+app.use(passPermissionsToViews);
+
 app.use((req, res, next) => {
-    res.locals.isAdmin = req.isAdmin;
+    res.locals.messages = req.flash();
     next();
 });
 
@@ -65,11 +73,32 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    // if (process.env.NODE_ENV === 'development') {
+    //     req.session.user = {
+    //         id: '123456',
+    //         email: 'test@example.com',
+    //         role: 'admin'
+    //     };
+    // }
+
+    if (!req.session.user) {
+        req.session.user = {
+            role: 'loggedout'
+        };
+    }
+
+    next();
+});
+
+
 app.use('/static', express.static('static'));
 
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
 app.use('/static', staticRouter);
+app.use('/login', userLoginRouter);
+app.use('/logout', userLogoutRouter);
 app.use('/doc/list', docListRouter);
 app.use('/doc/add', docAddRouter);
 app.use('/doc/edit', docEditRouter);
