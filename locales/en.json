@@ -78,5 +78,15 @@
 	"form_signup_password": "Password",
 	"form_signup_button": "Sign up",
 	"form_signup_password_check": "Repeat the password",
-	"navbar_signout": "Logout"
+	"navbar_signout": "Logout",
+	"navbar_manage": "Manage",
+	"navbar_manage_users": "Users",
+	"navbar_manage_users_list": "List users",
+	"list_users": "List users",
+	"user_status": "Status",
+	"user_email": "Email",
+	"user_role": "Role",
+	"activate_button": "Activate",
+	"deactivate_button": "Deactivate",
+	"user_list_title": "List of users"
 }

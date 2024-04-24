@@ -11,7 +11,7 @@ block content
         i.bi.bi-list-ul.me-2
         | #{__("list_docs")}
 
-    if userPermissions.write
+    if userPermissions.create
       a(href=`/doc/add`, role="button").btn.btn-primary
         i.bi.bi-plus.me-2
         | #{__("add_doc")}

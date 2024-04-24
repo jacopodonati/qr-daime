@@ -23,9 +23,11 @@ block content
         tr(data-status=`${status}`)
           if userPermissions.restore
             if info.deleted
-              td ⛔️
+              td
+                i.bi.bi-trash
             else
-              td ✅
+              td
+                i.bi.bi-check
 
           td #{info.labels.find(label => label.locale === locale) ? info.labels.find(label => label.locale === locale).text : ''}
           td #{info.fields.map(field => field.labels.find(label => label.locale === locale).text).join(', ')}

@@ -78,5 +78,15 @@
 	"form_signup_password": "Senha",
 	"form_signup_button": "Registrar",
 	"form_signup_password_check": "Repetir senha",
-	"navbar_signout": "Sair"
+	"navbar_signout": "Sair",
+	"navbar_manage": "Gerenciar",
+	"navbar_manage_users": "Usuários",
+	"navbar_manage_users_list": "Listar usuários",
+	"list_users": "Listar usuários",
+	"user_status": "Status",
+	"user_email": "E-mail",
+	"user_role": "Função",
+	"activate_button": "Ativar",
+	"deactivate_button": "Desativar",
+	"user_list_title": "Listar usuários"
 }

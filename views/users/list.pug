@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  h1 #{__("list_users")}
+
+  - if (users.length === 0)
+    div.alert.alert-primary #{__("empty_database_message")}
+  - else
+    table#docTable.table.table-striped.table-hover
+      thead
+        tr 
+          th #{__("user_status")}
+          th #{__("user_email")}
+          th #{__("user_role")}
+          th
+      each user in users
+        - let status
+        - if (user.deleted)
+          - status = "deleted"
+        - else if (user.activated)
+          - status = "active"
+        - else 
+          - status = "inactive"
+        tr(data-status=`${status}`)
+          if user.deleted
+            td
+              i.bi.bi-trash
+          else if user.activated
+            td
+              i.bi.bi-check
+          else 
+            td 
+              i.bi.bi-question
+
+          td= user.email
+          td
+            select.role-selector.form-select.form-select-sm(id=`id${user.id}`)
+              each role in roles
+                if (role != 'loggedout' && role != 'god')
+                  if (role == user.role)
+                    option(value=`${role}`, selected) #{role}
+                  else
+                    option(value=`${role}`) #{role}
+          td
+            .btn-group(role="group").float-end
+              - if (user.activated)
+                a(href=`/manage/users/toggle-activation/${user._id}`).btn.btn-primary.btn-sm #{__("deactivate_button")}
+              - else
+                a(href=`/manage/users/toggle-activation/${user._id}`).btn.btn-secondary.btn-sm #{__("activate_button")}
+              - if (!user.deleted)
+                a(href=`/manage/users/toggle-deletion/${user._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
+              - else
+                a(href=`/manage/users/toggle-deletion/${user._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
+
+  script.
+    const roleSelectors = document.querySelectorAll('.role-selector');
+    roleSelectors.forEach((selector) => {
+      selector.addEventListener('change', function() {
+        const formData = new FormData();
+        formData.set('id', this.id.substr(2));
+        formData.set('role', this.value);
+
+        fetch('/manage/users/role', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+          this.querySelector('option[selected]').removeAttribute('selected');
+          this.querySelector(`option[value="${data.user.role}"]`).setAttribute('selected', '');
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      });
+    });

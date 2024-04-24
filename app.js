@@ -10,10 +10,15 @@ const session = require('express-session');
 const db = require('./config/db');
 const i18n = require('./config/i18n');
 const flash = require('connect-flash');
+const multer = require('multer');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
 const staticRouter = require('./routes/static');
+const userListRouter = require('./routes/users/list');
+const userDeleteRouter = require('./routes/users/delete');
+const userActivationRouter = require('./routes/users/activate');
+const userRoleRouter = require('./routes/users/role');
 const userLoginRouter = require('./routes/users/login');
 const userLogoutRouter = require('./routes/users/logout');
 const docListRouter = require('./routes/documents/list');
@@ -29,6 +34,7 @@ const infoAddRouter = require('./routes/info/add');
 const infoEditRouter = require('./routes/info/edit');
 const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
+
 const { passUserToRoutes, passPermissionsToViews } = require('./middleware/users');
 
 const app = express();
@@ -55,7 +61,8 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(multer().none());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -74,13 +81,13 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    // if (process.env.NODE_ENV === 'development') {
-    //     req.session.user = {
-    //         id: '123456',
-    //         email: 'test@example.com',
-    //         role: 'admin'
-    //     };
-    // }
+    if (process.env.NODE_ENV === 'development') {
+        req.session.user = {
+            id: '123456',
+            email: 'test@example.com',
+            role: 'admin'
+        };
+    }
 
     if (!req.session.user) {
         req.session.user = {
@@ -112,6 +119,10 @@ app.use('/info/add', infoAddRouter);
 app.use('/info/edit', infoEditRouter);
 app.use('/info/delete', infoDeleteRouter);
 app.use('/info/restore', infoRestoreRouter);
+app.use('/manage/users/list', userListRouter);
+app.use('/manage/users/toggle-deletion', userDeleteRouter);
+app.use('/manage/users/toggle-activation', userActivationRouter);
+app.use('/manage/users/role', userRoleRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));

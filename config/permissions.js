@@ -1,37 +1,45 @@
 const permissions = {
     loggedout: {
-        read_public: true,
-        delete: false,
-        edit: false,
-        restore: false,
+        read_public: true
     },
     basic: {
         read_public: true,
+        create: true,
         delete: true,
-        restore: false,
+        edit: true
     },
     admin: {
-        read_public: true,
-        read_everything: true,
-        delete: true,
-        restore: true,
+        __extend: ['basic'],
+        read_any: true,
+        edit_any: true,
+        delete_any: true,
         manage_users: true
     },
     god: {
-        read_public: true,
-        read_everything: true,
-        delete: true,
-        restore: true,
-        manage_users: true,
+        __extend: ['admin'],
         grant_permissions: true
     }
 };
 
 function getUserPermissions(role) {
-    return permissions[role] || {}; // Se il ruolo non esiste, restituisci un oggetto vuoto
+    const userPermissions = {};
+    let currentRole = role;
+
+    while (permissions[currentRole]) {
+        const rolePermissions = permissions[currentRole];
+        Object.assign(userPermissions, rolePermissions);
+        currentRole = rolePermissions.__extend ? rolePermissions.__extend[0] : undefined;
+    }
+
+    return userPermissions;
+}
+
+function getRoles() {
+    return Object.keys(permissions);
 }
 
 module.exports = {
-    'permissions': permissions,
-    'getUserPermissions': getUserPermissions
+    permissions,
+    getUserPermissions,
+    getRoles
 };

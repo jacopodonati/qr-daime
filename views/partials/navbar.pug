@@ -10,12 +10,12 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
           ul.dropdown-menu
             if userPermissions.write
               li.dropdown-item
-                a.nav-link(href=`/doc/add`)
+                a.nav-link(href="/doc/add")
                   i.bi.bi-plus.me-3
                   | #{__("navbar_doc_add")}
             if userPermissions.read_public
               li.dropdown-item
-                a.nav-link(href=`/doc/list`)
+                a.nav-link(href="/doc/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_doc_list")}
         li.nav-item.dropdown
@@ -23,17 +23,23 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
           ul.dropdown-menu
             if userPermissions.write
               li.dropdown-item
-              a.nav-link(href=`/info/add`)
+              a.nav-link(href="/info/add")
                 i.bi.bi-plus.me-3
                 | #{__("navbar_info_add")}
             if userPermissions.read_public
               li.dropdown-item
-                a.nav-link(href=`/info/list`)
+                a.nav-link(href="/info/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_info_list")}
+        - if (userPermissions.manage_users)
+          li.nav-item.dropdown.ms-auto
+            a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}
+            ul.dropdown-menu
+              li.dropdown-item 
+                a.nav-link(href="/manage/users/list") #{__("navbar_manage_users_list")}
         - if (!user)
           li.nav-item.ms-auto
-            a.nav-link(href=`/login`) #{__('navbar_signin')}
+            a.nav-link(href="/login") #{__("navbar_signin")}
         - else 
           li.nav-item.ms-auto 
-            a.nav-link(href=`/logout`) #{__('navbar_signout')}
+            a.nav-link(href="/logout") #{__("navbar_signout")}

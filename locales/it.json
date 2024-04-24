@@ -78,5 +78,15 @@
 	"form_signup_password": "Password",
 	"form_signup_button": "Registrati",
 	"form_signup_password_check": "Ripeti la password",
-	"navbar_signout": "Esci"
+	"navbar_signout": "Esci",
+	"navbar_manage": "Gestisci",
+	"navbar_manage_users": "Utenti",
+	"navbar_manage_users_list": "Elenca gli utenti",
+	"list_users": "Elenco degli utenti",
+	"user_status": "Stato",
+	"user_email": "Email",
+	"user_role": "Ruolo",
+	"activate_button": "Attiva",
+	"deactivate_button": "Disattiva",
+	"user_list_title": "Elenco degli utenti"
 }

@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
             await newUser.save();
             res.redirect('/login');
         } else if (action === 'signin') {
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ email, deleted: false, activated: true });
             if (!user) {
                 req.flash('error', 'Utente non trovato');
                 return res.redirect('/login');
