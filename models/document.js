@@ -33,7 +33,11 @@ const documentSchema = new mongoose.Schema({
     },
     qrDocument: String,
     qrUrl: String,
-    information: [informationSchema]
+    information: [informationSchema],
+    workspace: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workspace'
+    }
 });
 
 documentSchema.post('find', function(docs) {

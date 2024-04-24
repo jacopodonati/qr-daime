@@ -20,6 +20,10 @@ const informationSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    workspace: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workspace'
+    }
 });
 
 const Information = mongoose.model('Information', informationSchema);

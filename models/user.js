@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['basic', 'admin', 'god'],
         default: 'basic'
-    }
+    },
+    workspaces: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workspace'
+    }]
 });
 
 userSchema.pre('save', async function (next) {
