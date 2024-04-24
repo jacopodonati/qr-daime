@@ -6,6 +6,9 @@ const Information = require('../../models/information');
 const { validateInformationData } = require('../../middleware/validation')
 
 router.get('/', async function(req, res, next) {
+    if (!res.locals.user.permissions.create) {
+        return res.status(403).send('Operazione non consentita');
+    }
     const localeCodes = i18n.getLocales();
     let availableLocales = [];
     let removeButtonLabels = {};
@@ -31,6 +34,9 @@ router.get('/', async function(req, res, next) {
 });
 
 router.post('/', validateInformationData, async (req, res) => {
+    if (!res.locals.user.permissions.create) {
+        return res.status(403).send('Operazione non consentita');
+    }
     try {
         const { labels, fields } = req.body;
 

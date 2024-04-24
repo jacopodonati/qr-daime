@@ -9,6 +9,9 @@ function getDocLink(id) {
 }
 
 router.get('/', async function(req, res, next) {
+    if (!res.locals.user.permissions.create) {
+        return res.status(403).send('Operazione non consentita');
+    }
     try {
         res.render('documents/add', {
             title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
@@ -22,6 +25,9 @@ router.get('/', async function(req, res, next) {
 });
 
 router.post('/', async (req, res) => {
+    if (!res.locals.user.permissions.create) {
+        return res.status(403).send('Operazione non consentita');
+    }
     try {
         const formDataArray = req.body;
         const fields = formDataArray.map(formData => {

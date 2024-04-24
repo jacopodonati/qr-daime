@@ -12,6 +12,9 @@ const i18n = require('./config/i18n');
 const flash = require('connect-flash');
 const multer = require('multer');
 
+const { getUserPermissions } = require('./config/permissions');
+const { passUserToRoutes } = require('./middleware/users');
+
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
 const staticRouter = require('./routes/static');
@@ -35,8 +38,6 @@ const infoEditRouter = require('./routes/info/edit');
 const infoDeleteRouter = require('./routes/info/delete');
 const infoRestoreRouter = require('./routes/info/restore');
 
-const { passUserToRoutes, passPermissionsToViews } = require('./middleware/users');
-
 const app = express();
 
 app.use(session({
@@ -49,7 +50,6 @@ app.use(i18n.init);
 app.use(flash());
 
 app.use(passUserToRoutes);
-app.use(passPermissionsToViews);
 
 app.use((req, res, next) => {
     res.locals.messages = req.flash();
@@ -85,19 +85,20 @@ app.use((req, res, next) => {
         req.session.user = {
             id: '123456',
             email: 'test@example.com',
-            role: 'admin'
+            role: 'admin',
+            permissions: getUserPermissions('admin')
         };
     }
 
     if (!req.session.user) {
         req.session.user = {
-            role: 'loggedout'
+            role: 'loggedout',
+            permissions: getUserPermissions('loggedout')
         };
     }
 
     next();
 });
-
 
 app.use('/static', express.static('static'));
 

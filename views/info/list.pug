@@ -9,7 +9,7 @@ block content
     table#docTable.table.table-striped.table-hover
       thead
         tr 
-          if userPermissions.restore 
+          if user.permissions.restore 
             th
           th #{__("info_title")}
           th #{__("info_content")}
@@ -21,7 +21,7 @@ block content
         - else
           - status = "available"
         tr(data-status=`${status}`)
-          if userPermissions.restore
+          if user.permissions.restore
             if info.deleted
               td
                 i.bi.bi-trash

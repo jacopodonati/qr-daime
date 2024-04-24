@@ -3,11 +3,9 @@ const router = express.Router();
 const Document = require('../../models/document');
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    if (req.isAdmin) {        
+    if (res.locals.user.permissions.manage_documents) {        
         try {
-            const document = await Document.findById(id);
+            const document = await Document.findById(req.params.id);
             
             if (document) {
                 document.deleted = false;

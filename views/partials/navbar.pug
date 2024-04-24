@@ -8,12 +8,12 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_documents")}
           ul.dropdown-menu
-            if userPermissions.write
+            if user.permissions.write
               li.dropdown-item
                 a.nav-link(href="/doc/add")
                   i.bi.bi-plus.me-3
                   | #{__("navbar_doc_add")}
-            if userPermissions.read_public
+            if user.permissions.read_public
               li.dropdown-item
                 a.nav-link(href="/doc/list")
                   i.bi.bi-list-ul.me-3
@@ -21,17 +21,17 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_info")}
           ul.dropdown-menu
-            if userPermissions.write
+            if user.permissions.write
               li.dropdown-item
               a.nav-link(href="/info/add")
                 i.bi.bi-plus.me-3
                 | #{__("navbar_info_add")}
-            if userPermissions.read_public
+            if user.permissions.read_public
               li.dropdown-item
                 a.nav-link(href="/info/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_info_list")}
-        - if (userPermissions.manage_users)
+        - if (user.permissions.manage_users)
           li.nav-item.dropdown.ms-auto
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}
             ul.dropdown-menu

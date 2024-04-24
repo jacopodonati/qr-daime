@@ -3,11 +3,9 @@ const router = express.Router();
 const Information = require('../../models/information');
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    if (req.isAdmin) {        
+    if (res.locals.user.permissions.manage_info) {        
         try {
-            const information = await Information.findById(id);
+            const information = await Information.findById(req.params.id);
             
             if (information) {
                 information.deleted = false;

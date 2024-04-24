@@ -5,31 +5,30 @@ const i18n = require('i18n');
 const iso6391 = require('iso-639-1');
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    const isAdmin = req.query.hasOwnProperty('admin');
-    const locale_codes = i18n.getLocales();
-    let availableLocales = []
-    locale_codes.forEach(code => {
-        const name = iso6391.getNativeName(code);
-        availableLocales.push({ code, name })
-    });
-
-    try {
-        const information = await Information.findById(id);
-
-        if (information) {
-            res.render('info/delete', {
-                title: i18n.__("info_no") + ': ' + information._id + ' - ' + i18n.__('app_name'),
-                information: information,
-                availableLocales,
-                isAdmin
-            });
-        } else {
-            res.redirect('/list');
+    if (res.locals.user.permissions.manage_info) {
+        const locale_codes = i18n.getLocales();
+        let availableLocales = []
+        locale_codes.forEach(code => {
+            const name = iso6391.getNativeName(code);
+            availableLocales.push({ code, name })
+        });
+        
+        try {
+            const information = await Information.findById(req.params.id);
+            
+            if (information) {
+                res.render('info/delete', {
+                    title: i18n.__("info_no") + ': ' + information._id + ' - ' + i18n.__('app_name'),
+                    information: information,
+                    availableLocales,
+                });
+            } else {
+                res.redirect('/list');
+            }
+        } catch (error) {
+            console.error('Error querying database:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
         }
-    } catch (error) {
-        console.error('Error querying database:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

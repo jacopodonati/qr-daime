@@ -13,6 +13,8 @@ const permissions = {
         read_any: true,
         edit_any: true,
         delete_any: true,
+        manage_info: true,
+        manage_documents: true,
         manage_users: true
     },
     god: {
