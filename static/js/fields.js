@@ -49,17 +49,35 @@ function saveField() {
         const infoText = item.childNodes[1].textContent;
         fieldInfos.push(infoText);
     });
-    
+
+  const langs = ['en', 'it', 'pt'];
+  const adata = {
+        labels: langs.map(l => {
+          const dd = {
+            locale: l,
+            text: l === fieldLocale ? fieldLabel : ''
+          };
+          return dd;
+        }),
+        fields: fieldInfos.map(f => {
+            const d = {
+              labels: langs.map(l => {
+                  const dd = {
+                      locale: l,
+                      text: ((l === fieldLocale) ? f : '')
+                  };
+                  return dd;
+              })
+            };
+            return d;
+        })
+    }
     fetch('/info/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            locale: fieldLocale,
-            label: fieldLabel,
-            infos: fieldInfos
-        })
+        body: JSON.stringify(adata)
     })
     .then(response => {
         if (response.ok) {

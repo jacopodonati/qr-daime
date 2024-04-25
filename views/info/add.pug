@@ -212,7 +212,11 @@ block content
         });
       });
 
-      fetch(`/info/add/!{isAdminQueryParam}`, {
+      dataToSubmit.fields.forEach(f => {
+        delete f._id;
+      });
+      return console.log({ dataToSubmit });
+      fetch(`/info/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
