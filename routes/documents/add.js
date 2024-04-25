@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
 const Document = require('../../models/document');
+const Information = require('../../models/information');
 const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 
 function getDocLink(id) {
@@ -13,10 +14,12 @@ router.get('/', async function(req, res, next) {
         return res.status(403).send('Operazione non consentita');
     }
     try {
+        const fields = await Information.find({});
         res.render('documents/add', {
             title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
             locale: req.getLocale(),
-            fallbackLocale: i18n.getLocale()
+            fallbackLocale: i18n.getLocale(),
+            fields
         });
     } catch (error) {
         console.error('Errore durante il recupero dei campi:', error);

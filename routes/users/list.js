@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
 const User = require('../../models/user');
+const { getRoles } = require('../../config/permissions');
 
 router.get('/', async (req, res) => {
     if (res.locals.user.permissions.manage_users) {

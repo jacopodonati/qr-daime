@@ -3,7 +3,7 @@ const router = express.Router();
 const Document = require('../../models/document');
 
 router.get('/:id', async (req, res) => {
-    if (res.locals.user.permissions.manage_documents) {        
+    if (res.locals.user.permissions.manage_documents) {
         try {
             const document = await Document.findById(req.params.id);
             
