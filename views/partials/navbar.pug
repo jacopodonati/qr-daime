@@ -37,7 +37,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
             ul.dropdown-menu
               li.dropdown-item 
                 a.nav-link(href="/manage/users/list") #{__("navbar_manage_users_list")}
-        - if (!user)
+        - if (user.role === 'loggedout')
           li.nav-item.ms-auto
             a.nav-link(href="/login") #{__("navbar_signin")}
         - else 
