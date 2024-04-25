@@ -6,15 +6,15 @@ async function validateInformationData (req, res, next) {
     i18n.setLocale(req.getLocale());
 
     try {
-        const hasLabelsWithText = data.labels.some(label => label.text.trim() !== '');
+        const hasLabelsWithText = data.infos.some(label => label.text.trim() !== '');
         
         if (!hasLabelsWithText) {
             return res.status(400).json({ error: i18n.__('missing_label_text') });
         }
 
-        for (let label of data.labels) {
+        for (let label of data.infos) {
             if (label.text.trim() === '') {
-                const notEmptyLabel = data.labels.find(l => l.text.trim() !== '');
+                const notEmptyLabel = data.infos.find(l => l.text.trim() !== '');
                 if (notEmptyLabel) {
                     const translatedLabel = await translateText(notEmptyLabel.text, notEmptyLabel.locale, label.locale);
                     label.text = translatedLabel;

@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
 const i18n = require('i18n');
-const { getUserPermissions } = require('../../config/permissions');
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
-    if (!role.delete) {
+    if (!res.locals.user.permissions.delete) {
         return res.status(403).send('Operazione non consentita');
     }
 
@@ -20,7 +19,7 @@ router.get('/:id', async (req, res) => {
                 document: document
             });
         } else {
-            res.redirect('/list');
+            res.redirect('/doc/list');
         }
     } catch (error) {
         console.error('Error querying database:', error);
@@ -30,14 +29,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     const id = req.params.id;
-    const role = getUserPermissions(req.session.user.role);
 
-    if (!role.delete) {
+    if (!res.locals.user.permissions.delete) {
         return res.status(403).send('Operazione non consentita');
     }
 
     try {
-        const queryString = role.restore ? { _id: id, deleted: false } : { _id: id }
+        const queryString = res.locals.user.permissions.restore ? { _id: id, deleted: false } : { _id: id }
         const document = await Document.findById(queryString);
 
         if (document) {
