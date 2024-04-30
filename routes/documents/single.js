@@ -18,10 +18,12 @@ router.get('/:id', async (req, res) => {
             document = await Document.findOne({ _id: id, deleted: false });
         }
 
+        console.log(document.information, 'abanana');
         if (document) {
             res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
-                document: document
+                document: document,
+                document_: document
             });
         } else {
             res.redirect('/list');

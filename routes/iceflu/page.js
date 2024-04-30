@@ -7,11 +7,22 @@ router.get('/', async (req, res) => {
     try {
         const queryString = res.locals.user.permissions.read ? {} : { deleted: false };
         const documents = await Document.find(queryString);
-        console.log(documents);
         
-        res.render('documents/list', {
-            title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
-            documents: documents
+        res.render('iceflu/page', {
+            title: 'ICEFLU Homepage',
+            fields: {
+              presentation: 'A ICEFLU PRESENTATION',
+              iceflu_links: [
+                {
+                  desc: 'a link desc',
+                  link: 'alink'
+                },
+                {
+                  desc: 'another link desc',
+                  link: 'alink another'
+                },
+              ]
+            },
         });
 
     } catch (error) {
@@ -21,3 +32,4 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
+

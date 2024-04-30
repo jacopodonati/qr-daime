@@ -1,0 +1,58 @@
+extends ../layout
+
+block content
+  h1 #{__("list_docs")}
+  div #{fields.presentation}
+  table#docTable.table.table-striped.table-hover
+    thead
+      tr
+        th DESC
+        th LINK
+    each link in fields.iceflu_links
+      tr
+        td #{link.desc}
+        td #{link.link}
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const dates = document.querySelectorAll('.date');
+      dates.forEach(element => {
+        const date = new Date(element.innerHTML);
+        const epoch = Math.floor(date / 1000);
+        element.parentElement.dataset.sort = epoch;
+        const options = {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        };
+        const localized = date.toLocaleString(navigator.language, options);
+        element.innerHTML = localized;
+      });
+
+      const dateHeader = document.getElementById('dateHeader');
+      const docTable = document.getElementById('docTable');
+      const tbody = docTable.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+
+      dateHeader.addEventListener('click', function () {
+        let sorting = dateHeader.dataset.sorting === 'desc' ? 'asc' : 'desc';
+        const icon = dateHeader.querySelector('i');
+        icon.classList.remove('bi-sort-numeric-up', 'bi-sort-numeric-down');
+        icon.classList.remove(dateHeader.dataset.sorting === 'desc' ? 'bi-sort-numeric-up' : 'bi-sort-numeric-down');
+        icon.classList.add(dateHeader.dataset.sorting === 'desc' ? 'bi-sort-numeric-down' : 'bi-sort-numeric-up');
+        dateHeader.dataset.sorting = sorting;
+        const sortedRows = rows.sort((a, b) => {
+          const dateA = a.dataset.sort;
+          const dateB = b.dataset.sort;
+          return sorting === 'desc' ? dateB - dateA : dateA - dateB;
+        });
+
+        while (tbody.firstChild) {
+          tbody.removeChild(tbody.firstChild);
+        }
+
+        sortedRows.forEach(row => tbody.appendChild(row));
+      });
+    });

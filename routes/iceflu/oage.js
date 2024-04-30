@@ -7,11 +7,9 @@ router.get('/', async (req, res) => {
     try {
         const queryString = res.locals.user.permissions.read ? {} : { deleted: false };
         const documents = await Document.find(queryString);
-        console.log(documents);
         
         res.render('documents/list', {
-            title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
-            documents: documents
+            title: 'ICEFLU Homepage',
         });
 
     } catch (error) {
@@ -21,3 +19,4 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
+

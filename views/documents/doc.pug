@@ -33,6 +33,9 @@ each info in document.information
 img(src=`${document.qrDocument}`, alt="Document")
 
 script.
+  let man = 'ok'
+  let document_ = !{JSON.stringify(document_)};
+  console.log('hey', man, document_);
   function getLabel(labels, locale) {
     for (const label of labels) {
       if (label.locale === locale) {
@@ -104,5 +107,6 @@ script.
   }
   fetchLabels(infoIds)
     .then(labels => {
+      console.log({ labels });
       setLabels(labels);
     });
