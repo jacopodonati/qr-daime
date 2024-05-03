@@ -5,7 +5,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const acceptLanguageParser = require('accept-language-parser');
 const session = require('express-session');
 const db = require('./config/db');
 const i18n = require('./config/i18n');
@@ -14,6 +13,7 @@ const multer = require('multer');
 
 const { getUserPermissions } = require('./config/permissions');
 const { passUserToRoutes } = require('./middleware/users');
+const { pageTitleLocalizationWorkaround } = require('./middleware/localization');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
@@ -50,6 +50,8 @@ app.use(session({
 app.use(i18n.init);
 app.use(flash());
 
+app.use(pageTitleLocalizationWorkaround);
+
 // app.use(passUserToRoutes);
 
 app.use((req, res, next) => {
@@ -85,20 +87,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(multer().none());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Workaround per forzare la localizzazione dei titoli delle pagine.
-app.use((req, res, next) => {
-    if (req.method === 'GET') {
-        const acceptLanguage = req.headers['accept-language'];
-        const languages = acceptLanguageParser.parse(acceptLanguage);
-        const primaryLanguage = languages[0].code;
-
-        if (primaryLanguage) {
-            i18n.setLocale(primaryLanguage);
-        }
-    }
-    next();
-});
 
 // app.use((req, res, next) => {
 //     if (process.env.NODE_ENV === 'development') {

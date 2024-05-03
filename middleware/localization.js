@@ -1,4 +1,6 @@
 const { MET } = require('bing-translate-api');
+const acceptLanguageParser = require('accept-language-parser');
+const i18n = require('i18n');
 
 async function translateText(text, sourceLanguage, targetLanguage) {
     try {
@@ -9,6 +11,20 @@ async function translateText(text, sourceLanguage, targetLanguage) {
     }
 }
 
+function pageTitleLocalizationWorkaround(req, res, next) {
+    if (req.method === 'GET') {
+        const acceptLanguage = req.headers['accept-language'];
+        const languages = acceptLanguageParser.parse(acceptLanguage);
+        const primaryLanguage = languages[0].code;
+        
+        if (primaryLanguage) {
+            i18n.setLocale(primaryLanguage);
+        }
+    }
+    next();
+}
+
 module.exports = {
-    'translateText': translateText
+    pageTitleLocalizationWorkaround,
+    translateText
 };
