@@ -55,22 +55,22 @@ app.use(pageTitleLocalizationWorkaround);
 // app.use(passUserToRoutes);
 
 app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'development') {
-    req.session.user = {
-      id: '123456',
-      email: 'test@example.com',
-      role: 'admin',
-      permissions: getUserPermissions('admin')
-    };
-  }
+    if (process.env.NODE_ENV === 'development') {
+        req.session.user = {
+            id: '123456',
+            email: 'test@example.com',
+            role: 'admin',
+            permissions: getUserPermissions('admin')
+        };
+    }
 
-  if (!req.session.user) {
-    req.session.user = {
-      role: 'loggedout',
-      permissions: getUserPermissions('loggedout')
-    };
-  }
-  passUserToRoutes(req, res, next);
+    if (!req.session.user) {
+        req.session.user = {
+            role: 'loggedout',
+            permissions: getUserPermissions('loggedout')
+        };
+    }
+    passUserToRoutes(req, res, next);
 });
 
 app.use((req, res, next) => {
