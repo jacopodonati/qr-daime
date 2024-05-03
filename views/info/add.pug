@@ -12,6 +12,7 @@ block content
     each loc in availableLocales
       include ../partials/panel_info_edit.pug
     hr
+    include ../partials/error_banner.pug
     button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
 
   script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js" integrity="sha512-TelkP3PCMJv+viMWynjKcvLsQzx6dJHvIGhfqzFtZKgAjKM1YPqcwzzDEoTc/BHjf43PcPzTQOjuTr4YdE8lNQ==" crossorigin="anonymous" referrerpolicy="no-referrer")
@@ -227,13 +228,23 @@ block content
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Errore durante l\'invio dei dati al server');
+          return response.json().then(error => {
+            const errorBanner = document.getElementById('error-banner');
+            errorBanner.textContent = error.error;
+            throw new Error('Errore durante il salvataggio del campo: ' + error.error);
+          });
         }
       })
       .then(data => {
         window.location.href = `/info/view/${data.id}`;
       })
       .catch(error => {
+        const errorMessage = document.getElementById('error-message');
+        const errorSeparator = document.getElementById('error-hr');
         console.error('Errore:', error);
+        errorMessage.classList.remove('d-none')
+        errorMessage.classList.add('d-block')
+        errorSeparator.classList.remove('d-none')
+        errorSeparator.classList.add('d-block')
       });
     });

@@ -84,8 +84,8 @@ function saveField() {
             return response.json();
         } else {
             return response.json().then(error => {
-                const modalMessagePanel = document.getElementById('modal-error-panel');
-                modalMessagePanel.textContent = error.error;
+                const errorBanner = document.getElementById('error-banner');
+                errorBanner.textContent = error.error;
                 throw new Error('Errore durante il salvataggio del campo: ' + error.error);
             });
         }

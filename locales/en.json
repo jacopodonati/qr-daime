@@ -88,5 +88,5 @@
 	"user_role": "Role",
 	"activate_button": "Activate",
 	"deactivate_button": "Deactivate",
-	"user_list_title": "List of users"
+	"generic_error": "Error"
 }
