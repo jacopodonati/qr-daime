@@ -35,13 +35,13 @@ block content
               i.bi.bi-postage-fill
           td
             .btn-group(role="group").float-end
-              if user.permissions.edit
+              if (user.permissions.edit)
                 a(href=`/doc/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
-              if user.permissions.read_public
+              if (user.permissions.read_public)
                 a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              if user.permissions.delete && !document.deleted
+              if (user.permissions.delete && !document.deleted)
                 a(href=`/doc/delete/${document._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
-              if user.permissions.restore && document.deleted
+              if (user.permissions.manage_documents && document.deleted)
                 a(href=`/doc/restore/${document._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
   script.
     document.addEventListener('DOMContentLoaded', function() {

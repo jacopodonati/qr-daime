@@ -6,7 +6,7 @@ const acceptLanguageParser = require('accept-language-parser');
 
 router.get('/', async (req, res) => {
     try {
-        const queryString = res.locals.user.permissions.read ? {} : { deleted: false };
+        const queryString = res.locals.user.permissions.manage_documents ? {} : { deleted: false };
         const info = await Information.find(queryString);
 
         const acceptLanguage = req.headers['accept-language'];
