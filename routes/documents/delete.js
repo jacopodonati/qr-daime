@@ -41,7 +41,7 @@ router.post('/:id', async (req, res) => {
         if (document) {
             document.deleted = true;
             await document.save();
-            res.redirect('/list');
+            res.redirect('/doc/list');
         } else {
             res.status(404).json({ error: 'Documento non trovato' });
         }
