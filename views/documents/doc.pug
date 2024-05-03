@@ -80,7 +80,7 @@ script.
   }
 
   function fetchLabels(infoIds) {
-    return fetch(`/info/list/labels!{isAdminQueryParam}`, {
+    return fetch('/info/list/labels', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

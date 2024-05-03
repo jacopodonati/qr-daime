@@ -51,8 +51,7 @@ block content
         }
       }
 
-      console.log(JSON.stringify(dataToSubmit))
-      fetch(`/doc/edit/#{document._id}!{isAdminQueryParam}`, {
+      fetch(`/doc/edit/#{document._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -67,7 +66,7 @@ block content
         }
       })
       .then(data => {
-        window.location.href = `/doc/${data.savedDocument._id}!{isAdminQueryParam}`;
+        window.location.href = `/doc/${data.savedDocument._id}`;
       })
       .catch(error => {
         console.error('Errore:', error);

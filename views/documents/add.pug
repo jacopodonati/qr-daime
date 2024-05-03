@@ -39,7 +39,7 @@ block content
         }
       }
 
-      fetch(`/doc/add!{isAdminQueryParam}`, {
+      fetch('/doc/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ block content
         }
       })
       .then(data => {
-        window.location.href = `/doc/${data.updatedDocument._id}!{isAdminQueryParam}`;
+        window.location.href = `/doc/${data.updatedDocument._id}`;
       })
       .catch(error => {
         console.error('Errore:', error);
