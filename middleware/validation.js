@@ -12,6 +12,10 @@ async function validateAndTranslateData(req, res, next) {
             return res.status(400).json({ error: i18n.__('missing_label_text') });
         }
 
+        if (data.fields.length === 0) {
+            return res.status(400).json({ error: i18n.__('missing_fields') });
+        }
+
         for (let label of data.labels) {
             if (label.text.trim() === '') {
                 const notEmptyLabel = data.labels.find(l => l.text.trim() !== '');

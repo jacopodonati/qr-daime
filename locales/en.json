@@ -88,5 +88,7 @@
 	"user_role": "Role",
 	"activate_button": "Activate",
 	"deactivate_button": "Deactivate",
+	"user_list_title": "List of users",
+	"missing_fields": "At least one field must be added",
 	"generic_error": "Error"
 }
