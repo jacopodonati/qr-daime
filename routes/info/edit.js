@@ -76,7 +76,7 @@ router.get('/:id', async (req, res) => {
         const id = req.params.id;
 
         let information;
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_info) {
             information = await Information.findById(id);
         } else {
             information = await Information.findOne({ _id: id, deleted: false });
@@ -105,7 +105,7 @@ router.post('/:id', validateAndTranslateData, async (req, res) => {
         const newData = req.body;
         let information;
         
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_info) {
             information = await Information.findById(id);
         } else {
             information = await Information.findOne({ _id: id, deleted: false });
@@ -127,7 +127,6 @@ router.post('/:id', validateAndTranslateData, async (req, res) => {
             information.fields.sort((a, b) => a.order - b.order);
 
             let savedInformation = await information.save();
-            console.log(savedInformation._doc);
             return res.status(200).json({ savedInformation });
         } 
     } catch (error) {

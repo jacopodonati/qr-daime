@@ -12,7 +12,7 @@ router.get('/:id', async (req, res) => {
     
     try {
         let document;
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_documents) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });

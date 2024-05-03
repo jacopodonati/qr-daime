@@ -44,7 +44,7 @@ router.post('/:id', async (req, res) => {
         const newData = req.body.fields;
 
         let document;
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_documents) {
             document = await Document.findById(id);
         } else {
             document = await Document.findOne({ _id: id, deleted: false });

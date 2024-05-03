@@ -48,7 +48,7 @@ router.get('/search', async (req, res) => {
             deleted: false
         }
 
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_info) {
             delete searchQuery.deleted;
         }
 

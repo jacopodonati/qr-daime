@@ -25,7 +25,7 @@ router.get('/view/:id', async (req, res) => {
 
     try {
         let info;
-        if (req.isAdmin) {
+        if (res.locals.user.permissions.manage_info) {
             info = await Information.findById(id);
         } else {
             info = await Information.findOne({ _id: id, deleted: false });
