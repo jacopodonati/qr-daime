@@ -119,7 +119,6 @@ router.post('/:id', validateAndTranslateData, async (req, res) => {
 
             information.fields = [];
             newData.fields.forEach(async (newField) => {
-                console.log(newField)
                 if (newField._id.substring(0, 3) === 'tmp') {
                     delete newField._id;
                 }
