@@ -34,7 +34,7 @@
 	"empty_database_message": "Nessun record salvato",
 	"delete_document_no": "Vuoi eliminare il record n.",
 	"missing_labels_or_infos": "è necessario impostare il nome e almeno un campo.",
-	"navbar_documents": "I Record",
+	"navbar_documents": "Record",
 	"navbar_info": "Informazioni",
 	"navbar_info_list": "Elenca le informazioni disponibili",
 	"list_info": "Elenca tutte le informazioni",
