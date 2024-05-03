@@ -215,7 +215,7 @@ block content
       dataToSubmit.fields.forEach(f => {
         delete f._id;
       });
-      return console.log({ dataToSubmit });
+
       fetch(`/info/add`, {
         method: 'POST',
         headers: {
