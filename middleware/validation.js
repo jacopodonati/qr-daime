@@ -49,6 +49,36 @@ async function validateAndTranslateData(req, res, next) {
     }
 }
 
+async function replaceUrlWithImg(content) {
+    let newContent = content;
+    const urlRegex = /(https?:\/\/[0-9a-z\-_\.~\/]+)/gi;
+    const urls = content.match(urlRegex);
+    if (urls && urls.length > 0) {
+        for (let i = 0; i < urls.length; i++) {
+            try {
+                const res = await fetch(urls[i]);
+                
+                if (!res.ok) {
+                    throw new Error(`Fetch failed with status ${res.status}`);
+                }
+    
+                const buffer = await res.blob();
+                if (buffer.type.startsWith('image/')) {
+                    const imgTag = `<img src="${urls[i]}">`;
+                    newContent = newContent.replace(urls[i], imgTag);
+                } else {
+                    const aTag = `<a href="${urls[i]}">${urls[i]}</a>`;
+                    newContent = newContent.replace(urls[i], aTag);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+    }
+    return newContent;
+}
+
 module.exports = {
-    validateAndTranslateData
+    validateAndTranslateData,
+    replaceUrlWithImg
 };

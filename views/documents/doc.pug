@@ -17,7 +17,7 @@ script.
   }
 
 each info in document.information
-  if (isAdmin || info.public)
+  if (user.permissions.manage_documents || info.public)
     - let info_id = 'id-' + info._id
     - let classes = info.public ? '' : 'bg-secondary-subtle'
     div(class=`${classes}`)
@@ -28,7 +28,7 @@ each info in document.information
           li
             span(id=field_id).field-id #{field._id}
             | : 
-            span.field-value #{field.value}
+            span.field-value !{field.value}
 
 img(src=`${document.qrDocument}`, alt="Document")
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
 const i18n = require('i18n');
+const { replaceUrlWithImg } = require('../../middleware/validation');
 
 router.get('/', async (req, res) => {
     res.redirect('/list');
@@ -19,6 +20,14 @@ router.get('/:id', async (req, res) => {
         }
 
         if (document) {
+            for (let i = 0; i < document._doc.information.length; i++) {
+                for (let j = 0; j < document._doc.information[i].fields.length; j++) {
+                    const field = document._doc.information[i].fields[j];
+                    let formattedValue = await replaceUrlWithImg(field.value)
+                    field.set('value', formattedValue);
+                }
+            }
+            
             res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document: document,
