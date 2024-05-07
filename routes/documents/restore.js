@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
             if (document) {
                 document.deleted = false;
                 await document.save();
-                res.redirect('/list');
+                res.redirect('/doc/list');
             } else {
                 res.status(404).json({ error: 'Documento non trovato' });
             }
@@ -19,7 +19,7 @@ router.get('/:id', async (req, res) => {
             res.status(500).json({ error: 'Errore del server interno' });
         }
     } else {
-        res.redirect('/list');
+        res.redirect('/doc/list');
     }
 });
 
