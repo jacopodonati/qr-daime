@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
     try {
         const newWorkspace = new Workspace({
             name: req.body.name,
-            public: typeof req.body.privacy !== 'undefined' ? true : false,
+            privacy: typeof req.body.privacy !== 'undefined' ? 'public' : 'private',
             members: [{
                 role: 'workspace_admin',
                 user: res.locals.user.id
