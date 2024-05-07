@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const i18n = require('i18n');
-const User = require('../../models/user');
 const bcrypt = require('bcrypt');
+const User = require('../../models/user');
+const Workspace = require('../../models/workspace');
 
 router.get('/', (req, res) => {
     res.render('users/login', {
@@ -16,6 +17,17 @@ router.post('/', async (req, res) => {
 
         if (action === 'signup') {
             const newUser = new User({ email, password });
+            await newUser.save();
+            const personalWorkspace = new Workspace({
+                members: [{
+                    role: 'workspace_admin',
+                    user: newUser._id
+                }],
+                name: email,
+                privacy: 'personal'
+            });
+            await personalWorkspace.save();
+            newUser.workspaces.push(personalWorkspace._id);
             await newUser.save();
             req.flash('success', i18n.__('login_user_created'));
             return res.redirect('/login');
