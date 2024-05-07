@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
+const Workspace = require('../../models/workspace');
 const i18n = require('i18n');
 
 router.get('/:id', async (req, res) => {
@@ -39,7 +40,9 @@ router.post('/:id', async (req, res) => {
         const document = await Document.findById(queryString);
 
         if (document) {
-            document.deleted = true;
+            const personalWorkspace = await Workspace.findOne({ name: res.locals.user.email, privacy: 'personal' }, '_id');
+            document.set('deleted', true);
+            document.set('workspace', personalWorkspace._id);
             await document.save();
             res.redirect('/doc/list');
         } else {
