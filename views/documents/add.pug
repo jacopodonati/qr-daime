@@ -14,7 +14,7 @@ block content
       label.form-label(for="workspace") #{__("form_select_workspace")}:
       select#workspace.form-control(name="workspace")
         each workspace in workspaces
-          if workspace.name == user.email
+          if workspace.privacy == "personal"
             option(value=`${workspace._id}`) #{__("select_personal_workspace")}
           else
             option(value=`${workspace._id}`) #{workspace.name}

@@ -15,7 +15,7 @@ block content
       select#workspace.form-control(name="workspace")
         each workspace in workspaces
           - let label = workspace.name
-          if workspace.name == user.email
+          if workspace.privacy == "personal"
             - label = __("select_personal_workspace")
           if workspace._id == document.workspace
             option(value=`${workspace._id}`, selected) #{label}
