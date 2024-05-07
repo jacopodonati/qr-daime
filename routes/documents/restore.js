@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
             if (document) {
                 document.deleted = false;
                 await document.save();
-                res.redirect('/list?admin');
+                res.redirect('/list');
             } else {
                 res.status(404).json({ error: 'Documento non trovato' });
             }

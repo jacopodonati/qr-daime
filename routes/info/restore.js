@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
             if (information) {
                 information.deleted = false;
                 await information.save();
-                res.redirect('/info/list?admin');
+                res.redirect('/info/list');
             } else {
                 res.status(404).json({ error: 'Informazione non trovata' });
             }
