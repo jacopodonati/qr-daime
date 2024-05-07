@@ -109,5 +109,6 @@
 	"login_password_not_valid": "Password errata",
 	"login_success": "Login effettuato con successo",
 	"form_select_workspace": "Area di lavoro",
-	"select_personal_workspace": "Area personale"
+	"select_personal_workspace": "Area personale",
+	"edit_workspace_title": "Modifica area di lavoro"
 }
