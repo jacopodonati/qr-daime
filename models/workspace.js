@@ -23,15 +23,7 @@ const workspaceSchema = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
-    },
-    documents: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document'
-    }],
-    informations: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Information'
-    }]
+    }
 });
 
 const Workspace = mongoose.model('Workspace', workspaceSchema);
