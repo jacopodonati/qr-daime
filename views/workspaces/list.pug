@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+  h1 #{__("list_workspaces")}
+  
+  - if (workspaces.length === 0)
+    div.alert.alert-primary #{__("empty_database_message")}
+  - else
+    table#docTable.table.table-striped.table-hover
+      thead
+        tr 
+          if user.permissions.manage_workspaces 
+            th
+          th ID
+          th #{__("th_workspace_name")}
+          th #{__("th_workspace_members")}
+          th
+      each workspace in workspaces
+        - let status
+        - if (workspace.deleted)
+          - status = "deleted"
+        - else
+          - status = "available"
+        tr(data-status=`${status}`)
+          if user.permissions.manage_workspaces
+            if workspace.deleted
+              td ⛔️
+            else
+              td ✅
+          td #{workspace._id}
+          td #{workspace.name}
+          td #{workspace.members.length}
+          td
+            .btn-group(role="group").float-end
+              if (user.permissions.edit)
+                a(href=`/doc/edit/${workspace._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+              if (user.permissions.read_public)
+                a(href=`/doc/${workspace._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+              if (user.permissions.delete && !workspace.deleted)
+                a(href=`/doc/delete/${workspace._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
+              if (user.permissions.manage_workspaces && workspace.deleted)
+                a(href=`/doc/restore/${workspace._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
+

@@ -15,7 +15,8 @@ const permissions = {
         delete_any: true,
         manage_info: true,
         manage_documents: true,
-        manage_users: true
+        manage_users: true,
+        manage_workspaces: true
     },
     god: {
         __extend: ['admin'],

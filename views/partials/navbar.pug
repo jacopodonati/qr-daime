@@ -31,6 +31,14 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                 a.nav-link(href="/info/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_info_list")}
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_workspaces")}
+          ul.dropdown-menu
+            if user.permissions.read_public
+              li.dropdown-item
+                a.nav-link(href="/workspace/list")
+                  i.bi.bi-list-ul.me-3
+                  | #{__("navbar_workspace_list")}
         - if (user.permissions.manage_users)
           li.nav-item.dropdown.ms-auto
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}

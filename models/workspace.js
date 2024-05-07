@@ -10,11 +10,20 @@ const memberSchema = new mongoose.Schema({
         enum: ['basic', 'workspace_admin'],
         default: 'basic'
     }
-});
+}, { _id: false });
 
 const workspaceSchema = new mongoose.Schema({
     name: String,
     members: [memberSchema],
+    privacy: {
+        type: String,
+        enum: ['private', 'shared', 'public', 'personal'],
+        default: 'private'
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     documents: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Document'
