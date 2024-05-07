@@ -90,5 +90,11 @@
 	"deactivate_button": "Disattiva",
 	"user_list_title": "Elenco degli utenti",
 	"missing_fields": "È necessario aggiungere almeno un campo",
-	"generic_error": "Errore"
+	"generic_error": "Errore",
+	"login_user_not_found": "Utente non trovato",
+	"login_user_not_activated": "Utente non ancora attivato",
+	"login_user_deleted": "Utente cancellato",
+	"login_user_created": "Utente creato. Riceverai un'email quando l'utente sarà stato attivato.",
+	"login_password_not_valid": "Password errata",
+	"login_success": "Login effettuato con successo",
 }

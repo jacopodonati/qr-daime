@@ -90,5 +90,10 @@
 	"deactivate_button": "Deactivate",
 	"user_list_title": "List of users",
 	"missing_fields": "At least one field must be added",
-	"generic_error": "Error"
-}
+	"generic_error": "Error",
+	"login_user_not_found": "User not found",
+	"login_user_not_activated": "User not yet activated",
+	"login_user_deleted": "User deleted",
+	"login_user_created": "User created",
+	"login_password_not_valid": "Wrong password",
+	"login_success": "Successfully logged in",

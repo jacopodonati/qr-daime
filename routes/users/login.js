@@ -17,24 +17,33 @@ router.post('/', async (req, res) => {
         if (action === 'signup') {
             const newUser = new User({ email, password });
             await newUser.save();
-            res.redirect('/login');
+            req.flash('success', i18n.__('login_user_created'));
+            return res.redirect('/login');
         } else if (action === 'signin') {
-            const user = await User.findOne({ email, deleted: false, activated: true });
+            const user = await User.findOne({ email });
             if (!user) {
-                req.flash('error', 'Utente non trovato');
+                req.flash('error', i18n.__('login_user_not_found'));
+                return res.redirect('/login');
+            }
+            if (!user.activated) {
+                req.flash('error', i18n.__('login_user_not_activated'));
+                return res.redirect('/login');
+            }
+            if (!user.deleted) {
+                req.flash('error', i18n.__('login_user_deleted'));
                 return res.redirect('/login');
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                req.flash('error', 'Password non valida');
+                req.flash('error', i18n.__('login_password_not_valid'));
                 return res.redirect('/login');
             }
 
-            req.flash('success', 'Login effettuato con successo');
+            req.flash('success', i18n.__('login_success'));
             req.session.user = user;
 
-            res.redirect('/');
+            return res.redirect('/');
         }
     } catch (error) {
         console.error('Errore durante il login/registrazione:', error);
