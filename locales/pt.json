@@ -108,3 +108,6 @@
 	"login_user_created": "Usuário criado",
 	"login_password_not_valid": "Senha errada",
 	"login_success": "Logado com sucesso",
+	"form_select_workspace": "Área de trabalho",
+	"select_personal_workspace": "Área de trabalho pessoal"
+}

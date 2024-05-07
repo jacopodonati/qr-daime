@@ -108,3 +108,6 @@
 	"login_user_created": "User created",
 	"login_password_not_valid": "Wrong password",
 	"login_success": "Successfully logged in",
+	"form_select_workspace": "Workspace",
+	"select_personal_workspace": "Personale Workspace"
+}

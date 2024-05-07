@@ -10,6 +10,20 @@ block content
 
     hr#form-sep
 
+    .mb-3
+      label.form-label(for="workspace") #{__("form_select_workspace")}:
+      select#workspace.form-control(name="workspace")
+        each workspace in workspaces
+          - let label = workspace.name
+          if workspace.name == user.email
+            - label = __("select_personal_workspace")
+          if workspace._id == document.workspace
+            option(value=`${workspace._id}`, selected) #{label}
+          else
+            option(value=`${workspace._id}`) #{label}
+
+    hr
+
     button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
 
   include ../partials/modal_add_field.pug
@@ -24,30 +38,26 @@ block content
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const formData = new FormData(form);
-      //- const deletedCheck = document.querySelector('[id*=deleted]');
-      //- let deletedCheckStatus = false;
-      //- if (deletedCheck) {
-      //-     deletedCheckStatus = deletedCheck.checked;
-      //- }
-
-      const dataToSubmit = {
-        fields: [],
-        //- deleted: deletedCheckStatus
-      };
+      const formDataObj = {
+        'workspace': formData.get('workspace'),
+        'fields': []
+      }
 
       for (const [key, value] of formData.entries()) {
         if (key === 'id') {
           const newObj = { _id: value, fields: [] };
-          dataToSubmit.fields.push(newObj);
+          formDataObj['fields'].push(newObj);
         } else if (key === 'public') {
-          const lastObjIndex = dataToSubmit.fields.length - 1;
-          dataToSubmit.fields[lastObjIndex].public = value === 'on';
+          const lastObjIndex = formDataObj['fields'].length - 1;
+          formDataObj['fields'][lastObjIndex].public = value === 'on';
         } else if (key === 'sort') {
-          const lastObjIndex = dataToSubmit.fields.length - 1;
-          dataToSubmit.fields[lastObjIndex].sort = value;
+          const lastObjIndex = formDataObj['fields'].length - 1;
+          formDataObj['fields'][lastObjIndex].sort = value;
+        } else if (key === 'workspace') {
+          continue;
         } else {
-          const lastObjIndex = dataToSubmit.fields.length - 1;
-          dataToSubmit.fields[lastObjIndex].fields.push({ _id: key, value: value });
+          const lastObjIndex = formDataObj['fields'].length - 1;
+          formDataObj['fields'][lastObjIndex].fields.push({ _id: key, value: value });
         }
       }
 
@@ -56,7 +66,7 @@ block content
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(dataToSubmit)
+        body: JSON.stringify(formDataObj)
       })
       .then(response => {
         if (response.ok) {

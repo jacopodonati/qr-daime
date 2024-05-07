@@ -31,6 +31,10 @@ const documentSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     qrDocument: String,
     qrUrl: String,
     information: [informationSchema],

@@ -3,6 +3,7 @@ const router = express.Router();
 const i18n = require('i18n');
 const Document = require('../../models/document');
 const Information = require('../../models/information');
+const Workspace = require('../../models/workspace');
 const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 
 function getDocLink(id) {
@@ -15,11 +16,14 @@ router.get('/', async function(req, res, next) {
     }
     try {
         const fields = await Information.find({});
+        const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+
         res.render('documents/add', {
             title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
             locale: req.getLocale(),
             fallbackLocale: i18n.getLocale(),
-            fields
+            fields,
+            workspaces
         });
     } catch (error) {
         console.error('Errore durante il recupero dei campi:', error);
@@ -31,9 +35,10 @@ router.post('/', async (req, res) => {
     if (!res.locals.user.permissions.create) {
         return res.status(403).send('Operazione non consentita');
     }
+
     try {
-        const formDataArray = req.body;
-        const fields = formDataArray.map(formData => {
+        const formData = req.body;
+        const fields = formData['fields'].map(formData => {
             const fieldData = formData.fields.map(field => ({
                 _id: field._id,
                 value: field.value
@@ -47,6 +52,8 @@ router.post('/', async (req, res) => {
         });
 
         const newDocument = new Document({
+            owner: res.locals.user.id,
+            workspace: formData['workspace'],
             information: fields
         });
 
@@ -61,7 +68,7 @@ router.post('/', async (req, res) => {
                 qrUrl: qrUrl 
             }, { new: true });
             return res.status(201).json({ updatedDocument });
-        } 
+        }
     } catch (error) {
         console.error('Errore durante il salvataggio del documento:', error);
         res.status(500).json({ error: 'Errore interno del server' });
