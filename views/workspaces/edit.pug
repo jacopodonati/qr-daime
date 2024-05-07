@@ -42,7 +42,7 @@ block content
       })
       .then(data => {
         console.log(data)
-        window.location.href = `/workspace/${data.updatedWorkspace._id}`;
+        window.location.href = `/workspace/view/${data.updatedWorkspace._id}`;
       })
       .catch(error => {
         console.error('Errore:', error);

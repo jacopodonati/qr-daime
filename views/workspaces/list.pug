@@ -12,8 +12,8 @@ block content
           if user.permissions.manage_workspaces 
             th
           th ID
-          th #{__("th_workspace_name")}
-          th #{__("th_workspace_members")}
+          th #{__("list_workspace_th_name")}
+          th #{__("list_workspace_th_members")}
           th
       each workspace in workspaces
         - let status
@@ -39,7 +39,7 @@ block content
               if (workspace.privacy != "personal" && (user.permissions.manage_workspaces || isWorkspaceAdmin))
                 a(href=`/workspace/edit/${workspace._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               if (user.permissions.read_public)
-                a(href=`/workspace/${workspace._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+                a(href=`/workspace/view/${workspace._id}`).btn.btn-primary.btn-sm #{__("view_button")}
               if (workspace.privacy != "personal" && !workspace.deleted && (user.permissions.manage_workspaces || isWorkspaceAdmin))
                 a(href=`/workspace/delete/${workspace._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
               if (workspace.privacy != "personal" && workspace.deleted && (user.permissions.manage_workspaces || isWorkspaceAdmin))

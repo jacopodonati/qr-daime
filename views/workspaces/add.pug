@@ -39,7 +39,7 @@ block content
       })
       .then(data => {
         console.log(data)
-        window.location.href = `/workspace/${data.savedWorkspace._id}`;
+        window.location.href = `/workspace/view/${data.savedWorkspace._id}`;
       })
       .catch(error => {
         console.error('Errore:', error);

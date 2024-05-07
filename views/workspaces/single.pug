@@ -1,0 +1,7 @@
+extends ../layout
+
+block content
+  include workspace.pug
+
+  hr
+  a.btn.btn-primary.col-md-2.offset-md-10(href=`/workspace/edit/${workspace._id}`) #{__("edit_button")}
