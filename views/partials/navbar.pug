@@ -34,6 +34,11 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_workspaces")}
           ul.dropdown-menu
+            if user.permissions.create
+              li.dropdown-item
+                a.nav-link(href="/workspace/add")
+                  i.bi.bi-plus.me-3
+                  | #{__("navbar_workspace_add")}
             if user.permissions.read_public
               li.dropdown-item
                 a.nav-link(href="/workspace/list")

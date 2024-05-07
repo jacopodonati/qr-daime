@@ -1,0 +1,47 @@
+extends ../layout
+
+block content
+  h1.mb-5 #{__("add_workspace_title")}
+
+  form(id="workspace-form" action=`/workspace/add` method="post")
+    .mb-3
+      label.form-label(for="workspace-title") #{__("workspace_title")}
+      input#workspace-title.form-control(type="text", name="name", placeholder=`${__("workspace_title_placeholder")}`, required)
+    .form-check.mb-3
+      input#workspace-privacy.form-check-input(type="checkbox", name="privacy", value="")
+      label.fomr-check-label(for="workspace-privacy") #{__("workspace_privacy_checkbox")}
+
+    button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
+
+  script.
+    const form = document.getElementById('workspace-form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const formDataObject = {};
+      for (const [key, value] of formData.entries()) {
+        formDataObject[key] = value;
+      }
+
+      fetch('/workspace/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObject)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante l\'invio dei dati al server');
+        }
+      })
+      .then(data => {
+        console.log(data)
+        window.location.href = `/workspace/${data.savedWorkspace._id}`;
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+      });
+    });
