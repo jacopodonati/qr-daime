@@ -124,5 +124,6 @@
 	"workspace_privacy_checkbox": "Public",
 	"workspace_title": "Workspace Title",
 	"workspace_title_placeholder": "Enter the title of the workspace",
-	"workspace_view_title": "View Workspace"
+	"workspace_view_title": "View Workspace",
+	"delete_workspace_no": "Delete workspace no."
 }

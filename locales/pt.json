@@ -124,5 +124,6 @@
 	"workspace_privacy_checkbox": "Público",
 	"workspace_title": "Título da área de trabalho",
 	"workspace_title_placeholder": "Insira o nome da área de trabalho",
-	"workspace_view_title": "workspace_view_title"
+	"workspace_view_title": "workspace_view_title",
+	"delete_workspace_no": "Cancele área de trabalho n°"
 }
