@@ -10,7 +10,6 @@ router.get('/:id', async (req, res) => {
             
             if (workspace) {
                 const memberIds = workspace.members.map(member => member.user);
-                console.log(memberIds)
                 await User.updateMany({ _id: { $in: memberIds } }, { $addToSet: { 'workspaces': workspace._id } })
                 workspace.deleted = false;
                 await workspace.save();
