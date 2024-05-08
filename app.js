@@ -43,6 +43,7 @@ const workspaceListRouter = require('./routes/workspaces/list');
 const workspaceAddRouter = require('./routes/workspaces/add');
 const workspaceEditRouter = require('./routes/workspaces/edit');
 const workspaceDeleteRouter = require('./routes/workspaces/delete');
+const workspaceRestoreRouter = require('./routes/workspaces/restore');
 
 const app = express();
 
@@ -139,6 +140,7 @@ app.use('/workspace/view', workspaceSingleRouter);
 app.use('/workspace/add', workspaceAddRouter);
 app.use('/workspace/edit', workspaceEditRouter);
 app.use('/workspace/delete', workspaceDeleteRouter);
+app.use('/workspace/restore', workspaceRestoreRouter);
 app.use('/manage/users/list', userListRouter);
 app.use('/manage/users/toggle-deletion', userDeleteRouter);
 app.use('/manage/users/toggle-activation', userActivationRouter);
