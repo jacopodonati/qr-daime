@@ -5,25 +5,31 @@ p ID: #{workspace._id}
 p Privacy: #{__(privacy_label)}
 
 h2 #{__("view_workspace_members_label")}:
-table.table.table-striped.table-hover
-  thead 
-    th #{__("view_workspace_th_member_email")}
-    th #{__("view_workspace_th_member_role")}
-  each member in workspace.members
-    - let role_label = "view_workspace_role_" + member.role
-    tr
-      td= member.user.email
-      td= __(role_label)
+- if (workspace.members.length === 0)
+  div.alert.alert-primary #{__("empty_database_message")}
+- else
+  table.table.table-striped.table-hover
+    thead 
+      th #{__("view_workspace_th_member_email")}
+      th #{__("view_workspace_th_member_role")}
+    each member in workspace.members
+      - let role_label = "view_workspace_role_" + member.role
+      tr
+        td= member.user.email
+        td= __(role_label)
 
 h2 #{__("view_workspace_documents_label")}
-table.table.table-striped.table-hover
-  thead 
-    th ID
-    th #{__("view_workspace_th_document_date")}
-    th #{__("view_workspace_th_document_owner")}
-  each document in documents
-    tr
-      td 
-        a(href=`/doc/${document.id}`) #{document._id}
-      td= document.dateOfIssue
-      td= document.owner.email
+- if (documents.length === 0)
+  div.alert.alert-primary #{__("empty_database_message")}
+- else
+  table.table.table-striped.table-hover
+    thead 
+      th ID
+      th #{__("view_workspace_th_document_date")}
+      th #{__("view_workspace_th_document_owner")}
+    each document in documents
+      tr
+        td 
+          a(href=`/doc/${document.id}`) #{document._id}
+        td= document.dateOfIssue
+        td= document.owner.email
