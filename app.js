@@ -18,6 +18,7 @@ const { pageTitleLocalizationWorkaround } = require('./middleware/localization')
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
 const staticRouter = require('./routes/static');
+const userSingleRouter = require('./routes/users/single');
 const userListRouter = require('./routes/users/list');
 const userDeleteRouter = require('./routes/users/delete');
 const userActivationRouter = require('./routes/users/activate');
@@ -141,6 +142,7 @@ app.use('/workspace/add', workspaceAddRouter);
 app.use('/workspace/edit', workspaceEditRouter);
 app.use('/workspace/delete', workspaceDeleteRouter);
 app.use('/workspace/restore', workspaceRestoreRouter);
+app.use('/manage/users/', userSingleRouter);
 app.use('/manage/users/list', userListRouter);
 app.use('/manage/users/toggle-deletion', userDeleteRouter);
 app.use('/manage/users/toggle-activation', userActivationRouter);

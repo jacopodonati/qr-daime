@@ -115,7 +115,7 @@
 	"view_workspace_privacy_public": "Público",
 	"view_workspace_privacy_shared": "Compartilhado",
 	"view_workspace_role_workspace_admin": "Administrador da área de trabalho",
-	"view_workspace_role_workspace_basic": "Usuário",
+	"view_workspace_role_basic": "Usuário",
 	"view_workspace_th_document_date": "data",
 	"view_workspace_th_document_owner": "proprietário",
 	"view_workspace_th_member_email": "E-mail",
@@ -125,5 +125,8 @@
 	"workspace_title": "Título da área de trabalho",
 	"workspace_title_placeholder": "Insira o nome da área de trabalho",
 	"workspace_view_title": "workspace_view_title",
-	"delete_workspace_no": "Cancele área de trabalho n°"
+	"delete_workspace_no": "Cancele área de trabalho n°",
+	"edit_workspace_remove_user": "Remover",
+	"edit_workspace_add_user_placeholder": "Digite um endereço de e-mail",
+	"edit_workspace_add_user": "Adicionar"
 }

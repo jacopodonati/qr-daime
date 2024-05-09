@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   h1.mb-5 #{__("edit_workspace_title")}
-  
+
   form(id="workspace-form" action=`/workspace/edit` method="post")
     .mb-3
       label.form-label(for="workspace-title") #{__("workspace_title")}
@@ -14,17 +14,183 @@ block content
         input#workspace-privacy.form-check-input(type="checkbox", name="privacy")
       label.form-check-label(for="workspace-privacy") #{__("workspace_privacy_checkbox")}
 
+    .mb-3
+      table.table.table-hover.table-striped#members-table
+        thead 
+          th= __("edit_workspace_th_member_email")
+          th= __("edit_workspace_th_member_role")
+          th
+        tbody
+          each member in workspace.members
+            tr.member(data-userid=`${member.user.id}`)
+              td= member.user.email 
+              - if (member.user.email == user.email)
+                td= __("edit_workspace_role_" + member.role)
+              - else 
+                td
+                  select.form-select.form-select-sm.role-selector
+                    each role in roles
+                      - if (role.value == member.role)
+                        option(value=`${role.value}`, selected)= role.label
+                      - else
+                        option(value=`${role.value}`)= role.label
+              td
+                - if (member.user.email != user.email)
+                  .btn-group(role="group").float-end
+                    a.btn.btn-danger.btn-sm.remove-button(href="#")= __("edit_workspace_remove_user")
+          
+    #add-user.input-group.mb-3
+      input.form-control#emailAdd(type="email", placeholder=`${__("edit_workspace_add_user_placeholder")}`)
+      a#add-button.btn.btn-outline-primary(href="#") #{__("edit_workspace_add_user")}
+
+    hr
+
+    div#hidden-members
+      each member, index in workspace.members
+        .hidden-group(id=`hidden-${member.user._id}`)
+          input(type="hidden", name=`members[${index}][id]`, value=member.user._id)
+          input(type="hidden", name=`members[${index}][role]`, value=member.role)
+    
     button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
 
   script.
+    const addButton = document.querySelector('#add-button');
+    addButton.addEventListener('click', function(event) {
+      const emailInput = document.querySelector('#emailAdd');
+      fetch('/manage/users/email/' + emailInput.value)
+      .then(response => {
+        emailInput.value = '';
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante l\'invio dei dati al server');
+        }
+      })
+      .then(data => {
+        const rows = document.querySelectorAll('tr.member');
+        let isAlreadyMember = false;
+        rows.forEach(row => {
+          if (row.dataset.userid === data._id) {
+            isAlreadyMember = true;
+          }
+        });
+        if (!isAlreadyMember) {
+          const newRow = document.createElement('tr');
+          newRow.classList.add('member');
+          newRow.dataset.userid = data._id;
+          const emailCell = document.createElement('td');
+          emailCell.textContent = data.email;
+          newRow.appendChild(emailCell);
+          const roleCell = document.createElement('td');
+          const roleSelector = document.createElement('select');
+          roleSelector.classList.add('form-select', 'form-select-sm', 'role-selector');
+          const roles = JSON.parse(`!{JSON.stringify(roles)}`);
+          roles.forEach((role) => {
+            const option = document.createElement('option');
+            option.value = role.value;
+            option.textContent = role.label;
+            roleSelector.appendChild(option);
+          });
+          roleSelector.addEventListener('change', function(event) {
+            changeRole(roleSelector);
+          });
+          roleCell.appendChild(roleSelector);
+          newRow.appendChild(roleCell);
+          const buttonCell = document.createElement('td');
+          const buttonGroup = document.createElement('div');
+          buttonGroup.classList.add('btn-group', 'float-end');
+          buttonGroup.setAttribute('role', 'group');
+          const buttonRemove = document.createElement('a');
+          buttonRemove.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
+          buttonRemove.setAttribute('href', '#');
+          buttonRemove.textContent = `!{__("edit_workspace_remove_user")}`;
+          buttonRemove.addEventListener('click', function() {
+            removeUser(buttonRemove);
+          });
+          buttonGroup.appendChild(buttonRemove);
+          buttonCell.appendChild(buttonGroup);
+          newRow.appendChild(buttonCell);
+          const membersTable = document.querySelector('#members-table tbody');
+          membersTable.appendChild(newRow);
+
+          const hiddenMembers = document.querySelector('#hidden-members');
+          const index = Date.now();
+          const hiddenGroup = document.createElement('div');
+          hiddenGroup.classList.add('hidden-group');
+          hiddenGroup.id = `hidden-${data._id}`;
+          const hiddenUser = document.createElement('input');
+          hiddenUser.setAttribute('type', 'hidden');
+          hiddenUser.setAttribute('name', `members[${index}][id]`);
+          hiddenUser.setAttribute('value', data._id);
+          hiddenGroup.appendChild(hiddenUser);
+          const hiddenRole = document.createElement('input');
+          hiddenRole.setAttribute('type', 'hidden');
+          hiddenRole.setAttribute('name', `members[${index}][role]`);
+          hiddenRole.setAttribute('value', 'basic');
+          hiddenGroup.appendChild(hiddenRole);
+          hiddenMembers.appendChild(hiddenGroup);
+        }
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+      });
+    });
+
+    function changeRole(element) {
+      const userId = element.parentElement.parentElement.dataset.userid;
+      const hiddenGroup = document.querySelector(`#hidden-${userId}`);
+      const hiddenRole = hiddenGroup.querySelector('[name*=role]');
+      hiddenRole.value = element.value;
+      console.log(hiddenRole.value, element.value)
+    }
+
+    const roleSelectors = document.querySelectorAll('.role-selector');
+    roleSelectors.forEach((selector) => {
+      selector.addEventListener('change', function(event) {
+        changeRole(selector);
+      });
+    });
+
+    function removeUser(element) {
+      const userId = element.parentElement.parentElement.parentElement.dataset.userid;
+      const rows = document.querySelectorAll('tr.member');
+      rows.forEach((row) => {
+        if (row.dataset.userid === userId) {
+          row.remove();
+        }
+      });
+      const hiddenGroup = document.querySelector(`#hidden-${userId}`);
+      hiddenGroup.remove()
+    }
+
+    const removeButtons = document.querySelectorAll('.remove-button');
+    removeButtons.forEach((button) => {
+      button.addEventListener('click', function() {
+        removeUser(button);
+      });
+    });
+
     const form = document.getElementById('workspace-form');
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const formData = new FormData(form);
       const formDataObject = {};
+      let membersList = [];
+      let tmpMember = {};
       for (const [key, value] of formData.entries()) {
-        formDataObject[key] = value;
+        if (key.includes('member')) {
+          if (key.includes('id')) {
+            tmpMember['id'] = value;
+          } else {
+            tmpMember['role'] = value;
+            membersList.push(tmpMember);
+            tmpMember = {};
+          }
+        } else {
+          formDataObject[key] = value;
+        }
       }
+      formDataObject['members'] = membersList;
 
       fetch(`/workspace/edit/!{workspace._id}`, {
         method: 'POST',

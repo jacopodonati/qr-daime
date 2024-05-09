@@ -115,7 +115,7 @@
 	"view_workspace_privacy_public": "Pubblico",
 	"view_workspace_privacy_shared": "Condiviso",
 	"view_workspace_role_workspace_admin": "Amministratore",
-	"view_workspace_role_workspace_basic": "Utente",
+	"view_workspace_role_basic": "Utente",
 	"view_workspace_th_document_date": "data",
 	"view_workspace_th_document_owner": "Proprietario",
 	"view_workspace_th_member_email": "email",
@@ -125,5 +125,12 @@
 	"workspace_title": "Nome dell'area di lavoro",
 	"workspace_title_placeholder": "Inserisci il nome dell'area di lavoro",
 	"workspace_view_title": "Area di lavoro",
-	"delete_workspace_no": "Elimina area di lavoro n."
+	"delete_workspace_no": "Elimina area di lavoro n.",
+	"edit_workspace_th_member_email": "email",
+	"edit_workspace_th_member_role": "ruolo",
+	"edit_workspace_role_workspace_admin": "Amministratore",
+	"edit_workspace_role_basic": "Utente",
+	"edit_workspace_remove_user": "Rimuovi",
+	"edit_workspace_add_user_placeholder": "Inserisci un indirizzo email",
+	"edit_workspace_add_user": "Aggiungi"
 }
