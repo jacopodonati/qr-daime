@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
                 req.flash('error', i18n.__('login_user_not_activated'));
                 return res.redirect('/login');
             }
-            if (!user.deleted) {
+            if (user.deleted) {
                 req.flash('error', i18n.__('login_user_deleted'));
                 return res.redirect('/login');
             }
