@@ -17,7 +17,7 @@ block content
           - let label = workspace.name
           if workspace.privacy == "personal"
             - label = __("select_personal_workspace")
-          if workspace._id == document.workspace
+          if workspace.id == document.workspace
             option(value=`${workspace._id}`, selected) #{label}
           else
             option(value=`${workspace._id}`) #{label}
