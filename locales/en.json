@@ -128,5 +128,9 @@
 	"delete_workspace_no": "Delete workspace no.",
 	"edit_workspace_remove_user": "Remove",
 	"edit_workspace_add_user_placeholder": "Enter an email address",
-	"edit_workspace_add_user": "Add"
+	"edit_workspace_add_user": "Add",
+	"edit_workspace_th_member_email": "email",
+	"edit_workspace_th_member_role": "role",
+	"edit_workspace_role_workspace_admin": "Admin",
+	"edit_workspace_role_basic": "User"
 }

@@ -128,5 +128,9 @@
 	"delete_workspace_no": "Cancele área de trabalho n°",
 	"edit_workspace_remove_user": "Remover",
 	"edit_workspace_add_user_placeholder": "Digite um endereço de e-mail",
-	"edit_workspace_add_user": "Adicionar"
+	"edit_workspace_add_user": "Adicionar",
+	"edit_workspace_role_basic": "Usuário",
+	"edit_workspace_role_workspace_admin": "Administrador",
+	"edit_workspace_th_member_email": "e-mail",
+	"edit_workspace_th_member_role": "papel"
 }
