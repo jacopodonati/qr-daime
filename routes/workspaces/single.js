@@ -33,11 +33,12 @@ router.get('/:id', async (req, res) => {
                 select: 'email'
             });
 
-            const documents = await Document.find({ workspace: workspace._id, deleted: false })
+            const documents = await Document.find({ workspace: id, deleted: false })
                 .populate({
                     path: 'owner',
                     select: 'email'
                 });
+
             res.render('workspaces/single', {
                 title: i18n.__("workspace_view_title") + ': ' + workspace.name + ' - ' + i18n.__('app_name'),
                 workspace,
