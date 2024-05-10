@@ -1,0 +1,71 @@
+extends ../layout
+
+block content
+  h1.mb-5 #{__("template_add_title")}
+
+
+  form(id="template-form" action=`/template/add` method="post")
+    .mb-3
+      label.form-label(for="template-title") #{__("template_form_title")}:
+      input#template-title.form-control(type="text", name="title", placeholder=`${__("template_form_title_placeholder")}`, required)
+    .mb-3
+      label.form-label(for="workspace") #{__("form_select_workspace")}:
+      select#workspace.form-control(name="workspace")
+        each workspace in workspaces
+          if workspace.privacy == "personal"
+            option(value=`${workspace._id}`) #{__("select_personal_workspace")}
+          else
+            option(value=`${workspace._id}`) #{workspace.name}
+    hr
+
+    include ../partials/form_search_field.pug
+
+    ul#infoList.list-group.mb-3
+
+    hr
+
+    button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
+
+  include ../partials/modal_add_field.pug
+
+  include ../partials/fields_scripts.pug
+
+  script.
+    const form = document.querySelector('#template-form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const formDataObj = {
+        'title': formData.get('title'),
+        'workspace': formData.get('workspace'),
+        'info': []
+      }
+
+      const infoList = document.querySelector('#infoList');
+      infoList.childNodes.forEach(info => {
+        formDataObj.info.push(info.id.substr(3));
+      });
+
+      console.log(formDataObj)
+
+      fetch('/template/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObj)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante l\'invio dei dati al server');
+        }
+      })
+      .then(data => {
+        window.location.href = `/template/${data.savedTemplate._id}`;
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+      });
+    });

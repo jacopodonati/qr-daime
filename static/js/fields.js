@@ -198,102 +198,134 @@ function displaySearchResults(data) {
 }
 
 function addFieldToForm(fieldStructure, fieldData) {
-    const existingFieldContainer = document.getElementById('id' + fieldStructure._id);
+    const existingFieldContainer = document.querySelector(`id${fieldStructure._id}`);
     if (existingFieldContainer) {
         return;
     }
-    
-    const fieldBody = document.createElement('div')
-    fieldBody.classList.add('card-body')
-    const fieldContainer = document.createElement('div');
-    fieldContainer.id = 'id' + fieldStructure._id;
-    fieldContainer.classList.add('card', 'mb-2');
-    fieldContainer.appendChild(fieldBody)
 
     const userLanguage = navigator.language || navigator.userLanguage;
     const locale = userLanguage.substr(0, 2);
-    const rootLabel = document.createElement('h5');
-    const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
-    rootLabel.textContent = rootLabelText;
-    rootLabel.classList.add('card-title')
-    fieldBody.appendChild(rootLabel);
-    const hiddenId = document.createElement('input');
-    hiddenId.type = 'hidden';
-    hiddenId.name = 'id';
-    hiddenId.value = fieldStructure._id;
-    fieldBody.appendChild(hiddenId)
-    const hiddenSort = document.createElement('input');
-    hiddenSort.type = 'hidden';
-    hiddenSort.name = 'sort';
-    hiddenSort.value = number_of_info++;
-    fieldBody.appendChild(hiddenSort)
 
-    fieldStructure.fields.forEach(field => {
-        const fieldDiv = document.createElement('div');
-        fieldDiv.classList.add('mb-3', 'row', 'mx-1');
-        const fieldLabel = document.createElement('label');
-        fieldLabel.classList.add('form-label', 'col-2')
-        fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
-        const fieldInput = document.createElement('input');
-        fieldInput.type = 'text';
-        fieldInput.name = field._id;
-        fieldInput.classList.add('col-form-control', 'col-10')
+    const docForm = document.querySelector('#doc-form');
+    if (docForm) {
+        const fieldBody = document.createElement('div');
+        fieldBody.classList.add('card-body');
+        const fieldContainer = document.createElement('div');
+        fieldContainer.id = 'id' + fieldStructure._id;
+        fieldContainer.classList.add('card', 'mb-2');
+        fieldContainer.appendChild(fieldBody);
 
-        if (fieldData !== undefined) {
-            let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
-            fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
-        }
-
-        fieldDiv.appendChild(fieldLabel);
-        fieldDiv.appendChild(fieldInput);
-        fieldBody.appendChild(fieldDiv);
-    });
-
-    const footer = document.createElement('div');
-    footer.classList.add('row', 'mx-1')
-    const fieldInput = document.createElement('input');
-    fieldInput.type = 'checkbox';
-    fieldInput.classList.add('btn-check', 'col-2')
-    fieldInput.name = 'public';
-    const fieldLabel = document.createElement('label');
-    fieldLabel.classList.add('btn', 'btn-primary', 'col-2');
-
-    fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
-    fieldInput.checked = true;
     
-    if (fieldData !== undefined && !fieldData.public) {
-        fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
-        fieldInput.checked = false;
-    }
-
-    fieldLabel.addEventListener('mouseup', function() {
-        fieldInput.checked = !fieldInput.checked;
-        if (fieldInput.checked) {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
-        } else {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
-        }
-    });
-    footer.appendChild(fieldInput);
-    footer.appendChild(fieldLabel);
-
-    if (!fieldStructure.default) {
-        const removeButton = document.createElement('button');
-        removeButton.textContent = 'INPUT_LBL_REMOVE';
-        removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
-        removeButton.addEventListener('mouseup', function() {
-            fieldContainer.remove();
-            fields_added = fields_added.filter(id => id !== fieldStructure._id);
-            toggleFieldInDropdown(`dd-${fieldStructure._id}`)
+        const rootLabel = document.createElement('h5');
+        const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
+        rootLabel.textContent = rootLabelText;
+        rootLabel.classList.add('card-title');
+        fieldBody.appendChild(rootLabel);
+        const hiddenId = document.createElement('input');
+        hiddenId.type = 'hidden';
+        hiddenId.name = 'id';
+        hiddenId.value = fieldStructure._id;
+        fieldBody.appendChild(hiddenId);
+        const hiddenSort = document.createElement('input');
+        hiddenSort.type = 'hidden';
+        hiddenSort.name = 'sort';
+        hiddenSort.value = number_of_info++;
+        fieldBody.appendChild(hiddenSort);
+    
+        fieldStructure.fields.forEach(field => {
+            const fieldDiv = document.createElement('div');
+            fieldDiv.classList.add('mb-3', 'row', 'mx-1');
+            const fieldLabel = document.createElement('label');
+            fieldLabel.classList.add('form-label', 'col-2');
+            fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
+            const fieldInput = document.createElement('input');
+            fieldInput.type = 'text';
+            fieldInput.name = field._id;
+            fieldInput.classList.add('col-form-control', 'col-10');
+    
+            if (fieldData !== undefined) {
+                let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
+                fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
+            }
+    
+            fieldDiv.appendChild(fieldLabel);
+            fieldDiv.appendChild(fieldInput);
+            fieldBody.appendChild(fieldDiv);
         });
-        footer.appendChild(removeButton);
-    }
-    fieldBody.appendChild(footer);
-
-    const formSep = document.querySelector('#form-sep');
     
-    const docForm = document.getElementById('doc-form');
-    docForm.insertBefore(fieldContainer, formSep);
+        const footer = document.createElement('div');
+        footer.classList.add('row', 'mx-1');
+        const fieldInput = document.createElement('input');
+        fieldInput.type = 'checkbox';
+        fieldInput.classList.add('btn-check', 'col-2');
+        fieldInput.name = 'public';
+        const fieldLabel = document.createElement('label');
+        fieldLabel.classList.add('btn', 'btn-primary', 'col-2');
+    
+        fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
+        fieldInput.checked = true;
+        
+        if (fieldData !== undefined && !fieldData.public) {
+            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
+            fieldInput.checked = false;
+        }
+    
+        fieldLabel.addEventListener('mouseup', function() {
+            fieldInput.checked = !fieldInput.checked;
+            if (fieldInput.checked) {
+                fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
+            } else {
+                fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
+            }
+        });
+        footer.appendChild(fieldInput);
+        footer.appendChild(fieldLabel);
+    
+        if (!fieldStructure.default) {
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'INPUT_LBL_REMOVE';
+            removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
+            removeButton.addEventListener('mouseup', function() {
+                fieldContainer.remove();
+                fields_added = fields_added.filter(id => id !== fieldStructure._id);
+                toggleFieldInDropdown(`dd-${fieldStructure._id}`);
+            });
+            footer.appendChild(removeButton);
+        }
+        fieldBody.appendChild(footer);
+    
+        const formSep = document.querySelector('#form-sep');
+        docForm.insertBefore(fieldContainer, formSep);
+    } else {
+        let label = fieldStructure.labels.find(label => label.locale === locale).text + ': ';
+        fieldStructure.fields.forEach((field) => {
+            label += field.labels.find(label => label.locale === locale).text + ', ';
+        });
+        label = label.substring(0, label.length - 2);
+
+        const infoList = document.querySelector('#infoList');
+        const listItem = document.createElement('li');
+        listItem.classList.add('list-group-item');
+        listItem.id = `id-${fieldStructure._id}`;
+        infoList.appendChild(listItem);
+        const fieldWrapper = document.createElement('div');
+        fieldWrapper.classList.add('row', 'row-cols-lg-auto', 'g-3', 'align-items-center');
+        listItem.appendChild(fieldWrapper);
+        const handleIcon = document.createElement('i');
+        handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
+        fieldWrapper.appendChild(handleIcon);
+        const textWrapper = document.createElement('div');
+        textWrapper.classList.add('col-10');
+        textWrapper.textContent = label;
+        fieldWrapper.appendChild(textWrapper);
+        const buttonWrapper = document.createElement('div');
+        buttonWrapper.classList.add('col-2');
+        fieldWrapper.appendChild(buttonWrapper);
+        const button = document.createElement('span');
+        button.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
+        button.textContent = 'INPUT_LBL_REMOVE';
+        buttonWrapper.appendChild(button);
+    }
     fields_added.push(fieldStructure._id);
     toggleFieldInDropdown(`dd-${fieldStructure._id}`);
 }
@@ -380,14 +412,30 @@ function getField(id, value) {
         });
 }
 
-const sort_infos = new Sortable(document.getElementById('doc-form'), { onSort: function (event) {
-    const hiddenInputs = document.querySelectorAll('input[name="sort"]');
-        hiddenInputs.forEach((input, index) => {
-            input.value = `${index + 1}`;
-        });
-  }
-});
+const docForm = document.querySelector('#doc-form');
+if (docForm) {
+    const sort_infos = new Sortable(docForm, { 
+        onSort: function (event) {
+            const hiddenInputs = document.querySelectorAll('input[name="sort"]');
+            hiddenInputs.forEach((input, index) => {
+                input.value = `${index + 1}`;
+            });
+        }
+    });
+}
 
-const sort_fields = new Sortable(document.getElementById('addedInfoList'), {
+const templateForm = document.querySelector('#template-form');
+if (templateForm) {
+    const sort_infos = new Sortable(document.querySelector('#infoList'), { 
+        onSort: function (event) {
+            const hiddenInputs = document.querySelectorAll('input[name="sort"]');
+            hiddenInputs.forEach((input, index) => {
+                input.value = `${index + 1}`;
+            });
+        }
+    });
+}
+
+const sort_fields = new Sortable(document.querySelector('#addedInfoList'), {
     handle: '.field-handle'
 });

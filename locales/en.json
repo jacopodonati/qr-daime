@@ -133,5 +133,9 @@
 	"edit_workspace_th_member_role": "role",
 	"edit_workspace_role_workspace_admin": "Admin",
 	"edit_workspace_role_basic": "User",
-	"navbar_doc_header": "Records"
+	"navbar_doc_header": "Records",
+	"navbar_template_header": "Templates",
+	"template_add_title": "Add a template",
+	"template_form_title": "Title",
+	"template_form_title_placeholder": "Enter a title for the template"
 }

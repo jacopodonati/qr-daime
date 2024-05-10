@@ -133,5 +133,9 @@
 	"edit_workspace_role_workspace_admin": "Administrador",
 	"edit_workspace_th_member_email": "e-mail",
 	"edit_workspace_th_member_role": "papel",
-	"navbar_doc_header": "Registros"
+	"navbar_doc_header": "Registros",
+	"template_add_title": "Adicionar um modelo",
+	"navbar_template_header": "Modelos",
+	"template_form_title": "Título",
+	"template_form_title_placeholder": "Insira o título do modelo"
 }

@@ -133,5 +133,9 @@
 	"edit_workspace_remove_user": "Rimuovi",
 	"edit_workspace_add_user_placeholder": "Inserisci un indirizzo email",
 	"edit_workspace_add_user": "Aggiungi",
-	"navbar_doc_header": "Record"
+	"navbar_template_header": "Modelli",
+	"navbar_doc_header": "Record",
+	"template_add_title": "Aggiungi un modello",
+	"template_form_title": "Nome",
+	"template_form_title_placeholder": "Inserisci il nome del modello"
 }
