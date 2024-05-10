@@ -111,10 +111,10 @@ function saveField() {
     })
     .catch(error => {
         console.error('Errore:', error);
-        errorMessage.classList.remove('d-none')
-        errorMessage.classList.add('d-block')
-        errorSeparator.classList.remove('d-none')
-        errorSeparator.classList.add('d-block')
+        errorMessage.classList.remove('d-none');
+        errorMessage.classList.add('d-block');
+        errorSeparator.classList.remove('d-none');
+        errorSeparator.classList.add('d-block');
     });    
 }
 
