@@ -132,5 +132,6 @@
 	"edit_workspace_role_basic": "Usuário",
 	"edit_workspace_role_workspace_admin": "Administrador",
 	"edit_workspace_th_member_email": "e-mail",
-	"edit_workspace_th_member_role": "papel"
+	"edit_workspace_th_member_role": "papel",
+	"navbar_doc_header": "Registros"
 }

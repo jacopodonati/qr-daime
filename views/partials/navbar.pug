@@ -8,6 +8,8 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_documents")}
           ul.dropdown-menu
+            li 
+              h6.dropdown-header #{__("navbar_doc_header")}
             if user.permissions.create
               li.dropdown-item
                 a.nav-link(href="/doc/add")
@@ -18,6 +20,14 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                 a.nav-link(href="/doc/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_doc_list")}
+            li
+              h6.dropdown-header #{__("navbar_template_header")}
+            if user.permissions.create
+              li.dropdown-item
+                a.nav-link(href="/template/add")
+                  i.bi.bi-plus.me-3
+                  | #{__("navbar_template_add")}
+
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_info")}
           ul.dropdown-menu

@@ -132,5 +132,6 @@
 	"edit_workspace_th_member_email": "email",
 	"edit_workspace_th_member_role": "role",
 	"edit_workspace_role_workspace_admin": "Admin",
-	"edit_workspace_role_basic": "User"
+	"edit_workspace_role_basic": "User",
+	"navbar_doc_header": "Records"
 }

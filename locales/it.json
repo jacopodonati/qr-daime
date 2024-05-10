@@ -132,5 +132,6 @@
 	"edit_workspace_role_basic": "Utente",
 	"edit_workspace_remove_user": "Rimuovi",
 	"edit_workspace_add_user_placeholder": "Inserisci un indirizzo email",
-	"edit_workspace_add_user": "Aggiungi"
+	"edit_workspace_add_user": "Aggiungi",
+	"navbar_doc_header": "Record"
 }
