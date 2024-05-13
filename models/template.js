@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const templateSchema = new mongoose.Schema({
+    title: String,
     deleted: {
         type: Boolean,
         default: false
