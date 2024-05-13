@@ -332,6 +332,9 @@ function addFieldToForm(fieldStructure, fieldData) {
         const button = document.createElement('span');
         button.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
         button.textContent = 'INPUT_LBL_REMOVE';
+        button.addEventListener('mouseup', function() {
+            listItem.remove();
+        });
         buttonWrapper.appendChild(button);
     }
     fields_added.push(fieldStructure._id);
