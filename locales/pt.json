@@ -149,5 +149,6 @@
 	"template_view_title": "Mostrar modelo",
 	"delete_template_no": "Cancele modelo n°",
 	"template_view_owner": "Proprietário",
-	"template_view_workspace": "Área de trabalho"
+	"template_view_workspace": "Área de trabalho",
+	"template_edit_title": "Editar modelo"
 }

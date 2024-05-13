@@ -150,5 +150,6 @@
 	"template_no": "Modello n.",
 	"template_view_owner": "Proprietario",
 	"template_view_workspace": "Area di lavoro",
-	"delete_template_no": "Elimina modello n."
+	"delete_template_no": "Elimina modello n.",
+	"template_edit_title": "Modifica modello"
 }

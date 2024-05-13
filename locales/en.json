@@ -148,5 +148,6 @@
 	"template_list_th_workspace": "workspace",
 	"delete_template_no": "Delete template no.",
 	"template_view_owner": "Owner",
-	"template_view_workspace": "Workspace"
+	"template_view_workspace": "Workspace",
+	"template_edit_title": "Edit template"
 }

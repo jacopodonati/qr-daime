@@ -1,0 +1,79 @@
+extends ../layout
+
+block content
+  h1.mb-5 #{__("template_edit_title")}
+
+  form(id="template-form" action=`/template/edit` method="post")
+    .mb-3
+      label.form-label(for="template-title") #{__("template_form_title")}:
+      input#template-title.form-control(type="text", name="title", placeholder=`${__("template_form_title_placeholder")}`, value=`${template.title}`, required)
+    .mb-3
+      label.form-label(for="workspace") #{__("form_select_workspace")}:
+      select#workspace.form-control(name="workspace")
+        each workspace in workspaces
+          - let workspace_label = workspace.name
+          if workspace.privacy == "personal"
+            - workspace_label = __("select_personal_workspace")
+          if workspace.id == template.workspace
+            option(value=`${workspace._id}`, selected) #{workspace_label}
+          else
+            option(value=`${workspace._id}`) #{workspace_label}
+    hr
+
+    include ../partials/form_search_field.pug
+
+    ul#infoList.list-group.mb-3
+
+    hr
+
+    button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}
+
+  include ../partials/modal_add_field.pug
+
+  include ../partials/fields_scripts.pug
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const infos = `!{template.info}`.split(',');
+      infos.forEach(info => {
+        getTemplateFields(info);
+      })
+    });
+
+    const form = document.querySelector('#template-form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const formDataObj = {
+        'id': `!{template._id}`,
+        'title': formData.get('title'),
+        'workspace': formData.get('workspace'),
+        'info': []
+      }
+
+      const infoList = document.querySelector('#infoList');
+      infoList.childNodes.forEach(info => {
+        formDataObj.info.push(info.id.substr(3));
+      });
+      
+      fetch('/template/edit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObj)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante l\'invio dei dati al server');
+        }
+      })
+      .then(data => {
+        window.location.href = `/template/view/${data.id}`;
+      })
+      .catch(error => {
+        console.error('Errore:', error);
+      });
+    });
