@@ -10,7 +10,7 @@ const templateSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    information: [{
+    info: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Information'
     }],

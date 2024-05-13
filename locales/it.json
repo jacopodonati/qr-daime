@@ -137,5 +137,9 @@
 	"navbar_doc_header": "Record",
 	"template_add_title": "Aggiungi un modello",
 	"template_form_title": "Nome",
-	"template_form_title_placeholder": "Inserisci il nome del modello"
+	"template_form_title_placeholder": "Inserisci il nome del modello",
+	"title_select_document_template": "Seleziona un modello",
+	"select_document_template_explanation": "Per proseguire, selezionare il modello di record da utilizzare o selezionare “Nessun modello”. Potrai sempre aggiungere e rimuovere informazioni.",
+	"form_select_template": "Seleziona un modello",
+	"select_no_template": "Nessun modello"
 }

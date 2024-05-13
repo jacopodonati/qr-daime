@@ -137,5 +137,9 @@
 	"navbar_template_header": "Templates",
 	"template_add_title": "Add a template",
 	"template_form_title": "Title",
-	"template_form_title_placeholder": "Enter a title for the template"
+	"template_form_title_placeholder": "Enter a title for the template",
+	"title_select_document_template": "Choose a template",
+	"select_document_template_explanation": "To continue, please select a template for this record or select “No Template”. You'll still be able to add and remove information.",
+	"form_select_template": "Select a template",
+	"select_no_template": "No Template"
 }

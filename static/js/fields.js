@@ -206,6 +206,8 @@ function addFieldToForm(fieldStructure, fieldData) {
     const userLanguage = navigator.language || navigator.userLanguage;
     const locale = userLanguage.substr(0, 2);
 
+    const formSep = document.querySelector('#form-sep');
+
     const docForm = document.querySelector('#doc-form');
     if (docForm) {
         const fieldBody = document.createElement('div');
@@ -281,21 +283,27 @@ function addFieldToForm(fieldStructure, fieldData) {
         footer.appendChild(fieldInput);
         footer.appendChild(fieldLabel);
     
-        if (!fieldStructure.default) {
-            const removeButton = document.createElement('button');
-            removeButton.textContent = 'INPUT_LBL_REMOVE';
-            removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
-            removeButton.addEventListener('mouseup', function() {
-                fieldContainer.remove();
-                fields_added = fields_added.filter(id => id !== fieldStructure._id);
-                toggleFieldInDropdown(`dd-${fieldStructure._id}`);
-            });
-            footer.appendChild(removeButton);
-        }
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'INPUT_LBL_REMOVE';
+        removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
+        removeButton.addEventListener('mouseup', function() {
+            fieldContainer.remove();
+            fields_added = fields_added.filter(id => id !== fieldStructure._id);
+            toggleFieldInDropdown(`dd-${fieldStructure._id}`);
+            if (fields_added.length === 0) {
+                formSep.classList.remove('d-block');
+                formSep.classList.add('d-none');
+            }
+        });
+        footer.appendChild(removeButton);
+
         fieldBody.appendChild(footer);
     
-        const formSep = document.querySelector('#form-sep');
         docForm.insertBefore(fieldContainer, formSep);
+        if (formSep.classList.contains('d-none')) {
+            formSep.classList.remove('d-none');
+            formSep.classList.add('d-block');
+        }
     } else {
         let label = fieldStructure.labels.find(label => label.locale === locale).text + ': ';
         fieldStructure.fields.forEach((field) => {
@@ -364,8 +372,8 @@ dropdownItems.forEach((item) => {
     });
 });
 
-function getDefaultFields() {
-    fetch('/info/list/default')
+function getTemplateFields(id) {
+    fetch(`/info/id/${id}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -373,17 +381,13 @@ function getDefaultFields() {
                 throw new Error('Errore durante il recupero dei campi default');
             }
         })
-        .then(defaultFields => {
-            defaultFields.forEach(fieldData => {
-                addFieldToForm(fieldData);
-            });
+        .then(field => {
+            addFieldToForm(field);
         })
         .catch(error => {
             console.error('Errore:', error);
         });
 }
-
-document.addEventListener('DOMContentLoaded', getDefaultFields);
 
 document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', function () {
     document.getElementById('infoLabel').value = '';

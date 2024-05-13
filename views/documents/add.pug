@@ -8,7 +8,7 @@ block content
   form(id="doc-form" action=`/doc/add` method="post")
     hr
 
-    hr#form-sep
+    hr#form-sep.d-none
 
     .mb-3
       label.form-label(for="workspace") #{__("form_select_workspace")}:
@@ -28,6 +28,13 @@ block content
   include ../partials/fields_scripts.pug
 
   script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const infos = `!{template.info}`.split(',');
+      infos.forEach(info => {
+        getTemplateFields(info);
+      })
+    });
+
     const form = document.getElementById('doc-form');
     form.addEventListener('submit', function(event) {
       event.preventDefault();

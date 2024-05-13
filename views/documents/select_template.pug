@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  h1 #{__("title_select_document_template")}
+
+  p #{__("select_document_template_explanation")}
+
+  form(id="pick-template", method="GET")
+    .mb-3
+        label.form-label(for="template") #{__("form_select_template")}:
+        select#template.form-control(name="template")
+          option(value="") #{__("select_no_template")}
+          each template in templates
+            option(value=`${template._id}`) #{template.title}
+    button(type="submit").btn.btn-primary.col-md-2.offset-md-10 #{__("submit_button")}

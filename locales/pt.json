@@ -137,5 +137,9 @@
 	"template_add_title": "Adicionar um modelo",
 	"navbar_template_header": "Modelos",
 	"template_form_title": "Título",
-	"template_form_title_placeholder": "Insira o título do modelo"
+	"template_form_title_placeholder": "Digite um título para o modelo",
+	"title_select_document_template": "Escolha um modelo",
+	"select_document_template_explanation": "Para continuar, selecione um modelo para este registro ou selecione “Sem modelo”. Você ainda poderá adicionar e remover informações.",
+	"form_select_template": "Selecione um modelo",
+	"select_no_template": "Sem modelo"
 }
