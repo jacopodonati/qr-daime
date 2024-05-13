@@ -46,6 +46,10 @@ const workspaceEditRouter = require('./routes/workspaces/edit');
 const workspaceDeleteRouter = require('./routes/workspaces/delete');
 const workspaceRestoreRouter = require('./routes/workspaces/restore');
 const templateAddRouter = require('./routes/templates/add');
+const templateDeleteRouter = require('./routes/templates/delete');
+const templateRestoreRouter = require('./routes/templates/restore');
+const templateListRouter = require('./routes/templates/list');
+const templateSingleRouter = require('./routes/templates/single');
 
 const app = express();
 
@@ -143,7 +147,11 @@ app.use('/workspace/add', workspaceAddRouter);
 app.use('/workspace/edit', workspaceEditRouter);
 app.use('/workspace/delete', workspaceDeleteRouter);
 app.use('/workspace/restore', workspaceRestoreRouter);
+app.use('/template/view', templateSingleRouter);
+app.use('/template/list', templateListRouter);
 app.use('/template/add', templateAddRouter);
+app.use('/template/delete', templateDeleteRouter);
+app.use('/template/restore', templateRestoreRouter);
 app.use('/manage/users/', userSingleRouter);
 app.use('/manage/users/list', userListRouter);
 app.use('/manage/users/toggle-deletion', userDeleteRouter);

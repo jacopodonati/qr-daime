@@ -27,6 +27,11 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                 a.nav-link(href="/template/add")
                   i.bi.bi-plus.me-3
                   | #{__("navbar_template_add")}
+            if user.permissions.read_public
+              li.dropdown-item
+                a.nav-link(href="/template/list")
+                  i.bi.bi-list-ul.me-3
+                  | #{__("navbar_template_list")}
 
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_info")}

@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .col-md-8.offset-md-2
+        .card.mt-5
+          .card-header.bg-danger.text-white
+            h3.card-title.text-center #{__("delete_template_no")} #{template._id}?
+          .card-body
+            include template.pug
+          .card-footer.text-center
+            form(action=`/template/delete/${template._id}`, method='POST')
+              a.btn.btn-primary.col-md-2(href=`/template/list`) #{__("cancel_button")}
+              button.btn.btn-danger.col-md-2.offset-md-8(type='submit') #{__("delete_button")}
+

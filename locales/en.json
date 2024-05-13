@@ -141,5 +141,12 @@
 	"title_select_document_template": "Choose a template",
 	"select_document_template_explanation": "To continue, please select a template for this record or select “No Template”. You'll still be able to add and remove information.",
 	"form_select_template": "Select a template",
-	"select_no_template": "No Template"
+	"select_no_template": "No Template",
+	"template_list_title": "List of templates",
+	"template_list_th_title": "title",
+	"template_list_th_owner": "owner",
+	"template_list_th_workspace": "workspace",
+	"delete_template_no": "Delete template no.",
+	"template_view_owner": "Owner",
+	"template_view_workspace": "Workspace"
 }

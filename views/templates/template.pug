@@ -1,0 +1,97 @@
+h1 #{template.title}
+
+p ID: #{template._id}
+p #{__("template_view_owner")}: #{template.owner.email}
+if template.workspace.privacy == "personal"
+  p #{__("template_view_workspace")}: #{__("select_personal_workspace")}
+else
+  p #{__("template_view_workspace")}: #{template.workspace.name}
+
+ul
+  each info in template.info
+    - let info_id = 'id-' + info._id
+    li
+      span.fw-semibold(id=info_id)
+      | : 
+      each field, index in info.fields
+        - let field_id = 'id-' + field._id
+        if index == info.fields.length - 1
+          span(id=field_id).field-id #{field._id}
+        else 
+          span(id=field_id).field-id #{field._id}
+          | , 
+
+script.
+  function getLabel(labels, locale) {
+    for (const label of labels) {
+      if (label.locale === locale) {
+        return label.text;
+      }
+    }
+
+    for (const label of labels) {
+      if (label.locale === 'en') {
+        return label.text;
+      }
+    }
+
+    return labels[0].text;
+  }
+
+  function setLabels(labels) {
+    const locale_complete = navigator.language || navigator.userLanguage;
+    const locale = locale_complete.substring(0, 2);
+
+    for (const block of labels) {
+      const infoId = 'id-' + block.id;
+      const h2Element = document.querySelector(`#${infoId}`);
+
+      if (h2Element) {
+        const label = getLabel(block.labels, locale);
+
+        h2Element.innerText = label;
+      }
+
+      for (const field of block.fields) {
+        const fieldId = 'id-' + field.id;
+        const spanElement = document.querySelector(`#${fieldId}`);
+
+        if (spanElement) {
+          const label = getLabel(field.labels, locale);
+
+          spanElement.innerText = label;
+        }
+      }
+    }
+  }
+
+  function fetchLabels(infoIds) {
+    return fetch('/info/list/labels', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ infoIds })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Errore durante il recupero delle label dei campi');
+      }
+    })
+    .catch(error => {
+      console.error('Errore:', error);
+    });
+  }
+
+  let doc =  !{JSON.stringify(template)};
+  let infoIds = [];
+  for (const info of doc.info) {
+    let fields = info.fields.map(info => info._id);
+    infoIds.push({ _id: info._id, fields });
+  }
+  fetchLabels(infoIds)
+    .then(labels => {
+      setLabels(labels);
+    });

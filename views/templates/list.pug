@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+  h1 #{__("template_list_title")}
+  
+  - if (templates.length === 0)
+    div.alert.alert-primary #{__("empty_database_message")}
+  - else
+    table#docTable.table.table-striped.table-hover
+      thead
+        tr 
+          if user.permissions.manage_documents 
+            th
+          th #{__("template_list_th_title")}
+          th #{__("template_list_th_owner")}
+          th #{__("template_list_th_workspace")}
+          th
+      each template in templates
+        - let status
+        - if (template.deleted)
+          - status = "deleted"
+        - else
+          - status = "available"
+        tr(data-sort=template.dateOfIssue, data-status=`${status}`)
+          if user.permissions.manage_documents
+            if template.deleted
+              td ⛔️
+            else
+              td ✅
+          td #{template.title}
+          td #{template.owner.email}
+          - if (template.workspace.privacy == 'personal')
+            td #{__("select_personal_workspace")}
+          - else 
+            td #{template.workspace.name}
+          td
+            .btn-group(role="group").float-end
+              if (user.permissions.edit)
+                a(href=`/template/edit/${template._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+              if (user.permissions.read_public)
+                a(href=`/template/view/${template._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+              if (user.permissions.delete && !template.deleted)
+                a(href=`/template/delete/${template._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
+              if (user.permissions.manage_documents && template.deleted)
+                a(href=`/template/restore/${template._id}`).btn.btn-warning.btn-sm #{__("restore_button")}

@@ -141,5 +141,14 @@
 	"title_select_document_template": "Seleziona un modello",
 	"select_document_template_explanation": "Per proseguire, selezionare il modello di record da utilizzare o selezionare “Nessun modello”. Potrai sempre aggiungere e rimuovere informazioni.",
 	"form_select_template": "Seleziona un modello",
-	"select_no_template": "Nessun modello"
+	"select_no_template": "Nessun modello",
+	"template_list_title": "Elenco dei modelli",
+	"template_list_th_title": "titolo",
+	"template_list_th_owner": "proprietario",
+	"template_list_th_workspace": "area di lavoro",
+	"template_view_title": "Visualizza modello",
+	"template_no": "Modello n.",
+	"template_view_owner": "Proprietario",
+	"template_view_workspace": "Area di lavoro",
+	"delete_template_no": "Elimina modello n."
 }
