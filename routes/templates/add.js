@@ -4,7 +4,6 @@ const i18n = require('i18n');
 const Template = require('../../models/template');
 const Workspace = require('../../models/workspace');
 const Information = require('../../models/information');
-const { validateAndTranslateData } = require('../../middleware/validation')
 
 router.get('/', async function(req, res, next) {
     if (!res.locals.user.permissions.create) {
