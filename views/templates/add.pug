@@ -46,8 +46,6 @@ block content
         formDataObj.info.push(info.id.substr(3));
       });
 
-      console.log(formDataObj)
-
       fetch('/template/add', {
         method: 'POST',
         headers: {
@@ -63,7 +61,7 @@ block content
         }
       })
       .then(data => {
-        window.location.href = `/template/${data.savedTemplate._id}`;
+        window.location.href = `/template/${data.id}`;
       })
       .catch(error => {
         console.error('Errore:', error);
