@@ -12,8 +12,8 @@ block content
           if user.permissions.manage_workspaces 
             th
           th ID
-          th #{__("list_workspace_th_name")}
-          th #{__("list_workspace_th_members")}
+          th #{__("th_name")}
+          th #{__("th_members")}
           th
       each workspace in workspaces
         - let status
@@ -27,7 +27,8 @@ block content
               td ⛔️
             else
               td ✅
-          td #{workspace._id}
+          td
+            span(title=`${workspace.id}`) #{workspace.id.slice(-5)}
           td #{workspace.name}
           td #{workspace.members.length}
           td

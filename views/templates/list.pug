@@ -11,9 +11,9 @@ block content
         tr 
           if user.permissions.manage_documents 
             th
-          th #{__("template_list_th_title")}
-          th #{__("template_list_th_owner")}
-          th #{__("template_list_th_workspace")}
+          th #{__("th_title")}
+          th #{__("th_owner")}
+          th #{__("th_workspace")}
           th
       each template in templates
         - let status
