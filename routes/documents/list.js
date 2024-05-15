@@ -6,11 +6,13 @@ const i18n = require('i18n');
 router.get('/', async (req, res) => {
     try {
         const queryString = res.locals.user.permissions.manage_documents ? {} : { deleted: false };
-        const documents = await Document.find(queryString);
+        const documents = await Document.find(queryString)
+            .populate({ path: 'workspace', select: 'privacy name'})
+            .populate({ path: 'owner', select: 'email'});
         
         res.render('documents/list', {
             title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
-            documents: documents
+            documents
         });
 
     } catch (error) {

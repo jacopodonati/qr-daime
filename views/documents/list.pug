@@ -2,19 +2,21 @@ extends ../layout
 
 block content
   h1 #{__("list_docs")}
-  
+
   - if (documents.length === 0)
     div.alert.alert-primary #{__("empty_database_message")}
   - else
     table#docTable.table.table-striped.table-hover
       thead
         tr 
-          if user.permissions.restore 
+          if user.permissions.manage_documents 
             th
           th ID
           th#dateHeader(data-sorting="asc") #{__("doc_date_of_issue")}
             i.ms-3.bi.bi-sort-numeric-down
-          th PDF
+          th #{__("th_workspace")}
+          th #{__("th_owner")}
+          th #{__("th_summary")}
           th
       each document in documents
         - let status
@@ -23,16 +25,32 @@ block content
         - else
           - status = "available"
         tr(data-sort=document.dateOfIssue, data-status=`${status}`)
-          if user.permissions.restore
+          if user.permissions.manage_documents
             if document.deleted
-              td ⛔️
+              td
+                i.bi.bi-trash
             else
-              td ✅
-          td #{document._id}
-          td.date #{document.dateOfIssue}
+              td 
           td
-            a(href=`/pdf/${document._id}`)
-              i.bi.bi-postage-fill
+            span(title=`${document.id}`) #{document.id.slice(-5)}
+          td.date #{document.dateOfIssue}
+          - if (document.workspace.privacy == "personal")
+            td #{__("select_personal_workspace")}
+          - else
+            td #{document.workspace.name}
+          td #{document.owner.email}
+          td.overflow-auto.summary
+            each info in document.information 
+              div.d-inline(class=`info-${info.id}`)
+                span.fw-semibold(class=`info-${info.id}`) #{info.id} 
+                each field, index in info.fields 
+                  - if (index == info.fields.length - 1)
+                    span(class=`field-${field.id}`) #{field.id}:
+                    | #{field.value} 
+                  - else
+                    span(class=`field-${field.id}`) #{field.id}:
+                    | #{field.value}, 
+
           td
             .btn-group(role="group").float-end
               if (user.permissions.edit)
@@ -52,11 +70,10 @@ block content
         element.parentElement.dataset.sort = epoch;
         const options = {
           day: 'numeric',
-          month: 'long',
+          month: 'numeric',
           year: 'numeric',
           hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
+          minute: 'numeric'
         };
         const localized = date.toLocaleString(navigator.language, options);
         element.innerHTML = localized;
@@ -85,5 +102,60 @@ block content
         }
 
         sortedRows.forEach(row => tbody.appendChild(row));
+      });
+
+      const elements = document.querySelectorAll('div[class*="info-"]');
+      const infoObjects = Array.from(elements).map(element => {
+        const id = element.classList[1].substring(5); // Ottieni l'_id dall'attributo class
+        const fields = Array.from(element.querySelectorAll('[class^="field-"]'))
+          .map(field => field.classList[0].substring(6)); // Ottieni il campo dall'attributo class
+        return { _id: id, fields: fields };
+      });
+      const uniqueInfoObjects = infoObjects.reduce((acc, obj) => {
+        const existing = acc.find(item => item._id === obj._id);
+        if (!existing) {
+          acc.push(obj);
+        }
+        return acc;
+      }, []);
+
+      fetch('/info/list/labels', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ infoIds: uniqueInfoObjects })
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Errore durante il recupero delle label dei campi');
+        }
+      })
+      .then(data => {
+        const locale_complete = navigator.language || navigator.userLanguage;
+        const locale = locale_complete.substring(0, 2);
+        data.forEach(label => {
+          const infoLabel = label.labels.find(label => label.locale === locale);
+          const infos = document.querySelectorAll(`span.info-${label.id}`);
+          infos.forEach((info) => {
+            info.textContent = infoLabel.text + ' ';
+          });
+          label.fields.forEach((field) => {
+            const fieldLabel = field.labels.find(label => label.locale === locale);
+            const fields = document.querySelectorAll(`span.field-${field.id}`);
+            fields.forEach((subf) => {
+              subf.textContent = fieldLabel.text + ': ';
+            });
+          });
+        })
+        const tds = document.querySelectorAll('td.summary');
+        tds.forEach(td => {
+          td.textContent = td.textContent.substring(0, 150) + '…'
+        })
+      })
+      .catch(error => {
+        console.error('Errore:', error);
       });
     });
