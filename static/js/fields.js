@@ -257,31 +257,26 @@ function addFieldToForm(fieldStructure, fieldData) {
     
         const footer = document.createElement('div');
         footer.classList.add('row', 'mx-1');
+        const fieldInputWrapper = document.createElement('div');
+        fieldInputWrapper.classList.add('form-check', 'col-2');
         const fieldInput = document.createElement('input');
+        fieldInput.id = `check-${fieldStructure._id}`;
         fieldInput.type = 'checkbox';
-        fieldInput.classList.add('btn-check', 'col-2');
         fieldInput.name = 'public';
+        fieldInput.classList.add('form-check-input');
         const fieldLabel = document.createElement('label');
-        fieldLabel.classList.add('btn', 'btn-primary', 'col-2');
-    
-        fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
+        fieldLabel.classList.add('form-check-label');
+        fieldLabel.setAttribute('for', `check-${fieldStructure._id}`);
+        fieldLabel.textContent = 'INPUT_LBL_PUBLIC';
         fieldInput.checked = true;
         
         if (fieldData !== undefined && !fieldData.public) {
-            fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
             fieldInput.checked = false;
         }
-    
-        fieldLabel.addEventListener('mouseup', function() {
-            fieldInput.checked = !fieldInput.checked;
-            if (fieldInput.checked) {
-                fieldLabel.innerHTML = '<i class="bi bi-eye-fill"></i> INPUT_LBL_PUBLIC';
-            } else {
-                fieldLabel.innerHTML = '<i class="bi bi-eye-slash-fill"></i> INPUT_LBL_PRIVATE';
-            }
-        });
-        footer.appendChild(fieldInput);
-        footer.appendChild(fieldLabel);
+
+        fieldInputWrapper.appendChild(fieldInput);
+        fieldInputWrapper.appendChild(fieldLabel);
+        footer.appendChild(fieldInputWrapper);
     
         const removeButton = document.createElement('button');
         removeButton.textContent = 'INPUT_LBL_REMOVE';

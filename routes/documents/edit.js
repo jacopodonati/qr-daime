@@ -28,6 +28,8 @@ router.get('/:id', async (req, res) => {
             return res.redirect('/');
         }
 
+        console.log(document)
+
         const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
         res.render('documents/edit', {
             title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
