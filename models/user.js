@@ -23,19 +23,36 @@ const userSchema = new mongoose.Schema({
     }]
 });
 
+async function encryptPassword(password) {
+    const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_ROUNDS));
+    return await bcrypt.hash(password, salt);
+}
+
 userSchema.pre('save', async function (next) {
     try {
-        if (!this.isModified('password')) {
-            return next();
+        if (this.isModified('password')) {
+            this.password = await encryptPassword(this.password);
         }
-        const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_ROUNDS));
-        const hashedPassword = await bcrypt.hash(this.password, salt);
-        this.password = hashedPassword;
         next();
     } catch (error) {
         next(error);
     }
 });
+
+userSchema.pre('findOneAndUpdate', async function (next) {
+    try {
+        const update = this.getUpdate();
+        if (update && update.password) {
+            update.password = await encryptPassword(update.password);
+            this.setUpdate(update);
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 
 const User = mongoose.model('User', userSchema);
 

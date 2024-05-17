@@ -62,12 +62,19 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         - if (user.permissions.manage_users)
           li.nav-item.dropdown.ms-auto
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}
-            ul.dropdown-menu
+            ul.dropdown-menu.dropdown-menu-end
               li.dropdown-item 
                 a.nav-link(href="/manage/users/list") #{__("navbar_manage_users_list")}
         - if (user.role === 'loggedout')
           li.nav-item.ms-auto
             a.nav-link(href="/login") #{__("navbar_signin")}
         - else 
-          li.nav-item
-            a.nav-link(href="/logout") #{__("navbar_signout")}
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{user.email}
+            ul.dropdown-menu.dropdown-menu-end
+              li.dropdown-item 
+                a.nav-link(href="/manage/you") #{__("navbar_manage_you")}
+              li
+                hr.dropdown-divider
+              li.dropdown-item 
+                a.nav-link(href="/logout") #{__("navbar_signout")}

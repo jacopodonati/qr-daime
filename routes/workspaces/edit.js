@@ -91,7 +91,6 @@ router.post('/:id', async (req, res) => {
             const members = req.body.members;
             workspace.members = []
             for (member of members) {
-                console.log(member)
                 await User.findByIdAndUpdate({ _id: member.id }, { $addToSet: { workspaces: workspace._id } });
                 workspace.members.push({ user: member.id, role: member.role });
             }

@@ -25,6 +25,7 @@ const userActivationRouter = require('./routes/users/activate');
 const userRoleRouter = require('./routes/users/role');
 const userLoginRouter = require('./routes/users/login');
 const userLogoutRouter = require('./routes/users/logout');
+const userPersonalProfileRouter = require('./routes/users/personal_profile');
 const docListRouter = require('./routes/documents/list');
 const icefluPageRouter = require('./routes/iceflu/page');
 const docSingleRouter = require('./routes/documents/single');
@@ -159,6 +160,7 @@ app.use('/manage/users/list', userListRouter);
 app.use('/manage/users/toggle-deletion', userDeleteRouter);
 app.use('/manage/users/toggle-activation', userActivationRouter);
 app.use('/manage/users/role', userRoleRouter);
+app.use('/manage/you', userPersonalProfileRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));

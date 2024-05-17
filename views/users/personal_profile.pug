@@ -1,0 +1,176 @@
+extends ../layout
+
+block content
+  h1 #{__("user_profile_title")}
+
+  .row.align-items-start
+    .col-1
+      span.col-sm-3.fw-semibold ID:
+    .col-11
+      span #{ownProfile.id}
+  .row.align-items-start
+    .col-1
+      - let localizedRole = "user_profile_role_localized_" + ownProfile.role
+      span.fw-semibold #{__("user_profile_role_label")}:
+    .col-11
+      span #{__(localizedRole)}
+
+  form.row.align-items-start.mb-2.mt-2(method="post")
+    .col-1
+      label.col-form-label.fw-semibold(for="emailInput") #{__("user_profile_form_email_label")}:
+    .col-8
+      input.form-control(type="email" name="email" id="emailInput", placeholder=`${__("user_profile_form_email_placeholder")}`, value=`${ownProfile.email}`, required)
+    .col-2
+      button#emailButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
+  
+  form.row.g-3.align-items-center(method="post")
+    .col-1
+      label.col-form-label.fw-semibold(for="oldPassword") #{__("user_profile_form_password_label")}:
+    .col-4
+      input.form-control.password-field(type="password" id="oldPassword", placeholder=`${__("user_profile_form_new_password_placeholder_once")}`, required)
+    .col-4
+      input.form-control.password-field(type="password" name="password" id="newPassword", placeholder=`${__("user_profile_form_new_password_placeholder_twice")}`, required)
+    .col-2
+      button#passwordButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
+  
+  h2.mt-3 #{__("user_profile_workspace_list")}
+  ul.list-group
+    each workspace in ownProfile.workspaces
+      - let label = workspace.name
+      - let role = "no_role"
+        if workspace.privacy == "personal"
+          - label = __("select_personal_workspace")
+        each member in workspace.members
+          if member.user == ownProfile.id
+            - role = member.role
+        li.list-group-item(id=`workspace-${workspace.id}`)
+          span.fw-semibold #{label} 
+          span (#{__("role_" + role)})
+          if role == "basic"
+            a.btn.btn-danger.btn-sm.ms-3(data-bs-toggle="modal", data-bs-target="#leaveWorkspaceModal", data-bs-workspace-title=`${workspace.name}`, data-bs-workspace-id=`${workspace.id}`) #{__("button_leave")}
+
+  #leaveWorkspaceModal.modal(tabindex="-1")
+    .modal-dialog.modal-dialog-centered
+      .modal-content 
+        .modal-header 
+          h5.modal-title #{__("modal_leave_workspace_title")}
+          button.btn-close(type="button", data-bs-dismiss="modal")
+        .modal-body 
+          p #{__("modal_leave_workspace_body")}
+        .modal-footer 
+          button.btn.btn-secondary(type="button", data-bs-dismiss="modal") #{__("modal_close")}
+          button#leaveButton.btn.btn-primary #{__("button_leave")}
+
+  script.
+    let currentEmail = `!{ownProfile.email}`;
+
+    const emailInput = document.querySelector('#emailInput');
+    emailInput.addEventListener('keyup', (event) => {
+      const emailButton = document.querySelector('#emailButton');
+      if (emailInput.value !== currentEmail) {
+        emailButton.classList.add('d-block');
+        emailButton.classList.remove('d-none');
+      } else {
+        emailButton.classList.add('d-none');
+        emailButton.classList.remove('d-block');
+      }
+    });
+
+    const passwordFields = document.querySelectorAll('.password-field');
+      const passwordButton = document.querySelector('#passwordButton');
+    passwordFields.forEach(field => {
+      field.addEventListener('keyup', (event) => {
+        const oldPassword = document.querySelector('#oldPassword');
+        const newPassword = document.querySelector('#newPassword');
+        if ((oldPassword.value === newPassword.value) && oldPassword.value !== '') {
+          passwordButton.classList.add('d-block');
+          passwordButton.classList.remove('d-none');
+        } else {
+          passwordButton.classList.add('d-none');
+          passwordButton.classList.remove('d-block');
+        }
+      });
+    });
+
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const formDataObj = {};
+
+        for (const [key, value] of formData.entries()) {
+          formDataObj[key] = value;
+        }
+
+        fetch('/manage/you', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formDataObj)
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Errore durante l\'invio dei dati al server');
+          }
+        })
+        .then(data => {
+          passwordFields.forEach(field => {
+            field.value = '';
+          });
+          currentEmail = data.email;
+        })
+        .catch(error => {
+          console.error('Errore:', error);
+        });
+      });
+    });
+
+    const leaveWorkspaceModal = document.querySelector('#leaveWorkspaceModal');
+    if (leaveWorkspaceModal) {
+      leaveWorkspaceModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const workspace_title = button.getAttribute('data-bs-workspace-title');
+        const workspace_id = button.getAttribute('data-bs-workspace-id');
+        const modalBody = leaveWorkspaceModal.querySelector('.modal-body p');
+        if (modalBody) {
+          let template = `!{__("modal_leave_workspace_body")}`;
+          modalBody.textContent = template.replace("WORKSPACE_TITLE", workspace_title);
+        }
+        const leaveButton = leaveWorkspaceModal.querySelector('#leaveButton');
+        if (leaveButton) {
+          leaveButton.setAttribute('data-bs-workspace-id', workspace_id)
+        }
+      });
+      const leaveButton = leaveWorkspaceModal.querySelector('#leaveButton');
+      leaveButton.addEventListener('click', event => {
+        const workspace_id = leaveButton.getAttribute('data-bs-workspace-id');
+        fetch('/manage/you/leave/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 'workspace_id': workspace_id})
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Errore durante l\'invio dei dati al server');
+          }
+        })
+        .then(data => {
+          const workspace = document.querySelector(`#workspace-${data.id}`);
+          if (workspace) {
+            workspace.remove();
+          }
+        })
+        .catch(error => {
+          console.error('Errore:', error);
+        });
+      });
+    }
+  
