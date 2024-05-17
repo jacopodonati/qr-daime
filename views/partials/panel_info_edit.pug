@@ -4,18 +4,9 @@ container.localizedPanel.mt-3(data-lang=`${loc.code}`)
     - if (information)
       - info_title = information.labels.find(label => label.locale === loc.code);
     label.form-label(for=`${loc.code}-title`) #{__({ phrase: "modal_new_field_title", locale: loc.code })}:
-    input.form-control(type="text", name=`${loc.code}-title`, id=`${loc.code}-title`, value=`${info_title.text}`, placeholder=`${__({ phrase: "modal_new_field_title", locale: loc.code })}`)
+    input.form-control(type="text", name=`${loc.code}-title`, id=`${loc.code}-title`, value=`${info_title.text}`, placeholder=`${__({ phrase: "modal_new_field_placeholder", locale: loc.code })}`)
   div.mb-3
-    div.form-check
-      - let default_status = false 
-      - if (information)
-        - default_status = information.default
-      - if (default_status)
-        input.form-check-input(type="checkbox", checked, name="default", id=`${loc.code}-default`)
-      - else 
-        input.form-check-input(type="checkbox" name="default", id=`${loc.code}-default`)
-      label.form-check-label(for=`${loc.code}-default`) #{__({ phrase: "default", locale: loc.code })}
-    - if (isAdmin)
+    - if (user.permissions.manage_info)
       div.form-check
         - let deleted_status = false 
         - if (information)

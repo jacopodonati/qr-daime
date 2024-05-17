@@ -77,7 +77,7 @@
 	"modal_leave_workspace_body": "Vuoi davvero abbandonare l'area chiamata “WORKSPACE_TITLE”?",
 	"modal_leave_workspace_title": "Abbandonare l'area di lavoro?",
 	"modal_new_field_error": "Si è verificato un errore durante il salvataggio del campo",
-	"modal_new_field_info_add": "Aggiungi",
+	"modal_new_field_info_add": "Aggiungi un campo",
 	"modal_new_field_info_placeholder": "Inserisci il nome del campo",
 	"modal_new_field_placeholder": "Inserisci il titolo dell'informazione",
 	"modal_new_field_title": "Titolo dell'informazione",

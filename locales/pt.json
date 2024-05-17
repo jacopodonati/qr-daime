@@ -77,7 +77,7 @@
 	"modal_leave_workspace_body": "Você realmente deseja sair do espaço de trabalho “WORKSPACE_TITLE”?",
 	"modal_leave_workspace_title": "Sair da área de trabalho?",
 	"modal_new_field_error": "Ocorreu um erro ao salvar a informação",
-	"modal_new_field_info_add": "Adicione",
+	"modal_new_field_info_add": "Adicione um campo",
 	"modal_new_field_info_placeholder": "Digite o nome do campo",
 	"modal_new_field_placeholder": "Digite o título da informação",
 	"modal_new_field_title": "Título da informação",

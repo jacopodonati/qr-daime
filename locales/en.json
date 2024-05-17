@@ -77,7 +77,7 @@
 	"modal_leave_workspace_body": "Do you really want to leave the workspace “WORKSPACE_TITLE”?",
 	"modal_leave_workspace_title": "Leave the workspace?",
 	"modal_new_field_error": "There was an error saving the information",
-	"modal_new_field_info_add": "Add",
+	"modal_new_field_info_add": "Add a field",
 	"modal_new_field_info_placeholder": "Enter the name of the field",
 	"modal_new_field_placeholder": "Enter the title of the information",
 	"modal_new_field_title": "Information title",
