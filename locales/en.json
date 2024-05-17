@@ -16,6 +16,8 @@
 	"delete_workspace_no": "Delete workspace no.",
 	"deleted": "Deleted",
 	"doc_date_of_issue": "Date of Issue",
+	"doc_view_qr_document_caption": "Point your camera at this QR code to view the contents of this record.",
+	"doc_view_qr_link_caption": "Point your camera at this QR code to open it on your portable device",
 	"document": "Document",
 	"document_no": "Document no.",
 	"edit_button": "Edit",
@@ -136,6 +138,7 @@
 	"th_summary": "summary",
 	"th_title": "title",
 	"th_workspace": "workspace",
+	"th_workspace_name": "name",
 	"title_select_document_template": "Choose a template",
 	"user_email": "Email",
 	"user_list_title": "List of users",
@@ -163,7 +166,5 @@
 	"workspace_privacy_checkbox": "Public",
 	"workspace_title": "Workspace Title",
 	"workspace_title_placeholder": "Enter the title of the workspace",
-	"workspace_view_title": "View Workspace",
-	"doc_view_qr_link_caption": "Point your camera at this QR code to open it on your portable device",
-	"doc_view_qr_document_caption": "Point your camera at this QR code to view the contents of this record.",
+	"workspace_view_title": "View Workspace"
 }

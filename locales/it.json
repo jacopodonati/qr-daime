@@ -16,6 +16,8 @@
 	"delete_workspace_no": "Elimina area di lavoro n.",
 	"deleted": "Cancellato",
 	"doc_date_of_issue": "Data di emissione",
+	"doc_view_qr_document_caption": "Inquadra con la fotocamera questo codice QR per visionare il contenuto di questo record.",
+	"doc_view_qr_link_caption": "Inquadra con la fotocamera questo codice QR per aprire il link sul tuo dispositivo portatile.",
 	"document": "Record",
 	"document_no": "Record n.",
 	"edit_button": "Modifica",
@@ -138,6 +140,7 @@
 	"th_summary": "Sommario",
 	"th_title": "titolo",
 	"th_workspace": "area di lavoro",
+	"th_workspace_name": "nome",
 	"title_select_document_template": "Seleziona un modello",
 	"user_email": "Email",
 	"user_list_title": "Elenco degli utenti",
@@ -166,7 +169,5 @@
 	"workspace_privacy_checkbox": "Pubblico",
 	"workspace_title": "Nome dell'area di lavoro",
 	"workspace_title_placeholder": "Inserisci il nome dell'area di lavoro",
-	"workspace_view_title": "Area di lavoro",
-	"doc_view_qr_link_caption": "Inquadra con la fotocamera questo codice QR per aprire il link sul tuo dispositivo portatile.",
-	"doc_view_qr_document_caption": "Inquadra con la fotocamera questo codice QR per visionare il contenuto di questo record.",
+	"workspace_view_title": "Area di lavoro"
 }

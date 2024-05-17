@@ -19,7 +19,7 @@ block content
     .col-1
       label.col-form-label.fw-semibold(for="emailInput") #{__("user_profile_form_email_label")}:
     .col-8
-      input.form-control(type="email" name="email" id="emailInput", placeholder=`${__("user_profile_form_email_placeholder")}`, value=`${ownProfile.email}`, required)
+      input.form-control(type="email" name="email" id="emailInput", placeholder=`${__("user_profile_form_email_placeholder")}`, value=`${ownProfile.email}`, required, autocomplete="off")
     .col-2
       button#emailButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
   
@@ -27,27 +27,37 @@ block content
     .col-1
       label.col-form-label.fw-semibold(for="oldPassword") #{__("user_profile_form_password_label")}:
     .col-4
-      input.form-control.password-field(type="password" id="oldPassword", placeholder=`${__("user_profile_form_new_password_placeholder_once")}`, required)
+      input.form-control.password-field(type="password" id="oldPassword", placeholder=`${__("user_profile_form_new_password_placeholder_once")}`, required, autocomplete="new-password")
     .col-4
-      input.form-control.password-field(type="password" name="password" id="newPassword", placeholder=`${__("user_profile_form_new_password_placeholder_twice")}`, required)
+      input.form-control.password-field(type="password" name="password" id="newPassword", placeholder=`${__("user_profile_form_new_password_placeholder_twice")}`, required, autocomplete="new-password")
     .col-2
       button#passwordButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
   
   h2.mt-3 #{__("user_profile_workspace_list")}
-  ul.list-group
-    each workspace in ownProfile.workspaces
-      - let label = workspace.name
-      - let role = "no_role"
-        if workspace.privacy == "personal"
-          - label = __("select_personal_workspace")
-        each member in workspace.members
-          if member.user == ownProfile.id
-            - role = member.role
-        li.list-group-item(id=`workspace-${workspace.id}`)
-          span.fw-semibold #{label} 
-          span (#{__("role_" + role)})
-          if role == "basic"
-            a.btn.btn-danger.btn-sm.ms-3(data-bs-toggle="modal", data-bs-target="#leaveWorkspaceModal", data-bs-workspace-title=`${workspace.name}`, data-bs-workspace-id=`${workspace.id}`) #{__("button_leave")}
+  table.table.table-striped.table-hover
+    thead 
+      tr 
+        th #{__("th_workspace_name")}
+        th #{__("th_member_role")}
+        //- th #{__("th_workspace_default")}
+        th
+    tbody
+      each workspace in ownProfile.workspaces
+        - let label = workspace.name
+        - let role = "no_role"
+          if workspace.privacy == "personal"
+            - label = __("select_personal_workspace")
+          each member in workspace.members
+            if member.user == ownProfile.id
+              - role = member.role
+          tr(id=`workspace-${workspace.id}`)
+            td.fw-semibold #{label} 
+            td #{__("role_" + role)}
+            //- td
+            //-   input.form-check-input(id=`radio-!{workspace.id}`, type="radio")
+            td.text-end
+              if role == "basic"
+                a.btn.btn-danger.btn-sm.ms-3(data-bs-toggle="modal", data-bs-target="#leaveWorkspaceModal", data-bs-workspace-title=`${workspace.name}`, data-bs-workspace-id=`${workspace.id}`) #{__("button_leave")}
 
   #leaveWorkspaceModal.modal(tabindex="-1")
     .modal-dialog.modal-dialog-centered
