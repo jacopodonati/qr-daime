@@ -38,6 +38,8 @@ script.
   .qrDocument.text-center.fst-italic.mb-5
     img(src=`${document.qrDocument}`, alt="Document")
     p #{__("doc_view_qr_document_caption")}
+  
+  p#docId.text-center #{__("document_no")} #{document.id}
 
 script.
   const dateOfIssue = document.querySelector('#dateOfIssue');
