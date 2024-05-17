@@ -30,8 +30,8 @@ router.get('/:id', async (req, res) => {
             
             res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
-                document: document,
-                document_: document
+                document,
+                link: process.env.DOMAIN + '/doc/' + document._id
             });
         } else {
             res.redirect('/list');

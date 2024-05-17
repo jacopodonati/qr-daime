@@ -1,8 +1,4 @@
-h1 #{__("document_no")} #{document._id}
-
-img(src=`${document.qrUrl}`, alt="Link")
-
-p #{document.dateOfIssue}
+p#dateOfIssue.text-center.fst-italic.mb-5 #{document.dateOfIssue}
 
 script.
   function getLabel(id) {
@@ -16,23 +12,46 @@ script.
     return '';
   }
 
-each info in document.information
-  if (user.permissions.manage_documents || info.public)
-    - let info_id = 'id-' + info._id
-    - let classes = info.public ? '' : 'bg-secondary-subtle'
-    div(class=`${classes}`)
-      h2(id=info_id)
-      ul
-        each field in info.fields
-          - let field_id = 'id-' + field._id
-          li
-            span(id=field_id).field-id #{field._id}
-            | : 
-            span.field-value !{field.value}
+.container-sm
+  each info in document.information
+    if (user.permissions.manage_documents || info.public)
+      - let info_id = 'id-' + info._id
+      - let classes = info.public ? '' : 'bg-secondary-subtle'
+      div(class=`${classes}`)
+        h4(id=info_id)
+        ul
+          each field in info.fields
+            - let field_id = 'id-' + field._id
+            li
+              span(id=field_id).field-id.fw-semibold #{field._id}
+              | : 
+              span.field-value !{field.value}
 
-img(src=`${document.qrDocument}`, alt="Document")
+  hr.mt-5.mb-5
+
+  .qrUrl.text-center.fst-italic
+    img(src=`${document.qrUrl}`, alt="Link")
+    p #{__("doc_view_qr_link_caption")}
+
+  hr.mt-5.mb-5
+
+  .qrDocument.text-center.fst-italic.mb-5
+    img(src=`${document.qrDocument}`, alt="Document")
+    p #{__("doc_view_qr_document_caption")}
 
 script.
+  const dateOfIssue = document.querySelector('#dateOfIssue');
+  const date = new Date(dateOfIssue.innerHTML);
+  const options = {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+  const localized = date.toLocaleString(navigator.language, options);
+  dateOfIssue.innerHTML = localized;
+
   function getLabel(labels, locale) {
     for (const label of labels) {
       if (label.locale === locale) {

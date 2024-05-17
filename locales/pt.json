@@ -164,5 +164,7 @@
 	"workspace_privacy_checkbox": "Público",
 	"workspace_title": "Título da área de trabalho",
 	"workspace_title_placeholder": "Insira o nome da área de trabalho",
-	"workspace_view_title": "Mostrar área de trabalho"
+	"workspace_view_title": "Mostrar área de trabalho",
+	"doc_view_qr_link_caption": "Aponte sua câmera para este código QR para abri-lo em seu dispositivo portátil",
+	"doc_view_qr_document_caption": "Enquadre este código QR com sua câmera para visualizar o conteúdo deste registro."
 }

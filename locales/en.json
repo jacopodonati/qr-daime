@@ -163,5 +163,7 @@
 	"workspace_privacy_checkbox": "Public",
 	"workspace_title": "Workspace Title",
 	"workspace_title_placeholder": "Enter the title of the workspace",
-	"workspace_view_title": "View Workspace"
+	"workspace_view_title": "View Workspace",
+	"doc_view_qr_link_caption": "Point your camera at this QR code to open it on your portable device",
+	"doc_view_qr_document_caption": "Point your camera at this QR code to view the contents of this record."
 }
