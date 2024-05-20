@@ -18,6 +18,8 @@ block content
   script(src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js" integrity="sha512-TelkP3PCMJv+viMWynjKcvLsQzx6dJHvIGhfqzFtZKgAjKM1YPqcwzzDEoTc/BHjf43PcPzTQOjuTr4YdE8lNQ==" crossorigin="anonymous" referrerpolicy="no-referrer")
   script.
     const removeButtonLabels = !{JSON.stringify(removeButtonLabels)};
+    const placeholdersForLabels = !{JSON.stringify(placeholdersForLabels)};
+    const placeholdersForDescriptions = !{JSON.stringify(placeholdersForDescriptions)};
 
     document.addEventListener('DOMContentLoaded', function() {
       function changeLocaleFocus(locale) {
@@ -87,9 +89,9 @@ block content
 
       function removeItemFromEveryList(itemId) {
         var lists = document.querySelectorAll('.addedInfoList');
-        lists.forEach(function(list) {
+        lists.forEach((list) => {
           const listLocale = list.dataset.lang;
-          const listItem = document.getElementById(listLocale + itemId.substring(2));
+          const listItem = document.querySelector(`#${listLocale}${itemId.substring(2)}`);
           listItem.remove();
         });
       }
@@ -97,7 +99,7 @@ block content
       let removeButtons = document.querySelectorAll('.remove-button');
       removeButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-          removeItemFromEveryList(this.parentElement.parentElement.parentElement.id);
+          removeItemFromEveryList(this.parentElement.parentElement.id);
         });
       });
 
@@ -106,46 +108,53 @@ block content
         button.addEventListener('click', function() {
           const currentTimestamp = Date.now();
           const infoLists = document.querySelectorAll('.addedInfoList');
-          infoLists.forEach(function(infoList) {
+          infoLists.forEach((infoList) => {
             const currentLocale = infoList.dataset.lang;
             const newItemId = `${currentLocale}-tmp-${currentTimestamp}`;
 
-            const listItem = document.createElement('li');
-            listItem.id = newItemId;
-            listItem.classList.add('list-group-item');
+            const itemRow = document.createElement('tr');
+            itemRow.id = newItemId;
+            itemRow.classList.add('field-row');
 
-            const listRow = document.createElement('div');
-            listRow.classList.add('row', 'row-cols-lg-auto', 'g-3', 'align-items-center');
-            listItem.appendChild(listRow);
+            const handleCell = document.createElement('td');
+            handleCell.classList.add('text-center');
+            const handle = document.createElement('i');
+            handle.classList.add('bi', 'bi-grip-vertical', 'field-handle');
+            handleCell.appendChild(handle);
 
-            const handleIcon = document.createElement('i');
-            handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
-            listRow.appendChild(handleIcon);
+            const labelCell = document.createElement('td');
+            const labelInput = document.createElement('input');
+            labelInput.classList.add('form-control', 'form-control-sm', 'field-label');
+            labelInput.type = 'text';
+            labelInput.name = newItemId + '-label';
+            labelInput.placeholder = placeholdersForLabels[currentLocale];
+            labelCell.appendChild(labelInput);
 
-            const inputWrapper = document.createElement('div');
-            inputWrapper.classList.add('col-10');
-            listRow.appendChild(inputWrapper);
+            const descriptionCell = document.createElement('td');
+            const descriptionInput = document.createElement('input');
+            descriptionInput.classList.add('form-control', 'form-control-sm', 'field-description');
+            descriptionInput.type = 'text';
+            descriptionInput.name = newItemId + '-field-description';
+            descriptionInput.placeholder = placeholdersForDescriptions[currentLocale];
+            descriptionCell.appendChild(descriptionInput);
 
-            const infoText = document.createElement('input');
-            infoText.type = 'text';
-            infoText.name = newItemId;
-            infoText.classList.add('form-control', 'field-label');
-            inputWrapper.appendChild(infoText);
-
-            const buttonWrapper = document.createElement('div');
-            buttonWrapper.classList.add('col-2');
-            listRow.appendChild(buttonWrapper);
-
-            const removeIcon = document.createElement('span');
-            removeIcon.innerHTML = removeButtonLabels[currentLocale];
-            removeIcon.classList.add('btn', 'btn-danger', 'remove-button');
-            removeIcon.style.cursor = 'pointer';
-            removeIcon.addEventListener('click', function() {
+            const buttonCell = document.createElement('td');
+            buttonCell.classList.add('text-center');
+            const removeButton = document.createElement('span');
+            removeButton.innerHTML = removeButtonLabels[currentLocale];
+            removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
+            removeButton.style.cursor = 'pointer';
+            removeButton.addEventListener('click', function() {
               removeItemFromEveryList(newItemId);
             });
-            buttonWrapper.appendChild(removeIcon);
+            buttonCell.appendChild(removeButton);
 
-            infoList.appendChild(listItem);
+            itemRow.appendChild(handleCell);
+            itemRow.appendChild(labelCell);
+            itemRow.appendChild(descriptionCell);
+            itemRow.appendChild(buttonCell);
+
+            infoList.querySelector('tbody').appendChild(itemRow);
           });
         });
       });
@@ -167,7 +176,6 @@ block content
       event.preventDefault();
       const formData = new FormData(form);
 
-      const defaultCheck = document.querySelector('[id*=default]');
       const deletedCheck = document.querySelector('[id*=deleted]');
       let deletedCheckStatus = false;
       if (deletedCheck) {
@@ -175,10 +183,9 @@ block content
       }
 
       const dataToSubmit = {
-        admin: window.location.href.includes('admin'),
         labels: [],
+        descriptions: [],
         fields: [],
-        default: defaultCheck.checked,
         deleted: deletedCheckStatus
       };
 
@@ -187,26 +194,40 @@ block content
         const panelLocale = localizedPanel.dataset.lang;
         dataToSubmit.labels.push({
           'locale': panelLocale,
-          'text': localizedPanel.querySelector('[id*=title]').value
+          'text': localizedPanel.querySelector('[id$=title]').value
         });
-        const fields = localizedPanel.querySelectorAll('.field-label');
-        fields.forEach(function(field) {
-          const fieldId = field.name.substring(3);
+        dataToSubmit.descriptions.push({
+          'locale': panelLocale,
+          'text': localizedPanel.querySelector('[id$=info-description]').value
+        });
+        const fields = localizedPanel.querySelectorAll('.field-row');
+        fields.forEach((field) => {
+          const fieldId = field.id.substring(3);
           const fieldIndex = dataToSubmit.fields.findIndex(function(field) {
             return field._id === fieldId;
           });
+          const label = field.querySelector('.field-label');
+          const description = field.querySelector('.field-description');
 
           if (fieldIndex !== -1) {
             dataToSubmit.fields[fieldIndex].labels.push({
               locale: panelLocale,
-              text: field.value
+              text: label.value
+            });
+            dataToSubmit.fields[fieldIndex].descriptions.push({
+              locale: panelLocale,
+              text: description.value
             });
           } else {
             dataToSubmit.fields.push({
               _id: fieldId,
               labels: [{
                 locale: panelLocale,
-                text: field.value
+                text: label.value
+              }],
+              descriptions: [{
+                locale: panelLocale,
+                text: description.value
               }]
             });
           }

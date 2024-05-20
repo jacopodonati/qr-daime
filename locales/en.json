@@ -166,5 +166,12 @@
 	"workspace_privacy_checkbox": "Public",
 	"workspace_title": "Workspace Title",
 	"workspace_title_placeholder": "Enter the title of the workspace",
-	"workspace_view_title": "View Workspace"
+	"workspace_view_title": "View Workspace",
+	"modal_new_info_description": "Description of the information",
+	"modal_new_info_description_placeholder": "Enter a description for the information",
+	"modal_new_field_title_placeholder": "Enter a title for the field",
+	"modal_new_field_description_placeholder": "Enter a description for the field",
+	"missing_description_text": "Enter the description in at least one language",
+	"th_field_label": "title",
+	"th_field_description": "description"
 }

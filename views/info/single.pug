@@ -2,3 +2,6 @@ extends ../layout
 
 block content
   include info.pug
+
+  hr
+  a.btn.btn-primary.col-md-2.offset-md-10(href=`/info/edit/${information._id}`) #{__("edit_button")}

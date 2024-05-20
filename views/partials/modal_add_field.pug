@@ -1,5 +1,5 @@
 .modal.fade#addFieldModal
-  .modal-dialog
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
         h5.modal-title#addFieldModalLabel #{__("add_new_field")}
@@ -8,22 +8,29 @@
         include ../partials/error_banner.pug
 
         input#localeInput(type='hidden' name='locale', value=`${locale}`)
-        label(for='fieldLabel' class='form-label') #{__("modal_new_field_title")}:
-        input#fieldLabel.form-control(type='text', placeholder=`${__("modal_new_field_placeholder")}`, required)
+
+        .mb-3
+          label(for='fieldLabel' class='form-label') #{__("modal_new_field_title")}:
+          input#fieldLabel.form-control(type='text', placeholder=`${__("modal_new_field_placeholder")}`, required)
+        .mb-3
+          label(for='fieldDescription' class='form-label') #{__("modal_new_info_description")}:
+          input#fieldDescription.form-control(type='text', placeholder=`${__("modal_new_info_description_placeholder")}`, required)
 
         hr
 
-        ul#addedInfoList.list-group.mb-3(style='display: none;')
+        table#addedInfoList.table.table-striped.table-hover.mb-3.d-none 
+          thead 
+            tr 
+              th
+              th #{__("th_field_label")}
+              th #{__("th_field_description")}
+              th
+          tbody
 
-        .input-group.mb-3
-          input#infoLabel.form-control(type='text', placeholder=`${__("modal_new_field_info_placeholder")}`)
-          //- select#selectType(name="type")
-          //-     option(value="text") Testo 
-          //-     option(value="number") Numero
-          //-     option(value="date") Data
+        .text-center.mb-3
           button.btn.btn-outline-primary(type='button' onclick='addInfoField()') #{__("modal_new_field_info_add")}
 
-        div.mb-3
+        .mb-3
 
       .modal-footer
         button(type='button' class='btn btn-secondary' data-bs-dismiss='modal') #{__("modal_cancel")}

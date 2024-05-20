@@ -4,12 +4,18 @@ const { translateText } = require('./localization');
 async function validateAndTranslateData(req, res, next) {
     const data = req.body;
     i18n.setLocale(req.getLocale());
+    console.log(data)
 
     try {
         const hasLabelsWithText = data.labels.some(label => label.text.trim() !== '');
+        const hasDescriptionsWithText = data.descriptions.some(description => description.text.trim() !== '');
         
         if (!hasLabelsWithText) {
             return res.status(400).json({ error: i18n.__('missing_label_text') });
+        }
+        
+        if (!hasDescriptionsWithText) {
+            return res.status(400).json({ error: i18n.__('missing_description_text') });
         }
 
         if (data.fields.length === 0) {
@@ -26,6 +32,16 @@ async function validateAndTranslateData(req, res, next) {
             }
         }
 
+        for (let description of data.descriptions) {
+            if (description.text.trim() === '') {
+                const notEmptyDescription = data.descriptions.find(d => d.text.trim() !== '');
+                if (notEmptyDescription) {
+                    const translatedDescription = await translateText(notEmptyDescription.text, notEmptyDescription.locale, description.locale);
+                    description.text = translatedDescription;
+                }
+            }
+        }
+
         for (let field of data.fields) {
             const hasLabelsWithTextInField = field.labels.some(label => label.text.trim() !== '');
             if (!hasLabelsWithTextInField) {
@@ -37,6 +53,16 @@ async function validateAndTranslateData(req, res, next) {
                     if (notEmptyLabel) {
                         const translatedLabel = await translateText(notEmptyLabel.text, notEmptyLabel.locale, label.locale);
                         label.text = translatedLabel;
+                    }
+                }
+            }
+            console.log(field.descriptions)
+            for (let description of field.descriptions) {
+                if (description.text.trim() === '') {
+                    const notEmptyDescription = field.descriptions.find(d => d.text.trim() !== '');
+                    if (notEmptyDescription) {
+                        const translatedDescription = await translateText(notEmptyDescription.text, notEmptyDescription.locale, description.locale);
+                        description.text = translatedDescription;
                     }
                 }
             }

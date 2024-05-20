@@ -2,89 +2,137 @@ var number_of_info = 0;
 var fields_added = [];
 
 function addInfoField() {
-    const infoLabelInput = document.getElementById('infoLabel');
-    const addedInfoList = document.getElementById('addedInfoList');
-    const infoLabel = infoLabelInput.value.trim();
-
-    if (infoLabel) {
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-start', 'align-items-center');
-
-        const handleIcon = document.createElement('i');
-        handleIcon.classList.add('bi', 'bi-grip-vertical', 'me-2', 'field-handle');
-        listItem.appendChild(handleIcon);
-        
-        const infoText = document.createElement('span');
-        infoText.classList.add('flex-fill');
-        infoText.textContent = infoLabel;
-        listItem.appendChild(infoText);
-
-        const removeIcon = document.createElement('span');
-        removeIcon.innerHTML = 'INPUT_LBL_REMOVE';
-        removeIcon.classList.add('btn', 'btn-danger', 'btn-sm');
-        removeIcon.style.cursor = 'pointer';
-        removeIcon.addEventListener('click', function() {
-            listItem.remove();
-        });
-        listItem.appendChild(removeIcon);
-
-        addedInfoList.appendChild(listItem);
-        addedInfoList.style.display = 'block';
-        infoLabelInput.value = '';
+    const addedInfoList = document.querySelector('#addedInfoList');
+    if (addedInfoList.classList.contains('d-none')) {
+        addedInfoList.classList.remove('d-none');
     }
+
+    const currentTimestamp = Date.now();
+    const newItemId = `tmp-${currentTimestamp}`;
+
+    const itemRow = document.createElement('tr');
+    itemRow.id = newItemId;
+    itemRow.classList.add('field-row');
+
+    const handleCell = document.createElement('td');
+    handleCell.classList.add('text-center');
+    const handle = document.createElement('i');
+    handle.classList.add('bi', 'bi-grip-vertical', 'field-handle');
+    handleCell.appendChild(handle);
+
+    const labelCell = document.createElement('td');
+    const labelInput = document.createElement('input');
+    labelInput.classList.add('form-control', 'form-control-sm', 'field-label');
+    labelInput.type = 'text';
+    labelInput.name = newItemId + '-label';
+    labelInput.placeholder = 'LBL_PLACEHOLDER';
+    labelInput.setAttribute('required', '');
+    labelCell.appendChild(labelInput);
+
+    const descriptionCell = document.createElement('td');
+    const descriptionInput = document.createElement('input');
+    descriptionInput.classList.add('form-control', 'form-control-sm', 'field-description');
+    descriptionInput.type = 'text';
+    descriptionInput.name = newItemId + '-field-description';
+    descriptionInput.placeholder = 'DESC_PLACEHOLDER';
+    descriptionInput.setAttribute('required', '');
+    descriptionCell.appendChild(descriptionInput);
+
+    const buttonCell = document.createElement('td');
+    buttonCell.classList.add('text-center');
+    const removeButton = document.createElement('span');
+    removeButton.innerHTML = 'INPUT_LBL_REMOVE';
+    removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
+    removeButton.style.cursor = 'pointer';
+    removeButton.addEventListener('click', function() {
+        itemRow.remove();
+        if (addedInfoList.rows.length < 2) {
+            addedInfoList.classList.add('d-none');
+        }
+    });
+    buttonCell.appendChild(removeButton);
+
+    itemRow.appendChild(handleCell);
+    itemRow.appendChild(labelCell);
+    itemRow.appendChild(descriptionCell);
+    itemRow.appendChild(buttonCell);
+
+    addedInfoList.querySelector('tbody').appendChild(itemRow);
 }
 
 function saveField() {
-    const fieldLabelInput = document.getElementById('fieldLabel');
-    const fieldInfoList = document.getElementById('addedInfoList');
-    const fieldLocaleInput = document.getElementById('localeInput');
-    const errorMessage = document.getElementById('error-message');
-    const errorSeparator = document.getElementById('error-hr');
+    const fieldLabelInput = document.querySelector('#fieldLabel');
+    const fieldDescriptionInput = document.querySelector('#fieldDescription');
+    const fieldLocaleInput = document.querySelector('#localeInput');
+    const fieldInfoList = document.querySelector('#addedInfoList tbody');
+
+    const errorMessage = document.querySelector('#error-message');
+    const errorSeparator = document.querySelector('#error-hr');
 
     const fieldLabel = fieldLabelInput.value.trim();
+    const fieldDescription = fieldDescriptionInput.value.trim();
     const fieldLocale = fieldLocaleInput.value.trim();
 
-    const fieldInfos = [];
-    fieldInfoList.querySelectorAll('li').forEach(item => {
-        const infoText = item.childNodes[1].textContent;
-        fieldInfos.push(infoText);
+    const subFields = [];
+    fieldInfoList.querySelectorAll('tr').forEach(item => {
+        const infoLabel = item.querySelector('.field-label').value;
+        const infoDescription = item.querySelector('.field-description').value;
+        subFields.push({
+            'label': infoLabel,
+            'description': infoDescription
+        });
     });
 
-  const langs = ['en', 'it', 'pt'];
-  const adata = {
-        labels: langs.map(l => {
-          const dd = {
-            locale: l,
-            text: l === fieldLocale ? fieldLabel : ''
-          };
-          return dd;
+    const langs = ['en', 'it', 'pt'];
+    const dataToSend = {
+        labels: langs.map(locale => {
+            const localizedLabel = {
+                locale: locale,
+                text: locale === fieldLocale ? fieldLabel : ''
+            };
+            return localizedLabel;
         }),
-        fields: fieldInfos.map(f => {
-            const d = {
-              labels: langs.map(l => {
-                  const dd = {
-                      locale: l,
-                      text: ((l === fieldLocale) ? f : '')
+        descriptions: langs.map(locale => {
+            const localizedDescription = {
+                locale: locale,
+                text: locale === fieldLocale ? fieldDescription : ''
+            };
+            return localizedDescription;
+        }),
+        fields: subFields.map(field => {
+            const localizedField = {
+              labels: langs.map(locale => {
+                  const localizedFieldLabel = {
+                      locale: locale,
+                      text: ((locale === fieldLocale) ? field.label : '')
                   };
-                  return dd;
+                  return localizedFieldLabel;
+              }),
+              descriptions: langs.map(locale => {
+                  const localizedDescriptionLabel = {
+                      locale: locale,
+                      text: ((locale === fieldLocale) ? field.description : '')
+                  };
+                  return localizedDescriptionLabel;
               })
             };
-            return d;
+            return localizedField;
         })
-    }
+    };
+
     fetch('/info/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(adata)
+        body: JSON.stringify(dataToSend)
     })
     .then(response => {
         if (response.ok) {
             return response.json();
         } else {
             return response.json().then(error => {
-                const errorBanner = document.getElementById('error-banner');
+                const errorBanner = document.querySelector('#error-banner');
                 errorBanner.textContent = error.error;
                 throw new Error('Errore durante il salvataggio del campo: ' + error.error);
             });
@@ -119,13 +167,13 @@ function saveField() {
 }
 
 function closeModal() {
-    const modal_element = document.getElementById('addFieldModal');
+    const modal_element = document.querySelector('#addFieldModal');
     const modal = bootstrap.Modal.getInstance(modal_element);
     modal.hide();
 }
 
 function searchField() {
-    const addFieldInput = document.getElementById('addFieldInput');
+    const addFieldInput = document.querySelector('#addFieldInput');
     const searchText = addFieldInput.value.trim();
 
     if (searchText.length >= 3) {
@@ -153,20 +201,20 @@ function searchField() {
 }
 
 function hideSearchResults() {
-    let searchResults = document.getElementById('searchResults');
+    let searchResults = document.querySelector('#searchResults');
     searchResults.classList.add('d-none');
     searchResults.classList.remove('d-block');
 }
 
 function clearSearchInput() {
-    const addFieldInput = document.getElementById('addFieldInput');
+    const addFieldInput = document.querySelector('#addFieldInput');
     addFieldInput.value = '';
     hideSearchResults();
 }
 
 function displaySearchResults(data) {
-    const searchResults = document.getElementById('searchResults');
-    const searchResultsList = document.getElementById('searchResultsList');
+    const searchResults = document.querySelector('#searchResults');
+    const searchResultsList = document.querySelector('#searchResultsList');
     searchResultsList.innerHTML = '';
     if (data.length > 0) {
         const filtered_data = data.filter(obj => !fields_added.some(id => id === obj.result._id));
@@ -216,7 +264,6 @@ function addFieldToForm(fieldStructure, fieldData) {
         fieldContainer.id = 'id' + fieldStructure._id;
         fieldContainer.classList.add('card', 'mb-2');
         fieldContainer.appendChild(fieldBody);
-
     
         const rootLabel = document.createElement('h5');
         const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
@@ -243,6 +290,7 @@ function addFieldToForm(fieldStructure, fieldData) {
             const fieldInput = document.createElement('input');
             fieldInput.type = 'text';
             fieldInput.name = field._id;
+            fieldInput.placeholder = field.descriptions.find(description => description.locale === locale).text;
             fieldInput.classList.add('col-form-control', 'col-10');
     
             if (fieldData !== undefined) {
@@ -348,7 +396,7 @@ function toggleFieldInDropdown(id) {
     }
 }
 
-document.getElementById('searchResultsList').addEventListener('mouseup', function(event) {
+document.querySelector('#searchResultsList').addEventListener('mouseup', function(event) {
     const listItem = event.target.closest('li');
     if (listItem) {
         const objectString = listItem.dataset.object;
@@ -387,14 +435,15 @@ function getTemplateFields(id) {
         });
 }
 
-document.getElementById('addFieldModal').addEventListener('hidden.bs.modal', function () {
-    document.getElementById('infoLabel').value = '';
-    document.getElementById('fieldLabel').value = '';
-    document.getElementById('addedInfoList').innerHTML = '';
-    document.getElementById('error-message').classList.remove('d-block');
-    document.getElementById('error-message').classList.add('d-none');
-    document.getElementById('error-hr').classList.remove('d-block');
-    document.getElementById('error-hr').classList.add('d-none');
+document.querySelector('#addFieldModal').addEventListener('hidden.bs.modal', function () {
+    document.querySelector('#fieldLabel').value = '';
+    document.querySelector('#fieldDescription').value = '';
+    document.querySelector('#addedInfoList tbody').innerHTML = '';
+    document.querySelector('#addedInfoList').classList.add('d-none');
+    document.querySelector('#error-message').classList.remove('d-block');
+    document.querySelector('#error-message').classList.add('d-none');
+    document.querySelector('#error-hr').classList.remove('d-block');
+    document.querySelector('#error-hr').classList.add('d-none');
 });
 
 function getField(id, value) {
@@ -438,6 +487,6 @@ if (templateForm) {
     });
 }
 
-const sort_fields = new Sortable(document.querySelector('#addedInfoList'), {
+const sort_fields = new Sortable(document.querySelector('#addedInfoList tbody'), {
     handle: '.field-handle'
 });

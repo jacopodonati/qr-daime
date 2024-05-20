@@ -5,12 +5,19 @@ const labelSchema = new mongoose.Schema({
     text: String
 }, { _id: false });
 
+const descriptionSchema = new mongoose.Schema({
+    locale: String,
+    text: String
+}, { _id: false });
+
 const fieldSchema = new mongoose.Schema({
-    labels: [labelSchema]
+    labels: [labelSchema],
+    descriptions: [descriptionSchema]
 });
 
 const informationSchema = new mongoose.Schema({
     labels: [labelSchema],
+    descriptions: [descriptionSchema],
     fields: [fieldSchema],
     default: {
         type: Boolean,

@@ -8,21 +8,27 @@ ul#langSelector.nav.nav-tabs
 each loc in availableLocales
   container.localizedPanel.mt-3(data-lang=`${loc.code}`)
     - let info_title = information.labels.find(label => label.locale === loc.code);
+    - let info_desc = information.descriptions.find(description => description.locale === loc.code);
     h2(lang=`${loc.code}`) #{info_title.text}
+    p #{info_desc.text}
     - let delete_status = ''
-    - if (isAdmin)
+    - if (user.permissions.manage_info)
       - if (information.deleted)
         - delete_status = `, ${__({phrase: 'information_deleted', locale: loc.code})}`
       - else
         - delete_status = `, ${__({phrase: 'information_not_deleted', locale: loc.code})}`
-    - if (information.default)
-      p #{__({phrase: 'information_required', locale: loc.code})}#{delete_status}
-    - else
-      p #{__({phrase: 'information_not_required', locale: loc.code})}#{delete_status}
-    ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
-      each field in information.fields
-        - let field_label = field.labels.find(label => label.locale === loc.code);
-        li(data-lang=`${loc.code}`) #{field_label.text}
+    table.table.table-striped.table-hover.addedInfoList.mb-3(data-lang=`${loc.code}`)
+      thead
+        tr
+          th #{__("th_field_label")}
+          th #{__("th_field_description")}
+      tbody
+        each field in information.fields
+          - let field_label = field.labels.find(label => label.locale === loc.code);
+          - let field_description = field.descriptions.find(description => description.locale === loc.code);
+          tr
+            td #{field_label.text}
+            td #{field_description.text}
 
 script.
   document.addEventListener('DOMContentLoaded', function() {

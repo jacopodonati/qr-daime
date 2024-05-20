@@ -12,10 +12,14 @@ router.get('/', async function(req, res, next) {
     const localeCodes = i18n.getLocales();
     let availableLocales = [];
     let removeButtonLabels = {};
+    let placeholdersForLabels = {};
+    let placeholdersForDescriptions = {};
     localeCodes.forEach(code => {
         const name = iso6391.getNativeName(code);
         availableLocales.push({ code, name });
         removeButtonLabels[code] = i18n.__({ phrase: 'INPUT_LBL_REMOVE', locale: code });
+        placeholdersForLabels[code] = i18n.__({ phrase: 'modal_new_field_title_placeholder', locale: code });
+        placeholdersForDescriptions[code] = i18n.__({ phrase: 'modal_new_field_description_placeholder', locale: code });
     });
     const acceptLanguage = req.headers['accept-language'] || 'en';
     const currentLocale = acceptLanguage.split(',')[0].split('-')[0];
@@ -25,7 +29,9 @@ router.get('/', async function(req, res, next) {
             title: i18n.__('info_add_title') + ' - ' + i18n.__('app_name'),
             availableLocales,
             currentLocale,
-            removeButtonLabels
+            removeButtonLabels,
+            placeholdersForLabels,
+            placeholdersForDescriptions
         });
     } catch (error) {
         console.error('Errore durante il recupero dei campi:', error);
@@ -38,10 +44,11 @@ router.post('/', validateAndTranslateData, async (req, res) => {
         return res.status(403).send('Operazione non consentita');
     }
     try {
-        const { labels, fields } = req.body;
+        const { labels, fields, descriptions } = req.body;
 
         const newFieldData = {
             labels: labels,
+            descriptions: descriptions,
             fields: fields
         }
 

@@ -29,13 +29,15 @@ block content
 
   script.
     document.addEventListener('DOMContentLoaded', function() {
-      const infos = `!{template.info}`.split(',');
-      infos.forEach(info => {
-        getTemplateFields(info);
-      })
+      if (`!{template.info}` !== '') {
+        const infos = `!{template.info}`.split(',');
+        infos.forEach(info => {
+          getTemplateFields(info);
+        })
+      }
     });
 
-    const form = document.getElementById('doc-form');
+    const form = document.querySelector('#doc-form');
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const formData = new FormData(form);

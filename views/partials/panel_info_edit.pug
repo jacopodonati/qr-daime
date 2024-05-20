@@ -6,6 +6,12 @@ container.localizedPanel.mt-3(data-lang=`${loc.code}`)
     label.form-label(for=`${loc.code}-title`) #{__({ phrase: "modal_new_field_title", locale: loc.code })}:
     input.form-control(type="text", name=`${loc.code}-title`, id=`${loc.code}-title`, value=`${info_title.text}`, placeholder=`${__({ phrase: "modal_new_field_placeholder", locale: loc.code })}`)
   div.mb-3
+    - let info_description = { code: loc.code, text: '' }
+    - if (information)
+      - info_description = information.descriptions.find(description => description.locale === loc.code);
+    label.form-label(for=`${loc.code}-description`) #{__({ phrase: "modal_new_info_description", locale: loc.code })}:
+    input.form-control(type="text", name=`${loc.code}-description`, id=`${loc.code}-info-description`, value=`${info_description.text}`, placeholder=`${__({ phrase: "modal_new_info_description_placeholder", locale: loc.code })}`)
+  div.mb-3
     - if (user.permissions.manage_info)
       div.form-check
         - let deleted_status = false 
@@ -18,19 +24,29 @@ container.localizedPanel.mt-3(data-lang=`${loc.code}`)
         label.form-check-label(for=`${loc.code}-deleted`) #{__({ phrase: "deleted", locale: loc.code })}
   hr
 
-  ul.addedInfoList.list-group.mb-3(data-lang=`${loc.code}`)
-    - if (information)
-      each field in information.fields
-        - let field_label = field.labels.find(label => label.locale === loc.code);
-        li(class="list-group-item" id=`${loc.code}-${field._id}`, data-lang=`${loc.code}`)
-          .row.row-cols-lg-auto.g-3.align-items-center
-            i.bi.bi-grip-vertical.me-2.field-handle
-            .col-10
-              input.form-control.field-label(type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`)
-            .col-2
-              span.btn.btn-danger.remove-button #{__({ phrase: "INPUT_LBL_REMOVE", locale: loc.code })}
+  table.table.table-sm.table-striped.table-hover.addedInfoList.mb-3(data-lang=`${loc.code}`)
+    thead 
+      tr 
+        th
+        th #{__("info_field_title")}
+        th #{__("info_description")}
+        th
+    tbody
+      - if (information)
+        each field in information.fields
+          - let field_label = field.labels.find(label => label.locale === loc.code);
+          - let field_description = field.descriptions.find(description => description.locale === loc.code);
+          tr.field-row(id=`${loc.code}-${field._id}`, data-lang=`${loc.code}`)
+            td.text-center
+              i.bi.bi-grip-vertical.field-handle
+            td
+              input.form-control.form-control-sm.field-label(type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`, placeholder=`${__({ phrase: "modal_new_field_title_placeholder", locale: loc.code })}`)
+            td
+              input.form-control.form-control-sm.field-description(type="text", name=`${loc.code}-${field._id}-field-description`, value=`${field_description.text}`, placeholder=`${__({ phrase: "modal_new_field_description_placeholder", locale: loc.code })}`)
+            td.text-center
+              span.btn.btn-danger.btn-sm.remove-button #{__({ phrase: "INPUT_LBL_REMOVE", locale: loc.code })}
 
-  .mb-3
+  .mb-3.text-center
     button.btn.btn-primary.add-button(type="button", data-lang=`${loc.code}`) #{__({ phrase: "modal_new_field_info_add", locale: loc.code })}
 
   div.mb-3

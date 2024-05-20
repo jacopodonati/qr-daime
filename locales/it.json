@@ -169,5 +169,14 @@
 	"workspace_privacy_checkbox": "Pubblico",
 	"workspace_title": "Nome dell'area di lavoro",
 	"workspace_title_placeholder": "Inserisci il nome dell'area di lavoro",
-	"workspace_view_title": "Area di lavoro"
+	"workspace_view_title": "Area di lavoro",
+	"info_description": "descrizione",
+	"info_field_title": "titolo",
+	"modal_new_info_description": "Descrizione dell'informazione",
+	"modal_new_info_description_placeholder": "Inserisci una descrizione per l'informazione",
+	"modal_new_field_title_placeholder": "Inserisci un titolo per il campo",
+	"modal_new_field_description_placeholder": "Inserisci una descrizione per il campo",
+	"missing_description_text": "Inserire la descrizione in almeno una lingua",
+	"th_field_label": "nome",
+	"th_field_description": "descrizione"
 }
