@@ -3,5 +3,6 @@ extends ../layout
 block content
   include doc.pug
 
-  hr
-  a.btn.btn-primary.col-md-2.offset-md-10(href=`/doc/edit/${document._id}`) #{__("edit_button")}
+  - if (user.permissions.manage_documents || (document.owner == user.id))
+    hr
+    a.btn.btn-primary.col-md-2.offset-md-10(href=`/doc/edit/${document._id}`) #{__("edit_button")}

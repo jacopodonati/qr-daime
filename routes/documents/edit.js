@@ -9,34 +9,24 @@ const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 router.use(express.json());
 
 router.get('/:id', async (req, res) => {
-    if (!res.locals.user.permissions.edit) {
-      return res.redirect('/doc/list')
-    }
-
     try {
         const id = req.params.id;
         const fields = await Information.find({});
 
-        let document;
-        if (res.locals.user.permissions.manage_documents) {
-            document = await Document.findById(id);
-        } else {
-            document = await Document.findOne({ _id: id, deleted: false, owner: res.locals.user.id });
-        }
+        const queryString = res.locals.user.permissions.manage_documents ? { id: id } : { _id: id, deleted: false, owner: res.locals.user.id };
+        const document = await Document.findOne(queryString);
 
-        if (!document) {
+        if (document) {
+            const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+            res.render('documents/edit', {
+                title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
+                document,
+                fields,
+                workspaces
+            });
+        } else {
             return res.redirect('/');
         }
-
-        console.log(document)
-
-        const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
-        res.render('documents/edit', {
-            title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
-            document,
-            fields,
-            workspaces
-        });
     } catch (error) {
         console.error('Error retrieving document from the database:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -44,9 +34,8 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/:id', async (req, res) => {
-    const id = req.params.id;
-
     try {
+        const id = req.params.id;
         const newData = req.body.fields;
         const workspace = req.body.workspace;
 

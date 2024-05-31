@@ -9,15 +9,10 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    
     try {
-        let document;
-        if (res.locals.user.permissions.manage_documents) {
-            document = await Document.findById(id);
-        } else {
-            document = await Document.findOne({ _id: id, deleted: false });
-        }
+        const id = req.params.id;
+        const queryString = res.locals.user.permissions.manage_documents ? { _id: id } : { _id: id, deleted: false };
+        const document = await Document.findOne(queryString);
 
         if (document) {
             for (let i = 0; i < document._doc.information.length; i++) {
@@ -34,7 +29,7 @@ router.get('/:id', async (req, res) => {
                 link: process.env.DOMAIN + '/doc/' + document._id
             });
         } else {
-            res.redirect('/list');
+            res.redirect('/doc/list');
         }
     } catch (error) {
         console.error('Error querying database:', error);

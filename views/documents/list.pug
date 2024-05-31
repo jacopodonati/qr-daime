@@ -32,7 +32,8 @@ block content
             else
               td 
           td
-            span(title=`${document.id}`) #{document.id.slice(-5)}
+            - let doc_id = document._id.toString()
+            span(title=`${document._id}`) #{doc_id.slice(-5)}
           td.date #{document.dateOfIssue}
           - if (document.workspace.privacy == "personal")
             td #{__("select_personal_workspace")}
@@ -40,26 +41,26 @@ block content
             td #{document.workspace.name}
           td #{document.owner.email}
           td.overflow-auto.summary
-            each info in document.information 
-              div.d-inline(class=`info-${info.id}`)
-                span.fw-semibold(class=`info-${info.id}`) #{info.id} 
+            each info in document.information
+              div.d-inline(class=`info-${info._id}`)
+                span.fw-semibold(class=`info-${info._id}`) #{info._id} 
                 each field, index in info.fields 
                   - if (index == info.fields.length - 1)
-                    span(class=`field-${field.id}`) #{field.id}:
+                    span(class=`field-${field._id}`) #{field._id}:
                     | #{field.value} 
                   - else
-                    span(class=`field-${field.id}`) #{field.id}:
+                    span(class=`field-${field._id}`) #{field._id}:
                     | #{field.value}, 
 
           td
             .btn-group(role="group").float-end
-              if (user.permissions.edit)
+              if (user.permissions.manage_documents || (user.permissions.edit && (document.owner.id == user.id)))
                 a(href=`/doc/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               if (user.permissions.read_public)
                 a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              if (user.permissions.delete && !document.deleted)
+              if (!document.deleted && ((user.permissions.delete && (document.owner.id == user.id)) || user.permissions.manage_documents))
                 a(href=`/doc/delete/${document._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
-              if (user.permissions.manage_documents && document.deleted)
+              if (document.deleted && user.permissions.manage_documents)
                 a(href=`/doc/restore/${document._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
   script.
     document.addEventListener('DOMContentLoaded', function() {
@@ -106,9 +107,9 @@ block content
 
       const elements = document.querySelectorAll('div[class*="info-"]');
       const infoObjects = Array.from(elements).map(element => {
-        const id = element.classList[1].substring(5); // Ottieni l'_id dall'attributo class
+        const id = element.classList[1].substring(5);
         const fields = Array.from(element.querySelectorAll('[class^="field-"]'))
-          .map(field => field.classList[0].substring(6)); // Ottieni il campo dall'attributo class
+          .map(field => field.classList[0].substring(6));
         return { _id: id, fields: fields };
       });
       const uniqueInfoObjects = infoObjects.reduce((acc, obj) => {

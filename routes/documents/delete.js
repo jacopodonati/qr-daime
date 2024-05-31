@@ -5,19 +5,15 @@ const Workspace = require('../../models/workspace');
 const i18n = require('i18n');
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    if (!res.locals.user.permissions.delete) {
-        return res.status(403).send('Operazione non consentita');
-    }
-
     try {
-        const document = await Document.findById(id);
+        const id = req.params.id;
+        const queryString = res.locals.user.permissions.manage_documents ? { _id: id, deleted: false } : { _id: id, owner: res.locals.user.id, deleted: false };
+        const document = await Document.findOne(queryString);
 
         if (document) {
             res.render('documents/delete', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
-                document: document
+                document
             });
         } else {
             res.redirect('/doc/list');
@@ -29,13 +25,8 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    if (!res.locals.user.permissions.delete) {
-        return res.status(403).send('Operazione non consentita');
-    }
-
     try {
+        const id = req.params.id;
         const queryString = res.locals.user.permissions.restore ? { _id: id, deleted: false } : { _id: id }
         const document = await Document.findById(queryString);
 
