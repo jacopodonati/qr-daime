@@ -3,6 +3,7 @@ const router = express.Router();
 const i18n = require('i18n');
 const Workspace = require('../../models/workspace');
 const User = require('../../models/user');
+const { validateUserRoles } = require('../../middleware/validation');
 
 const getRoles = async () => {
     try {
@@ -66,10 +67,9 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/:id', async (req, res) => {
-    const id = req.params.id;
-
+router.post('/:id', validateUserRoles, async (req, res) => {
     try {        
+        const id = req.params.id;
         let workspace;
         if (res.locals.user.permissions.manage_workspaces) {
             workspace = await Workspace.findOne({_id: id, privacy: { $ne: 'personal' }});

@@ -9,23 +9,39 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    
     try {
-        let workspace;
-        if (res.locals.user.permissions.manage_workspaces) {
-            workspace = await Workspace.findOne({_id: id});
-        } else {
-            workspace = await Workspace.findOne({
-                _id: id,
-                deleted: false,
-                members: {
-                    user: res.locals.user.id,
-                    role: 'workspace_admin'
+        const id = req.params.id;
+        const queryString = res.locals.user.permissions.manage_workspaces ? { _id: id } : {
+            _id: id,
+            deleted: false,
+            $or: [
+                {
+                    members: {
+                        user: res.locals.user.id,
+                        role: 'workspace_admin'
+                    },
+                    privacy: { $ne: 'personal' }
                 },
-                privacy: { $ne: 'personal' }
-            });
+                {
+                    privacy: 'public'
+                }
+            ]
         }
+        const workspace = await Workspace.findOne(queryString);
+        // let workspace;
+        // if (res.locals.user.permissions.manage_workspaces) {
+        //     workspace = await Workspace.findOne({_id: id});
+        // } else {
+        //     workspace = await Workspace.findOne({
+        //         _id: id,
+        //         deleted: false,
+        //         members: {
+        //             user: res.locals.user.id,
+        //             role: 'workspace_admin'
+        //         },
+        //         privacy: { $ne: 'personal' }
+        //     });
+        // }
 
         if (workspace) {
             await workspace.populate({

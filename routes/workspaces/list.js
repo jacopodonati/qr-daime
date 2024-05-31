@@ -5,7 +5,7 @@ const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     try {
-        const queryString = res.locals.user.permissions.manage_workspaces ? {} : { public: true, deleted: false };
+        const queryString = res.locals.user.permissions.manage_workspaces ? {} : { privacy: 'public', deleted: false };
         const workspaces = await Workspace.find(queryString);
         
         res.render('workspaces/list', {

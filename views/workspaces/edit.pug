@@ -24,20 +24,16 @@ block content
           each member in workspace.members
             tr.member(data-userid=`${member.user.id}`)
               td= member.user.email 
-              - if (member.user.email == user.email)
-                td= __("edit_workspace_role_" + member.role)
-              - else 
-                td
-                  select.form-select.form-select-sm.role-selector
-                    each role in roles
-                      - if (role.value == member.role)
-                        option(value=`${role.value}`, selected)= role.label
-                      - else
-                        option(value=`${role.value}`)= role.label
               td
-                - if (member.user.email != user.email)
-                  .btn-group(role="group").float-end
-                    a.btn.btn-danger.btn-sm.remove-button(href="#")= __("edit_workspace_remove_user")
+                select.form-select.form-select-sm.role-selector
+                  each role in roles
+                    - if (role.value == member.role)
+                      option(value=`${role.value}`, selected)= role.label
+                    - else
+                      option(value=`${role.value}`)= role.label
+              td
+                .btn-group(role="group").float-end
+                  a.btn.btn-danger.btn-sm.remove-button(href="#")= __("edit_workspace_remove_user")
           
     #add-user.input-group.mb-3
       input.form-control#emailAdd(type="email", placeholder=`${__("edit_workspace_add_user_placeholder")}`)

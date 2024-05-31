@@ -104,7 +104,18 @@ async function replaceUrlWithImg(content) {
     return newContent;
 }
 
+async function validateUserRoles(req, res, next) {
+    const members = req.body.members;
+    for (member of members) {
+        if (member.role == 'workspace_admin') {
+            return next();
+        }
+    }
+    return res.status(400).json({ error: i18n.__('missing_workspace_admin') });
+}
+
 module.exports = {
     validateAndTranslateData,
+    validateUserRoles,
     replaceUrlWithImg
 };

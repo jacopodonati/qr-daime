@@ -25,11 +25,26 @@ h2 #{__("view_workspace_documents_label")}
   table.table.table-striped.table-hover
     thead 
       th ID
-      th #{__("view_workspace_th_document_date")}
-      th #{__("view_workspace_th_document_owner")}
+      th #{__("th_document_date")}
+      th #{__("th_document_owner")}
     each document in documents
       tr
-        td 
-          a(href=`/doc/${document.id}`) #{document._id}
-        td= document.dateOfIssue
+        td(title=`${document._id}`) 
+          a(href=`/doc/${document.id}`) #{document._id.toString().slice(-5)}
+        td.date-of-issue= document.dateOfIssue
         td= document.owner.email
+  
+script.
+  const datesOfIssue = document.querySelectorAll('.date-of-issue');
+  const options = {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+  datesOfIssue.forEach((dateOfIssue) => {
+    const date = new Date(dateOfIssue.innerHTML)
+    const localized = date.toLocaleString(navigator.language, options);
+    dateOfIssue.innerHTML = localized;
+  });

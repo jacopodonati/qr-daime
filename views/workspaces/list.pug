@@ -11,22 +11,31 @@ block content
         tr 
           if user.permissions.manage_workspaces 
             th
+            th
           th ID
           th #{__("th_name")}
           th #{__("th_members")}
           th
       each workspace in workspaces
-        - let status
-        - if (workspace.deleted)
-          - status = "deleted"
-        - else
-          - status = "available"
         tr(data-status=`${status}`)
           if user.permissions.manage_workspaces
-            if workspace.deleted
-              td ⛔️
-            else
-              td ✅
+            - let status
+            - if (workspace.deleted)
+              - status = "deleted"
+            - else
+              - status = "available"
+              td
+                if workspace.deleted
+                  i.bi.bi-trash
+                else
+                  i.bi.bi-check
+              td
+                if workspace.privacy == "personal"
+                  i.bi.bi-person-circle
+                if workspace.privacy == "public"
+                  i.bi.bi-unlock
+                if workspace.privacy == "private"
+                  i.bi.bi-lock-fill
           td
             span(title=`${workspace.id}`) #{workspace.id.slice(-5)}
           td #{workspace.name}
