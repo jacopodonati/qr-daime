@@ -38,7 +38,6 @@ block content
         }
       })
       .then(data => {
-        console.log(data)
         window.location.href = `/workspace/view/${data.savedWorkspace._id}`;
       })
       .catch(error => {

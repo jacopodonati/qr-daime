@@ -109,7 +109,6 @@ block content
           const currentTimestamp = Date.now();
           const infoLists = document.querySelectorAll('.addedInfoList');
           infoLists.forEach((infoList) => {
-            console.log(infoList)
             const currentLocale = infoList.dataset.lang;
             const newItemId = `${currentLocale}-tmp-${currentTimestamp}`;
 

@@ -23,7 +23,6 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    console.log('normale')
     try {
         const updatedUser = await User.findByIdAndUpdate(res.locals.user.id, req.body, { new: true });
         if (updatedUser) {
