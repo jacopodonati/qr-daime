@@ -3,12 +3,10 @@ const { translateText } = require('./localization');
 
 async function validateInformation(req, res, next) {
     const data = req.body;
-    console.log('val', data)
 
     try {
         const hasLabelsWithText = data.labels.some(label => label.text.trim() !== '');
         const hasDescriptionsWithText = data.descriptions.some(description => description.text.trim() !== '');
-        console.log('desc', hasDescriptionsWithText)
         
         if (!hasLabelsWithText) {
             return res.status(400).json({ error: i18n.__('missing_label_text') });
@@ -32,7 +30,6 @@ async function validateInformation(req, res, next) {
 async function translateInformation(req, res, next) {
     const data = req.body;
     i18n.setLocale(req.getLocale());
-    console.log('tra', data)
 
     try {
         for (let label of data.labels) {

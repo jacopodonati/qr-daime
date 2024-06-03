@@ -180,4 +180,3 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-console.log('server restarted man');
