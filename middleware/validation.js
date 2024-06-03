@@ -1,14 +1,14 @@
 const i18n = require('i18n');
 const { translateText } = require('./localization');
 
-async function validateAndTranslateData(req, res, next) {
+async function validateInformation(req, res, next) {
     const data = req.body;
-    i18n.setLocale(req.getLocale());
-    console.log(data)
+    console.log('val', data)
 
     try {
         const hasLabelsWithText = data.labels.some(label => label.text.trim() !== '');
         const hasDescriptionsWithText = data.descriptions.some(description => description.text.trim() !== '');
+        console.log('desc', hasDescriptionsWithText)
         
         if (!hasLabelsWithText) {
             return res.status(400).json({ error: i18n.__('missing_label_text') });
@@ -22,6 +22,19 @@ async function validateAndTranslateData(req, res, next) {
             return res.status(400).json({ error: i18n.__('missing_fields') });
         }
 
+        next();
+    } catch (error) {
+        console.error('Errore durante la validazione delle informazioni:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+async function translateInformation(req, res, next) {
+    const data = req.body;
+    i18n.setLocale(req.getLocale());
+    console.log('tra', data)
+
+    try {
         for (let label of data.labels) {
             if (label.text.trim() === '') {
                 const notEmptyLabel = data.labels.find(l => l.text.trim() !== '');
@@ -44,9 +57,11 @@ async function validateAndTranslateData(req, res, next) {
 
         for (let field of data.fields) {
             const hasLabelsWithTextInField = field.labels.some(label => label.text.trim() !== '');
+
             if (!hasLabelsWithTextInField) {
                 return res.status(400).json({ error: i18n.__('missing_label_text_in_field') });
             }
+
             for (let label of field.labels) {
                 if (label.text.trim() === '') {
                     const notEmptyLabel = field.labels.find(l => l.text.trim() !== '');
@@ -56,7 +71,7 @@ async function validateAndTranslateData(req, res, next) {
                     }
                 }
             }
-            console.log(field.descriptions)
+
             for (let description of field.descriptions) {
                 if (description.text.trim() === '') {
                     const notEmptyDescription = field.descriptions.find(d => d.text.trim() !== '');
@@ -115,7 +130,8 @@ async function validateUserRoles(req, res, next) {
 }
 
 module.exports = {
-    validateAndTranslateData,
+    validateInformation,
+    translateInformation,
     validateUserRoles,
     replaceUrlWithImg
 };

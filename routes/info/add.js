@@ -3,7 +3,7 @@ const router = express.Router();
 const i18n = require('i18n');
 const iso6391 = require('iso-639-1');
 const Information = require('../../models/information');
-const { validateAndTranslateData } = require('../../middleware/validation')
+const { validateInformation, translateInformation } = require('../../middleware/validation')
 
 router.get('/', async function(req, res, next) {
     if (!res.locals.user.permissions.create) {
@@ -39,7 +39,7 @@ router.get('/', async function(req, res, next) {
     }
 });
 
-router.post('/', validateAndTranslateData, async (req, res) => {
+router.post('/', validateInformation, translateInformation, async (req, res) => {
     if (!res.locals.user.permissions.create) {
         return res.status(403).send('Operazione non consentita');
     }

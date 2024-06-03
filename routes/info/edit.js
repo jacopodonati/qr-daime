@@ -4,7 +4,7 @@ const Information = require('../../models/information');
 const i18n = require('i18n');
 const { MET } = require('bing-translate-api');
 const iso6391 = require('iso-639-1');
-const { validateAndTranslateData } = require('../../middleware/validation');
+const { validateInformation, translateInformation } = require('../../middleware/validation');
 
 router.use(express.json());
 
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/:id', validateAndTranslateData, async (req, res) => {
+router.post('/:id', validateInformation, translateInformation, async (req, res) => {
     try {
         const id = req.params.id;
         const newData = req.body;
