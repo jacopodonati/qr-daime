@@ -70,11 +70,12 @@ app.use(pageTitleLocalizationWorkaround);
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
+        const role = 'basic';
         req.session.user = {
             id: '123456',
             email: 'test@example.com',
-            role: 'admin',
-            permissions: getUserPermissions('admin')
+            role: role,
+            permissions: getUserPermissions(role)
         };
     }
 
