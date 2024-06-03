@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         if (res.locals.user.permissions.manage_documents) {
             documents = await Document.find({})
                 .populate({ path: 'workspace', select: 'privacy name'})
-                .populate({ path: 'owner', select: 'email'});
+                .populate({ path: 'owner', select: 'username'});
         } else {
             const user = await User.findById(res.locals.user.id).populate({ path: 'workspaces', select: 'id' }).exec();
             let userWorkspaceIds = [];
@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
                         _id: 1,
                         dateOfIssue: 1,
                         lastEdit: 1,
-                        'ownerDetails.email': 1,
+                        'ownerDetails.username': 1,
                         'ownerDetails._id': 1,
                         qrDocument: 1,
                         qrUrl: 1,
@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
                         'workspace.name': '$workspaceDetails.name',
                         'workspace.privacy': '$workspaceDetails.privacy',
                         'owner.id': '$ownerDetails._id',
-                        'owner.email': '$ownerDetails.email',
+                        'owner.username': '$ownerDetails.username',
                     }
                 },
                 {

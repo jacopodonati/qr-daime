@@ -39,7 +39,7 @@ block content
             td #{__("select_personal_workspace")}
           - else
             td #{document.workspace.name}
-          td #{document.owner.email}
+          td #{document.owner.username}
           td.overflow-auto.summary
             each info in document.information
               div.d-inline(class=`info-${info._id}`)
