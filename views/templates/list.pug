@@ -24,22 +24,23 @@ block content
         tr(data-sort=template.dateOfIssue, data-status=`${status}`)
           if user.permissions.manage_documents
             if template.deleted
-              td ⛔️
+              td
+                i.bi.bi-trash
             else
-              td ✅
+              td
           td #{template.title}
-          td #{template.owner.email}
+          td #{template.owner.username}
           - if (template.workspace.privacy == 'personal')
             td #{__("select_personal_workspace")}
           - else 
             td #{template.workspace.name}
           td
             .btn-group(role="group").float-end
-              if (user.permissions.edit)
+              if (user.permissions.manage_documents || (user.permissions.edit && (template.owner.id == user.id)))
                 a(href=`/template/edit/${template._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               if (user.permissions.read_public)
                 a(href=`/template/view/${template._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              if (user.permissions.delete && !template.deleted)
+              if (!template.deleted && ((user.permissions.delete && (template.owner.id == user.id)) || user.permissions.manage_documents))
                 a(href=`/template/delete/${template._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
-              if (user.permissions.manage_documents && template.deleted)
+              if (template.deleted && user.permissions.manage_documents)
                 a(href=`/template/restore/${template._id}`).btn.btn-warning.btn-sm #{__("restore_button")}

@@ -7,37 +7,27 @@ const Workspace = require('../../models/workspace');
 const Information = require('../../models/information');
 
 router.get('/:id', async function(req, res, next) {
-    if (!res.locals.user.permissions.manage_documents) {
-        return res.status(403).send('Operazione non consentita');
-    }
-
     try {
-        const user = await User.findById(res.locals.user.id);
-        let workspacesIds = [];
-        if (user) {
-            workspacesIds = user.workspaces.map(workspace => workspace._id);
-        }
+        const id = req.params.id;
         let template;
+        
         if (res.locals.user.permissions.manage_documents) {
-            template = await Template.findOne({_id: req.params.id});
+            template = await Template.findOne({_id: id});
         } else {
-            template = await Template.findOne({
-                $or: [
-                    { _id: id, deleted: false },
-                    { $and: [{ $or: [{ owner: res.locals.user.id }, { workspace: { $in: workspacesIds } }] }] }
-                ]
-            });
+            template = await Template.findOne({ _id: id, deleted: false, owner: res.locals.user.id });
         }
-        const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
-        const fields = await Information.find({ deleted: false });
-
+        
         if (template) {
+            const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+            const fields = await Information.find({ deleted: false });
             res.render('templates/edit', {
                 title: i18n.__('template_edit_title') + ' - ' + i18n.__('app_name'),
                 template,
                 workspaces,
                 fields
             });
+        } else {
+            res.redirect('/template/list');
         }
     } catch (error) {
         console.error('Errore durante il recupero dei campi:', error);
