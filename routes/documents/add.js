@@ -5,7 +5,6 @@ const Document = require('../../models/document');
 const Information = require('../../models/information');
 const Workspace = require('../../models/workspace');
 const Template = require('../../models/template');
-const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 
 function getDocLink(id) {
     return process.env.DOMAIN + '/doc/' + id
@@ -81,13 +80,6 @@ router.post('/', async (req, res) => {
         const savedDocument = await newDocument.save();
         
         if (savedDocument) {
-            let doc = await getQRDocumentContent(savedDocument);
-            let qrDoc = await getQRCodeString(doc);
-            let qrUrl = await getQRCodeString(getDocLink(savedDocument._id));
-            const updatedDocument = await Document.findByIdAndUpdate(savedDocument._id, {
-                qrDocument: qrDoc,
-                qrUrl: qrUrl 
-            }, { new: true });
             return res.status(201).json({ updatedDocument });
         }
     } catch (error) {

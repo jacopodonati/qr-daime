@@ -4,7 +4,6 @@ const i18n = require('i18n');
 const Document = require('../../models/document');
 const Information = require('../../models/information');
 const Workspace = require('../../models/workspace');
-const { getQRCodeString, getQRDocumentContent } = require('../../qr');
 
 router.use(express.json());
 
@@ -50,9 +49,6 @@ router.post('/:id', async (req, res) => {
             document.set('information', newData);
             document.set('workspace', workspace);
             document.set('lastEdit', new Date());
-            let doc = await getQRDocumentContent(document);
-            let qrDoc = await getQRCodeString(doc);
-            document.set('qrDocument', qrDoc)
             let savedDocument = await document.save();
             return res.status(200).json({ savedDocument });
         } 

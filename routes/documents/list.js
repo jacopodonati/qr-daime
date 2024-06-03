@@ -63,8 +63,6 @@ router.get('/', async (req, res) => {
                         lastEdit: 1,
                         'ownerDetails.username': 1,
                         'ownerDetails._id': 1,
-                        qrDocument: 1,
-                        qrUrl: 1,
                         information: 1,
                         'workspaceDetails._id': 1,
                         'workspaceDetails.name': 1,

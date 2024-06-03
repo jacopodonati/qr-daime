@@ -35,8 +35,6 @@ const documentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    qrDocument: String,
-    qrUrl: String,
     information: [informationSchema],
     workspace: {
         type: mongoose.Schema.Types.ObjectId,

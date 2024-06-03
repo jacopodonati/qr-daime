@@ -17,30 +17,31 @@ script.
     if (user.permissions.manage_documents || info.public)
       - let info_id = 'id-' + info._id
       - let classes = info.public ? '' : 'bg-secondary-subtle'
-      div(class=`${classes}`)
-        h4(id=info_id)
+      div.info(class=`${classes}`)
+        h4.info-title(id=info_id)
         ul
           each field in info.fields
             - let field_id = 'id-' + field._id
-            li
-              span(id=field_id).field-id.fw-semibold #{field._id}
+            li.field
+              span.field-title(id=field_id).field-id.fw-semibold #{field._id}
               | : 
               span.field-value !{field.value}
 
   hr.mt-5.mb-5
 
-  .qrUrl.text-center.fst-italic
-    img(src=`${document.qrUrl}`, alt="Link")
+  #qr-url.text-center.fst-italic
+    canvas
     p #{__("doc_view_qr_link_caption")}
 
   hr.mt-5.mb-5
 
-  .qrDocument.text-center.fst-italic.mb-5
-    img(src=`${document.qrDocument}`, alt="Document")
+  #qr-record.text-center.fst-italic.mb-5
+    canvas
     p #{__("doc_view_qr_document_caption")}
   
   p#docId.text-center #{__("document_no")} #{document.id}
 
+script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js") 
 script.
   const dateOfIssue = document.querySelector('#dateOfIssue');
   const date = new Date(dateOfIssue.innerHTML);
@@ -126,4 +127,35 @@ script.
   fetchLabels(infoIds)
     .then(labels => {
       setLabels(labels);
+      function getInfo() {
+        const infos = document.querySelectorAll('.info');
+        let result = '';
+        infos.forEach((info) => {
+          result += `- ${info.querySelector('.info-title').textContent}\n`;
+          const fields = info.querySelectorAll('.field');
+          fields.forEach((field) => {
+            result += ` - ${field.textContent}\n`;
+          });
+        });
+        return result;
+      }
+
+      const qrUrl = new QRious({
+        element: document.querySelector('#qr-url canvas'),
+        size: 200,
+        value: `${window.location.origin}${window.location.pathname}`
+      });
+
+      let recordAsText = `!{__("record_no")} !{document.id}\n`;
+      recordAsText += `!{__("record_date_issue")}: !{document.dateOfIssue}\n`;
+      recordAsText += `!{__("record_date_edit")}: !{document.lastEdit}\n`;
+      recordAsText += `!{__("record_information")}:\n`;
+      recordAsText += getInfo();
+      
+      const qrRecord = new QRious({
+        element: document.querySelector('#qr-record canvas'),
+        size: 300,
+        value: recordAsText
+      });
     });
+  
