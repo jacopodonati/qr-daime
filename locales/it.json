@@ -159,6 +159,8 @@
 	"user_profile_form_new_password_placeholder_once": "Inserisci la nuova password",
 	"user_profile_form_new_password_placeholder_twice": "Inseriscila di nuovo",
 	"user_profile_form_password_label": "Password",
+	"user_profile_form_username_label": "Nome utente",
+	"user_profile_form_username_placeholder": "Inserisci un nome utente",
 	"user_profile_role_label": "Ruolo",
 	"user_profile_role_localized_admin": "Amministratore",
 	"user_profile_role_localized_basic": "Utente",

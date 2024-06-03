@@ -16,7 +16,8 @@ router.post('/', async (req, res) => {
         const { action, email, password } = req.body;
 
         if (action === 'signup') {
-            const newUser = new User({ email, password });
+            const username = email.substring(0, email.indexOf('@'));
+            const newUser = new User({ email, password, username});
             await newUser.save();
             const personalWorkspace = new Workspace({
                 members: [{

@@ -4,19 +4,27 @@ block content
   h1 #{__("user_profile_title")}
 
   .row.align-items-start
-    .col-1
+    .col-2
       span.col-sm-3.fw-semibold ID:
-    .col-11
+    .col-10
       span #{ownProfile.id}
   .row.align-items-start
-    .col-1
+    .col-2
       - let localizedRole = "user_profile_role_localized_" + ownProfile.role
       span.fw-semibold #{__("user_profile_role_label")}:
-    .col-11
+    .col-10
       span #{__(localizedRole)}
 
   form.row.align-items-start.mb-2.mt-2(method="post")
-    .col-1
+    .col-2
+      label.col-form-label.fw-semibold(for="usernameInput") #{__("user_profile_form_username_label")}:
+    .col-8
+      input.form-control(type="text" name="username" id="usernameInput", placeholder=`${__("user_profile_form_username_placeholder")}`, value=`${ownProfile.username}`, required, autocomplete="off")
+    .col-2
+      button#usernameButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
+
+  form.row.align-items-start.mb-2.mt-2(method="post")
+    .col-2
       label.col-form-label.fw-semibold(for="emailInput") #{__("user_profile_form_email_label")}:
     .col-8
       input.form-control(type="email" name="email" id="emailInput", placeholder=`${__("user_profile_form_email_placeholder")}`, value=`${ownProfile.email}`, required, autocomplete="off")
@@ -24,7 +32,7 @@ block content
       button#emailButton.d-none(type="submit").btn.btn-primary #{__("submit_button")}
   
   form.row.g-3.align-items-center(method="post")
-    .col-1
+    .col-2
       label.col-form-label.fw-semibold(for="oldPassword") #{__("user_profile_form_password_label")}:
     .col-4
       input.form-control.password-field(type="password" id="oldPassword", placeholder=`${__("user_profile_form_new_password_placeholder_once")}`, required, autocomplete="new-password")
@@ -73,6 +81,19 @@ block content
 
   script.
     let currentEmail = `!{ownProfile.email}`;
+    let currentUsername = `!{ownProfile.username}`;
+
+    const usernameInput = document.querySelector('#usernameInput');
+    usernameInput.addEventListener('keyup', (event) => {
+      const usernameButton = document.querySelector('#usernameButton');
+      if (usernameInput.value !== currentUsername) {
+        usernameButton.classList.add('d-block');
+        usernameButton.classList.remove('d-none');
+      } else {
+        usernameButton.classList.add('d-none');
+        usernameButton.classList.remove('d-block');
+      }
+    });
 
     const emailInput = document.querySelector('#emailInput');
     emailInput.addEventListener('keyup', (event) => {
@@ -131,7 +152,14 @@ block content
           passwordFields.forEach(field => {
             field.value = '';
           });
-          currentEmail = data.email;
+          usernameInput.value = data.updatedUser.username;
+          currentEmail = data.updatedUser.email;
+          currentUsername = data.updatedUser.username;
+          const buttons = document.querySelectorAll('button');
+          buttons.forEach((button) => {
+            button.classList.add('d-none');
+            button.classList.remove('d-block');
+          });
         })
         .catch(error => {
           console.error('Errore:', error);

@@ -127,8 +127,8 @@ async function validateUserRoles(req, res, next) {
 }
 
 module.exports = {
-    validateInformation,
+    replaceUrlWithImg,
     translateInformation,
-    validateUserRoles,
-    replaceUrlWithImg
+    validateInformation,
+    validateUserRoles
 };

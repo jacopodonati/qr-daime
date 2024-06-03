@@ -156,6 +156,8 @@
 	"user_profile_form_new_password_placeholder_once": "Digite sua senha",
 	"user_profile_form_new_password_placeholder_twice": "Repita sua senha",
 	"user_profile_form_password_label": "Senha",
+	"user_profile_form_username_label": "Nome de usuário",
+	"user_profile_form_username_placeholder": "Insira o nome de usuário",
 	"user_profile_role_label": "Papel",
 	"user_profile_role_localized_admin": "Administrador",
 	"user_profile_title": "Seu perfil",

@@ -155,6 +155,8 @@
 	"user_profile_form_new_password_placeholder_once": "Enter your password",
 	"user_profile_form_new_password_placeholder_twice": "Repeat your password",
 	"user_profile_form_password_label": "Password",
+	"user_profile_form_username_label": "Username",
+	"user_profile_form_username_placeholder": "Enter a username",
 	"user_profile_role_label": "Role",
 	"user_profile_role_localized_admin": "Admin",
 	"user_profile_title": "Your profile",
