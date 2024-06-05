@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
             });
             await personalWorkspace.save();
             newUser.workspaces.push(personalWorkspace._id);
+            newUser.default_workspace = personalWorkspace._id;
             await newUser.save();
             req.flash('success', i18n.__('login_user_created'));
             return res.redirect('/login');

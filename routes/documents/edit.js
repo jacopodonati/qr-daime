@@ -4,6 +4,7 @@ const i18n = require('i18n');
 const Document = require('../../models/document');
 const Information = require('../../models/information');
 const Workspace = require('../../models/workspace');
+const User = require('../../models/user');
 
 router.use(express.json());
 
@@ -14,6 +15,7 @@ router.get('/:id', async (req, res) => {
 
         const queryString = res.locals.user.permissions.manage_documents ? { id: id } : { _id: id, deleted: false, owner: res.locals.user.id };
         const document = await Document.findOne(queryString);
+        const user = await User.findById(res.locals.user.id);
 
         if (document) {
             const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
@@ -21,7 +23,8 @@ router.get('/:id', async (req, res) => {
                 title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
                 document,
                 fields,
-                workspaces
+                workspaces,
+                defaultWorkspace: user.default_workspace
             });
         } else {
             return res.redirect('/');

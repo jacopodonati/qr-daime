@@ -14,10 +14,13 @@ block content
       label.form-label(for="workspace") #{__("form_select_workspace")}:
       select#workspace.form-control(name="workspace")
         each workspace in workspaces
+          - let workspace_label = workspace.name
           if workspace.privacy == "personal"
-            option(value=`${workspace._id}`) #{__("select_personal_workspace")}
+            - workspace_label = __("select_personal_workspace")
+          if workspace.id == defaultWorkspace
+            option(value=`${workspace._id}`, selected) #{workspace_label} (#{__("default")})
           else
-            option(value=`${workspace._id}`) #{workspace.name}
+            option(value=`${workspace._id}`) #{workspace_label}
 
     hr
 

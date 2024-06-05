@@ -47,7 +47,7 @@ block content
       tr 
         th #{__("th_workspace_name")}
         th #{__("th_member_role")}
-        //- th #{__("th_workspace_default")}
+        th #{__("th_workspace_default")}
         th
     tbody
       each workspace in ownProfile.workspaces
@@ -61,8 +61,11 @@ block content
           tr(id=`workspace-${workspace.id}`)
             td.fw-semibold #{label} 
             td #{__("role_" + role)}
-            //- td
-            //-   input.form-check-input(id=`radio-!{workspace.id}`, type="radio")
+            td
+              - if (ownProfile.default_workspace == workspace.id)
+                input.form-check-input.workspace-radio(id=`radio-${workspace.id}`, type="radio", checked)
+              - else
+                input.form-check-input.workspace-radio(id=`radio-${workspace.id}`, type="radio")
             td.text-end
               if role == "basic"
                 a.btn.btn-danger.btn-sm.ms-3(data-bs-toggle="modal", data-bs-target="#leaveWorkspaceModal", data-bs-workspace-title=`${workspace.name}`, data-bs-workspace-id=`${workspace.id}`) #{__("button_leave")}
@@ -211,4 +214,41 @@ block content
         });
       });
     }
+
+    const workspaceRadios = document.querySelectorAll('.workspace-radio');
+    workspaceRadios.forEach((workspaceRadio) => {
+      workspaceRadio.addEventListener('click', function() {
+        const workspaceId = this.id.substring(6);
+        workspaceRadios.forEach((workspaceRadio) => {
+          workspaceRadio.setAttribute('disabled', '');
+          if (workspaceRadio.id != this.id) {
+            workspaceRadio.checked = false;
+          }
+        });
+
+        fetch('/manage/you/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 'default_workspace': workspaceId})
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Errore durante l\'invio dei dati al server');
+          }
+        })
+        .then(data => {
+          workspaceRadios.forEach((workspaceRadio) => {
+            workspaceRadio.removeAttribute('disabled');
+          });
+        })
+        .catch(error => {
+          console.error('Errore:', error);
+        });
+      })
+    });
+
   

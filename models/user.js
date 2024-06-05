@@ -21,7 +21,11 @@ const userSchema = new mongoose.Schema({
     workspaces: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Workspace'
-    }]
+    }],
+    default_workspace: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workspace'
+    }
 });
 
 async function encryptPassword(password) {

@@ -5,6 +5,7 @@ const Document = require('../../models/document');
 const Information = require('../../models/information');
 const Workspace = require('../../models/workspace');
 const Template = require('../../models/template');
+const User = require('../../models/user');
 
 function getDocLink(id) {
     return process.env.DOMAIN + '/doc/' + id
@@ -31,6 +32,7 @@ router.get('/', async function(req, res, next) {
         try {
             const fields = await Information.find({});
             const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+            const user = await User.findById(res.locals.user.id);
             let template = {};
             if (req.query.template !== '') {
                 template = await Template.findOne({ _id: req.query.template, deleted: false});
@@ -42,7 +44,8 @@ router.get('/', async function(req, res, next) {
                 fallbackLocale: i18n.getLocale(),
                 fields,
                 workspaces,
-                template
+                template,
+                defaultWorkspace: user.default_workspace
             });
         } catch (error) {
             console.error('Errore durante il recupero dei campi:', error);
