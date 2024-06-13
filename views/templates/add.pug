@@ -61,7 +61,7 @@ block content
         }
       })
       .then(data => {
-        window.location.href = `/template/${data.id}`;
+        window.location.href = `/template/view/${data.id}`;
       })
       .catch(error => {
         console.error('Errore:', error);
