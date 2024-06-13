@@ -17,7 +17,7 @@ router.get('/:id', async (req, res) => {
             $or: [
                 {
                     members: {
-                        user: res.locals.user.id,
+                        user: res.locals.user._id,
                         role: 'workspace_admin'
                     },
                     privacy: { $ne: 'personal' }
@@ -28,20 +28,6 @@ router.get('/:id', async (req, res) => {
             ]
         }
         const workspace = await Workspace.findOne(queryString);
-        // let workspace;
-        // if (res.locals.user.permissions.manage_workspaces) {
-        //     workspace = await Workspace.findOne({_id: id});
-        // } else {
-        //     workspace = await Workspace.findOne({
-        //         _id: id,
-        //         deleted: false,
-        //         members: {
-        //             user: res.locals.user.id,
-        //             role: 'workspace_admin'
-        //         },
-        //         privacy: { $ne: 'personal' }
-        //     });
-        // }
 
         if (workspace) {
             await workspace.populate({

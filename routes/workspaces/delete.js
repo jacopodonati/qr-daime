@@ -17,7 +17,7 @@ router.get('/:id', async (req, res) => {
                 _id: id,
                 deleted: false,
                 members: {
-                    user: res.locals.user.id,
+                    user: res.locals.user._id,
                     role: 'workspace_admin'
                 },
                 privacy: { $ne: 'personal' }
@@ -61,7 +61,7 @@ router.post('/:id', async (req, res) => {
                 _id: id,
                 deleted: false,
                 members: {
-                    user: res.locals.user.id,
+                    user: res.locals.user._id,
                     role: 'workspace_admin'
                 },
                 privacy: { $ne: 'personal' }

@@ -54,11 +54,11 @@ block content
 
           td
             .btn-group(role="group").float-end
-              if (user.permissions.manage_documents || (user.permissions.edit && (document.owner.id == user.id)))
+              if (user.permissions.manage_documents || (user.permissions.edit && (document.owner.id == user._id)))
                 a(href=`/doc/edit/${document._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               if (user.permissions.read_public)
                 a(href=`/doc/${document._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              if (!document.deleted && ((user.permissions.delete && (document.owner.id == user.id)) || user.permissions.manage_documents))
+              if (!document.deleted && ((user.permissions.delete && (document.owner.id == user._id)) || user.permissions.manage_documents))
                 a(href=`/doc/delete/${document._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
               if (document.deleted && user.permissions.manage_documents)
                 a(href=`/doc/restore/${document._id}`).btn.btn-warning.btn-sm #{__("restore_button")}

@@ -6,7 +6,7 @@ const Workspace = require('../../models/workspace');
 
 router.get('/', async (req, res) => {
     try {
-        const ownProfile = await User.findById(res.locals.user.id);
+        const ownProfile = await User.findById(res.locals.user._id);
         if (ownProfile) {
             await ownProfile.populate('workspaces');
             res.render('users/personal_profile', {
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(res.locals.user.id, req.body, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(res.locals.user._id, req.body, { new: true });
         if (updatedUser) {
             return res.status(200).json({ updatedUser });
         }
@@ -38,13 +38,13 @@ router.post('/leave', async (req, res) => {
     try {
         const workspaceId = req.body.workspace_id;
         const updatedUser = await User.findByIdAndUpdate(
-            res.locals.user.id,
+            res.locals.user._id,
             { $pull: { workspaces: workspaceId } },
             { new: true }
         );
         const updatedWorkspace = await Workspace.findByIdAndUpdate(
             workspaceId,
-            { $pull: { members: { user: res.locals.user.id } } },
+            { $pull: { members: { user: res.locals.user._id } } },
             { new: true }
         );
         

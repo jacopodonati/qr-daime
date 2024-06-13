@@ -34,7 +34,7 @@ block content
 
           td= user.email
           td
-            select.role-selector.form-select.form-select-sm(id=`id${user.id}`)
+            select.role-selector.form-select.form-select-sm(id=`id${user._id}`)
               each role in roles
                 if (role != 'loggedout' && role != 'god')
                   if (role == user.role)

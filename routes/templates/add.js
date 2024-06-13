@@ -11,7 +11,7 @@ router.get('/', async function(req, res, next) {
     }
 
     try {
-        const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+        const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
         const fields = await Information.find({ deleted: false });
 
         res.render('templates/add', {
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         const newFieldData = {
             title: title,
             workspace: workspace,
-            owner: res.locals.user.id,
+            owner: res.locals.user._id,
             info: info
         }
 

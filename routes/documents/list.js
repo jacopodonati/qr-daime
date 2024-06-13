@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
                 .populate({ path: 'workspace', select: 'privacy name'})
                 .populate({ path: 'owner', select: 'username'});
         } else {
-            const user = await User.findById(res.locals.user.id).populate({ path: 'workspaces', select: 'id' }).exec();
+            const user = await User.findById(res.locals.user._id).populate({ path: 'workspaces', select: 'id' }).exec();
             let userWorkspaceIds = [];
             if (user) {
                 userWorkspaceIds = user.workspaces.map(ws => ws._id);
@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
                             },
                             {
                                 $or: [
-                                    { owner: res.locals.user.id },
+                                    { owner: res.locals.user._id },
                                     { 'workspaceDetails._id': { $in: userWorkspaceIds } },
                                     { 'workspaceDetails.privacy': 'public' }
                                 ]

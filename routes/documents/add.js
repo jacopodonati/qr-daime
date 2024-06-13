@@ -31,8 +31,8 @@ router.get('/', async function(req, res, next) {
     } else {
         try {
             const fields = await Information.find({});
-            const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
-            const user = await User.findById(res.locals.user.id);
+            const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
+            const user = await User.findById(res.locals.user._id);
             let template = {};
             if (req.query.template !== '') {
                 template = await Template.findOne({ _id: req.query.template, deleted: false});
@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
         });
 
         const newDocument = new Document({
-            owner: res.locals.user.id,
+            owner: res.locals.user._id,
             workspace: formData['workspace'],
             information: fields
         });

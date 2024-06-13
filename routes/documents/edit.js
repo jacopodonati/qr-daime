@@ -13,12 +13,12 @@ router.get('/:id', async (req, res) => {
         const id = req.params.id;
         const fields = await Information.find({});
 
-        const queryString = res.locals.user.permissions.manage_documents ? { id: id } : { _id: id, deleted: false, owner: res.locals.user.id };
+        const queryString = res.locals.user.permissions.manage_documents ? { id: id } : { _id: id, deleted: false, owner: res.locals.user._id };
         const document = await Document.findOne(queryString);
-        const user = await User.findById(res.locals.user.id);
+        const user = await User.findById(res.locals.user._id);
 
         if (document) {
-            const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+            const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
             res.render('documents/edit', {
                 title: i18n.__('edit_doc_title') + ' ' + id + ' - ' + i18n.__('app_name'),
                 document,
@@ -45,7 +45,7 @@ router.post('/:id', async (req, res) => {
         if (res.locals.user.permissions.manage_documents) {
             document = await Document.findById(id);
         } else {
-            document = await Document.findOne({ _id: id, deleted: false, owner: res.locals.user.id });
+            document = await Document.findOne({ _id: id, deleted: false, owner: res.locals.user._id });
         }
 
         if (document) {

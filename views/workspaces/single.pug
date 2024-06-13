@@ -3,7 +3,7 @@ extends ../layout
 block content
   include workspace.pug
 
-  - var isAdmin = workspace.members.some(member => member.user._id.toString() === user.id.toString() && member.role === 'workspace_admin')
+  - var isAdmin = workspace.members.some(member => member.user._id.toString() === user._id.toString() && member.role === 'workspace_admin')
   - if (user.permissions.manage_workspaces || isAdmin)
     hr
     a.btn.btn-primary.col-md-2.offset-md-10(href=`/workspace/edit/${workspace._id}`) #{__("edit_button")}

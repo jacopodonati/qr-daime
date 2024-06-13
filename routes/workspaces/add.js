@@ -23,14 +23,14 @@ router.post('/', async (req, res) => {
             privacy: typeof req.body.privacy !== 'undefined' ? 'public' : 'private',
             members: [{
                 role: 'workspace_admin',
-                user: res.locals.user.id
+                user: res.locals.user._id
             }],
         });
 
         const savedWorkspace = await newWorkspace.save();
         
         if (savedWorkspace) {
-            const owner = await User.findById(res.locals.user.id);
+            const owner = await User.findById(res.locals.user._id);
             owner.workspaces.push(savedWorkspace._id);
             await owner.save();
             return res.status(201).json({ savedWorkspace });

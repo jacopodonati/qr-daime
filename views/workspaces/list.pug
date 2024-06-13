@@ -44,7 +44,7 @@ block content
             .btn-group(role="group").float-end
               - let isWorkspaceAdmin = false
               each member in workspace.members
-                if (member.user == user.id) && member.role == "workspace_admin"
+                if (member.user == user._id) && member.role == "workspace_admin"
                   - isWorkspaceAdmin = true
               if (workspace.privacy != "personal" && (user.permissions.manage_workspaces || isWorkspaceAdmin))
                 a(href=`/workspace/edit/${workspace._id}`).btn.btn-success.btn-sm #{__("edit_button")}

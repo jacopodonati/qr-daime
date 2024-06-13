@@ -14,11 +14,11 @@ router.get('/:id', async function(req, res, next) {
         if (res.locals.user.permissions.manage_documents) {
             template = await Template.findOne({_id: id});
         } else {
-            template = await Template.findOne({ _id: id, deleted: false, owner: res.locals.user.id });
+            template = await Template.findOne({ _id: id, deleted: false, owner: res.locals.user._id });
         }
         
         if (template) {
-            const workspaces = await Workspace.find({ 'members.user': res.locals.user.id });
+            const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
             const fields = await Information.find({ deleted: false });
             res.render('templates/edit', {
                 title: i18n.__('template_edit_title') + ' - ' + i18n.__('app_name'),
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
     try {
         const { id, title, workspace, info } = req.body;
 
-        const user = await User.findById(res.locals.user.id);
+        const user = await User.findById(res.locals.user._id);
         let workspacesIds = [];
         if (user) {
             workspacesIds = user.workspaces.map(workspace => workspace._id);
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
             template = await Template.findOne({
                 $or: [
                     { _id: id, deleted: false },
-                    { $and: [{ $or: [{ owner: res.locals.user.id }, { workspace: { $in: workspacesIds } }] }] }
+                    { $and: [{ $or: [{ owner: res.locals.user._id }, { workspace: { $in: workspacesIds } }] }] }
                 ]
             });
         }

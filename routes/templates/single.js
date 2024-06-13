@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const user = await User.findById(res.locals.user.id);
+        const user = await User.findById(res.locals.user._id);
         let workspaces = [];
         if (user) {
             workspaces = user.workspaces.map(workspace => workspace._id);
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
             template = await Template.findOne({
                 $or: [
                     { _id: id, deleted: false },
-                    { $and: [{ $or: [{ owner: res.locals.user.id }, { workspace: { $in: workspaces } }] }] }
+                    { $and: [{ $or: [{ owner: res.locals.user._id }, { workspace: { $in: workspaces } }] }] }
                 ]
             });
         }

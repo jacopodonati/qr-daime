@@ -22,7 +22,7 @@ block content
           th
         tbody
           each member in workspace.members
-            tr.member(data-userid=`${member.user.id}`)
+            tr.member(data-userid=`${member.user._id}`)
               td= member.user.email 
               td
                 select.form-select.form-select-sm.role-selector

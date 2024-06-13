@@ -7,7 +7,7 @@ const i18n = require('i18n');
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const queryString = res.locals.user.permissions.manage_documents ? { _id: id, deleted: false } : { _id: id, owner: res.locals.user.id, deleted: false };
+        const queryString = res.locals.user.permissions.manage_documents ? { _id: id, deleted: false } : { _id: id, owner: res.locals.user._id, deleted: false };
         const document = await Document.findOne(queryString);
 
         if (document) {

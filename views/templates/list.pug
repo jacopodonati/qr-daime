@@ -36,11 +36,11 @@ block content
             td #{template.workspace.name}
           td
             .btn-group(role="group").float-end
-              if (user.permissions.manage_documents || (user.permissions.edit && (template.owner.id == user.id)))
+              if (user.permissions.manage_documents || (user.permissions.edit && (template.owner.id == user._id)))
                 a(href=`/template/edit/${template._id}`).btn.btn-success.btn-sm #{__("edit_button")}
               if (user.permissions.read_public)
                 a(href=`/template/view/${template._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              if (!template.deleted && ((user.permissions.delete && (template.owner.id == user.id)) || user.permissions.manage_documents))
+              if (!template.deleted && ((user.permissions.delete && (template.owner.id == user._id)) || user.permissions.manage_documents))
                 a(href=`/template/delete/${template._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
               if (template.deleted && user.permissions.manage_documents)
                 a(href=`/template/restore/${template._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
