@@ -37,8 +37,11 @@ block content
                 if workspace.privacy == "private"
                   i.bi.bi-lock-fill
           td
-            span(title=`${workspace.id}`) #{workspace.id.slice(-5)}
-          td #{workspace.name}
+            span(title=`${workspace._id}`) #{workspace._id.toString().slice(-5)}
+          - if ((user.role == "admin") || (workspace.privacy != "personal"))
+            td #{workspace.name}
+          - else
+            td #{__("select_personal_workspace")}
           td #{workspace.members.length}
           td
             .btn-group(role="group").float-end
@@ -54,4 +57,3 @@ block content
                 a(href=`/workspace/delete/${workspace._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
               if (workspace.privacy != "personal" && workspace.deleted && (user.permissions.manage_workspaces || isWorkspaceAdmin))
                 a(href=`/workspace/restore/${workspace._id}`).btn.btn-warning.btn-sm #{__("restore_button")}
-

@@ -2,12 +2,31 @@ const express = require('express');
 const router = express.Router();
 const Workspace = require('../../models/workspace');
 const i18n = require('i18n');
+const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {
     try {
-        const queryString = res.locals.user.permissions.manage_workspaces ? {} : { privacy: 'public', deleted: false };
-        const workspaces = await Workspace.find(queryString);
-        
+        let workspaces;
+        if (res.locals.user.permissions.manage_workspaces) {
+            workspaces = await Workspace.find({});
+        } else {
+            workspaces = await Workspace.aggregate([
+                {
+                    $match: {
+                        $and: [
+                            { deleted: false },
+                            {
+                                $or: [
+                                    { privacy: 'public' },
+                                    { 'members.user': new mongoose.Types.ObjectId(res.locals.user._id) }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]);
+        }
+
         res.render('workspaces/list', {
             title: i18n.__('workspace_list_title') + ' - ' + i18n.__('app_name'),
             workspaces
