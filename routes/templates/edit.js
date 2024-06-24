@@ -9,13 +9,8 @@ const Information = require('../../models/information');
 router.get('/:id', async function(req, res, next) {
     try {
         const id = req.params.id;
-        let template;
-        
-        if (res.locals.user.permissions.manage_documents) {
-            template = await Template.findOne({_id: id});
-        } else {
-            template = await Template.findOne({ _id: id, deleted: false, owner: res.locals.user._id });
-        }
+        const queryString = res.locals.user.permissions.manage_documents ? {_id: id} : { _id: id, deleted: false, owner: res.locals.user._id };
+        const template = await Template.findOne(queryString);
         
         if (template) {
             const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
