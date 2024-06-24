@@ -267,7 +267,7 @@ function addFieldToForm(fieldStructure, fieldData) {
     
         const rootLabel = document.createElement('h5');
         const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
-        rootLabel.textContent = rootLabelText;
+        rootLabel.innerHTML = '<i class="bi bi-grip-vertical field-handle"></i>' +  rootLabelText;
         rootLabel.classList.add('card-title');
         fieldBody.appendChild(rootLabel);
         const hiddenId = document.createElement('input');
@@ -466,6 +466,7 @@ function getField(id, value) {
 const docForm = document.querySelector('#doc-form');
 if (docForm) {
     const sort_infos = new Sortable(docForm, { 
+        handle: '.field-handle',
         onSort: function (event) {
             const hiddenInputs = document.querySelectorAll('input[name="sort"]');
             hiddenInputs.forEach((input, index) => {
