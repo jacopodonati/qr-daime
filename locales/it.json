@@ -46,6 +46,7 @@
 	"info_content": "Contenuto",
 	"info_description": "descrizione",
 	"info_field_title": "titolo",
+	"info_html_safe": "HTML",
 	"info_no": "Informazione n.",
 	"info_title": "Nome",
 	"information_deleted": "informazione cancellata",
@@ -110,6 +111,7 @@
 	"navbar_workspace_add": "Crea un'area di lavoro",
 	"navbar_workspace_list": "Elenca le aree di lavoro",
 	"navbar_workspaces": "Aree di lavoro",
+	"no": "no",
 	"NO_FIELD_FOUND": "Nessun campo trovato",
 	"pick_field": "Scegli un'informazione da aggiungere",
 	"record_date_edit": "Data di modifica",
@@ -186,5 +188,6 @@
 	"workspace_privacy_checkbox": "Pubblico",
 	"workspace_title": "Nome dell'area di lavoro",
 	"workspace_title_placeholder": "Inserisci il nome dell'area di lavoro",
-	"workspace_view_title": "Area di lavoro"
+	"workspace_view_title": "Area di lavoro",
+	"yes": "sì"
 }

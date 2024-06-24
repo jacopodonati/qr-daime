@@ -12,7 +12,11 @@ const descriptionSchema = new mongoose.Schema({
 
 const fieldSchema = new mongoose.Schema({
     labels: [labelSchema],
-    descriptions: [descriptionSchema]
+    descriptions: [descriptionSchema],
+    htmlSafe: {
+        type: Boolean,
+        default: true
+    }
 });
 
 const informationSchema = new mongoose.Schema({

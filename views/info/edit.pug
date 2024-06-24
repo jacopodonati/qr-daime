@@ -163,7 +163,7 @@ block content
       checkboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
           const checkedStatus = this.checked;
-          const otherCheckboxes = document.querySelectorAll(`[id*=${this.id.substring(3)}]`);
+          const otherCheckboxes = document.querySelectorAll(`[name*="${this.name.substring(3)}"]`);
           otherCheckboxes.forEach(function(otherCheckbox) {
             otherCheckbox.checked = checkedStatus;
           });
@@ -206,29 +206,32 @@ block content
           const fieldIndex = dataToSubmit.fields.findIndex(function(field) {
             return field._id === fieldId;
           });
-          const label = field.querySelector('.field-label');
-          const description = field.querySelector('.field-description');
+          const label = field.querySelector('.field-label').value;
+          const description = field.querySelector('.field-description').value;
+          const htmlSafe = field.querySelector('.field-html').checked;
 
           if (fieldIndex !== -1) {
             dataToSubmit.fields[fieldIndex].labels.push({
               locale: panelLocale,
-              text: label.value
+              text: label
             });
             dataToSubmit.fields[fieldIndex].descriptions.push({
               locale: panelLocale,
-              text: description.value
+              text: description
             });
+            dataToSubmit.fields[fieldIndex].htmlSafe = htmlSafe;
           } else {
             dataToSubmit.fields.push({
               _id: fieldId,
               labels: [{
                 locale: panelLocale,
-                text: label.value
+                text: label
               }],
               descriptions: [{
                 locale: panelLocale,
-                text: description.value
-              }]
+                text: description
+              }],
+              htmlSafe: htmlSafe
             });
           }
         });

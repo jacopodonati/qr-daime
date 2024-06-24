@@ -44,6 +44,9 @@
 	"homepage_welcome": "Bem-vindo ao QR Daime!",
 	"info_add_title": "Adicione uma nova informação",
 	"info_content": "Conteúdo",
+	"info_description": "descrição",
+	"info_field_title": "título",
+	"info_html_safe": "HTML",
 	"info_no": "Informação n°",
 	"info_title": "Nome",
 	"information_deleted": "informação excluída",
@@ -108,6 +111,7 @@
 	"navbar_workspace_add": "Adicionar uma área de trabalho",
 	"navbar_workspace_list": "Listar todas as áreas de trabalho",
 	"navbar_workspaces": "Áreas de trabalho",
+	"no": "não",
 	"NO_FIELD_FOUND": "Nenhum campo encontrado",
 	"pick_field": "Escolha uma informação para adicionar",
 	"record_date_edit": "Última edição",
@@ -182,5 +186,6 @@
 	"workspace_privacy_checkbox": "Público",
 	"workspace_title": "Título da área de trabalho",
 	"workspace_title_placeholder": "Insira o nome da área de trabalho",
-	"workspace_view_title": "Mostrar área de trabalho"
+	"workspace_view_title": "Mostrar área de trabalho",
+	"yes": "sim"
 }

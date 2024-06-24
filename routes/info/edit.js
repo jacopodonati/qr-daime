@@ -79,7 +79,7 @@ router.post('/:id', validateInformation, translateInformation, async (req, res) 
                 information.fields.push(newField);
             });
             information.fields.sort((a, b) => a.order - b.order);
-
+            
             let savedInformation = await information.save();
             return res.status(200).json({ savedInformation });
         } 

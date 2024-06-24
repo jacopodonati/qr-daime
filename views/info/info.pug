@@ -22,13 +22,16 @@ each loc in availableLocales
         tr
           th #{__("th_field_label")}
           th #{__("th_field_description")}
+          th #{__("info_html_safe")}
       tbody
         each field in information.fields
           - let field_label = field.labels.find(label => label.locale === loc.code);
           - let field_description = field.descriptions.find(description => description.locale === loc.code);
+          - let field_html = field.htmlSafe ? __("yes") : __("no")
           tr
             td #{field_label.text}
             td #{field_description.text}
+            td #{field_html}
 
 script.
   document.addEventListener('DOMContentLoaded', function() {

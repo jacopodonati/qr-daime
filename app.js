@@ -10,6 +10,7 @@ const db = require('./config/db');
 const i18n = require('./config/i18n');
 const flash = require('connect-flash');
 const multer = require('multer');
+const filters = require('./middleware/filters');
 
 const { getUserPermissions } = require('./config/permissions');
 const { passUserToRoutes } = require('./middleware/users');
@@ -97,6 +98,7 @@ app.use((req, res, next) => {
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.locals.filters = filters;
 
 app.use(logger('dev'));
 app.use(express.json());
