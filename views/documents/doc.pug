@@ -22,10 +22,15 @@ each loc in availableLocales
               - let field_title = field.labels.find(label => label.locale === loc.code);
               - let field_desc = field.descriptions.find(label => label.locale === loc.code);
               - let field_value = filters.sanitize(field.value)
+              - if (field.htmlSafe)
+                - field_value = field.value
               li.field
                 span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
                 | : 
-                span.field-value(data-lang=`${loc.code}`) #{field_value}
+                - if (field.htmlSafe)
+                  span.field-value(data-lang=`${loc.code}`) !{field_value}
+                - else 
+                  span.field-value(data-lang=`${loc.code}`) #{filters.sanitize(field.value)}
 
     hr.mt-5.mb-5
 
@@ -119,7 +124,7 @@ script.
         });
       });
       console.log(`Lunghezza dati per ${locale}: ${textualRecord.length}`);
-      
+
       new QRious({
         element: qrRecord,
         size: 300,
