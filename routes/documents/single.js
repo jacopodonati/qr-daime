@@ -22,11 +22,6 @@ router.get('/:id', async (req, res) => {
             qrLabels.push({code, label: 'record_date_issue', value: i18n.__({ phrase: 'record_date_issue', locale: code})});
             qrLabels.push({code, label: 'record_date_edit', value: i18n.__({ phrase: 'record_date_edit', locale: code})});
             qrLabels.push({code, label: 'record_information', value: i18n.__({ phrase: 'record_information', locale: code})});
-            
-            // !{doc
-            //     "record_date_issue")}:
-            //     "record_date_edit")}: 
-            //     "record_information")}})})
         });
 
 
