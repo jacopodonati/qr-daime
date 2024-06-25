@@ -1,161 +1,130 @@
-p#dateOfIssue.text-center.fst-italic.mb-5 #{document.dateOfIssue}
-
 script.
-  function getLabel(id) {
-    for (const field of document.fields) {
-      for (const info of field.fields) {
-        if (info._id === id) {
-          return info.label;
-        }
-      }
-    }
-    return '';
-  }
+  console.log(!{JSON.stringify(document)})
 
-.container-sm
-  each info in document.information
-    if (user.permissions.manage_documents || info.public)
-      - let info_id = 'id-' + info._id
-      - let classes = info.public ? '' : 'bg-secondary-subtle'
-      div.info(class=`${classes}`)
-        h4.info-title(id=info_id)
-        ul
-          each field in info.fields
-            - let field_id = 'id-' + field._id
-            li.field
-              span.field-title(id=field_id).field-id.fw-semibold #{field._id}
-              | : 
-              span.field-value !{field.value}
+ul#langSelector.nav.nav-tabs
+  each loc in availableLocales
+    li.nav-item
+      a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
 
-  hr.mt-5.mb-5
+each loc in availableLocales
+  container.localizedPanel.mt-3(data-lang=`${loc.code}`)
+    p.date-of-issue.text-center.fst-italic.mb-5(data-lang=`${loc.code}`) #{document.dateOfIssue}
 
-  #qr-url.text-center.fst-italic
-    canvas
-    p #{__("doc_view_qr_link_caption")}
+    each info in document.information
+      if (user.permissions.manage_documents || info.public)
+        - let classes = info.public ? '' : 'bg-secondary-subtle'
+        - let info_title = info.labels.find(label => label.locale === loc.code);
+        - let info_desc = info.descriptions.find(label => label.locale === loc.code);
+        div.info(class=`${classes}`)
+          h4.info-title(data-lang=`${loc.code}`, title=`${info_desc.text}`) #{info_title.text}
+          ul
+            each field in info.fields
+              - let field_title = field.labels.find(label => label.locale === loc.code);
+              - let field_desc = field.descriptions.find(label => label.locale === loc.code);
+              - let field_value = filters.sanitize(field.value)
+              li.field
+                span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
+                | : 
+                span.field-value(data-lang=`${loc.code}`) #{field_value}
 
-  hr.mt-5.mb-5
+    hr.mt-5.mb-5
 
-  #qr-record.text-center.fst-italic.mb-5
-    canvas
-    p #{__("doc_view_qr_document_caption")}
-  
-  p#docId.text-center #{__("document_no")} #{document.id}
+    .qr-url.text-center.fst-italic
+      canvas
+      p #{__({phrase: "doc_view_qr_link_caption", locale: loc.code})}
+
+    hr.mt-5.mb-5
+
+    .qr-record.text-center.fst-italic.mb-5(data-lang=`${loc.code}`)
+      canvas
+      p #{__({phrase: "doc_view_qr_document_caption", locale: loc.code})}
+    
+    p#docId.text-center #{__({phrase: "document_no", locale: loc.code})} #{document._id}
 
 script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js") 
 script.
-  const dateOfIssue = document.querySelector('#dateOfIssue');
-  const date = new Date(dateOfIssue.innerHTML);
-  const options = {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric'
-  };
-  const localized = date.toLocaleString(navigator.language, options);
-  dateOfIssue.innerHTML = localized;
+  document.addEventListener('DOMContentLoaded', function() {
+    const browserLocale = (navigator.language || navigator.userLanguage).substring(0, 2);
 
-  function getLabel(labels, locale) {
-    for (const label of labels) {
-      if (label.locale === locale) {
-        return label.text;
+    function changeLocaleFocus(locale) {
+      const langTabs = document.querySelectorAll('.lang-tab');
+      const oldActiveTab = document.querySelector('.active')
+      if (oldActiveTab) {
+        oldActiveTab.classList.remove('active');
       }
+      const newActiveTab = document.querySelector(`.lang-tab[data-lang*="${locale}"]`)
+      newActiveTab.classList.add('active');
+
+      const localizedPanels = document.querySelectorAll('.localizedPanel');
+      localizedPanels.forEach(function(localizedPanel) {
+        localizedPanel.classList.add('d-none');
+      });
+      const newActiveLocalizedPanel = document.querySelector(`.localizedPanel[data-lang*="${locale}"]`)
+      newActiveLocalizedPanel.classList.remove('d-none');
+      newActiveLocalizedPanel.classList.add('d-block');
     }
 
-    for (const label of labels) {
-      if (label.locale === 'en') {
-        return label.text;
-      }
-    }
-
-    return labels[0].text;
-  }
-
-  function setLabels(labels) {
-    const locale_complete = navigator.language || navigator.userLanguage;
-    const locale = locale_complete.substring(0, 2);
-
-    for (const block of labels) {
-      const infoId = 'id-' + block.id;
-      const h2Element = document.getElementById(infoId);
-
-      if (h2Element) {
-        const label = getLabel(block.labels, locale);
-
-        h2Element.innerText = label;
-      }
-
-      for (const field of block.fields) {
-        const fieldId = 'id-' + field.id;
-        const spanElement = document.getElementById(fieldId);
-
-        if (spanElement) {
-          const label = getLabel(field.labels, locale);
-
-          spanElement.innerText = label;
-        }
-      }
-    }
-  }
-
-  function fetchLabels(infoIds) {
-    return fetch('/info/list/labels', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ infoIds })
+    const langTabs = document.querySelectorAll('.lang-tab');
+    langTabs.forEach(function(langTab) {
+      langTab.addEventListener('click', function() {
+        changeLocaleFocus(this.dataset.lang)
+      })
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Errore durante il recupero delle label dei campi');
-      }
-    })
-    .catch(error => {
-      console.error('Errore:', error);
+
+    changeLocaleFocus(browserLocale);
+
+    const dates = document.querySelectorAll('.date-of-issue');
+    dates.forEach((date) => {
+      const locale = date.dataset.lang;
+      const plainDate = new Date(date.innerHTML);
+      const options = {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      };
+      const localized = plainDate.toLocaleString(locale, options);
+      date.innerHTML = localized;
     });
-  }
 
-  let doc =  !{JSON.stringify(document)};
-  let infoIds = [];
-  for (const info of doc.information) {
-    let fields = info.fields.map(info => info._id);
-    infoIds.push({ _id: info._id, fields });
-  }
-  fetchLabels(infoIds)
-    .then(labels => {
-      setLabels(labels);
-      function getInfo() {
-        const infos = document.querySelectorAll('.info');
-        let result = '';
-        infos.forEach((info) => {
-          result += `- ${info.querySelector('.info-title').textContent}\n`;
-          const fields = info.querySelectorAll('.field');
-          fields.forEach((field) => {
-            result += ` - ${field.textContent}\n`;
-          });
-        });
-        return result;
-      }
-
-      const qrUrl = new QRious({
-        element: document.querySelector('#qr-url canvas'),
+    const qrUrls = document.querySelectorAll('.qr-url canvas');
+    qrUrls.forEach((qrUrl) => {
+      new QRious({
+        element: qrUrl,
         size: 200,
         value: `${window.location.origin}${window.location.pathname}`
       });
+    })
 
-      let recordAsText = `!{__("record_no")} !{document.id}\n`;
-      recordAsText += `!{__("record_date_issue")}: !{document.dateOfIssue}\n`;
-      recordAsText += `!{__("record_date_edit")}: !{document.lastEdit}\n`;
-      recordAsText += `!{__("record_information")}:\n`;
-      recordAsText += getInfo();
+    const doc = !{JSON.stringify(document)};
+    const localizedLabels = !{JSON.stringify(qrLabels)};
+    const qrRecords = document.querySelectorAll('.qr-record canvas');
+    qrRecords.forEach((qrRecord) => {
+      const locale = qrRecord.parentElement.dataset.lang;
+      const record_no = localizedLabels.find(label => label.code === locale && label.label === 'record_no').value;
+      const record_date_issue = localizedLabels.find(label => label.code === locale && label.label === 'record_date_issue').value;
+      const record_date_edit = localizedLabels.find(label => label.code === locale && label.label === 'record_date_edit').value;
+      const record_information = localizedLabels.find(label => label.code === locale && label.label === 'record_information').value;
+      let textualRecord = `${record_no} ${doc.id}\n`;
+      textualRecord += `${record_date_issue}: !{document.dateOfIssue}\n`;
+      textualRecord += `${record_date_edit}: !{document.lastEdit}\n`;
+      textualRecord += `${record_information}:\n`;
+      doc.information.forEach((info) => {
+        const infoTitle = info.labels.find(label => label.locale === locale).text;
+        textualRecord += `- ${infoTitle}:\n`;
+        info.fields.forEach((field) => {
+          const fieldTitle = field.labels.find(label => label.locale === locale).text;
+          textualRecord += `  - ${fieldTitle}: ${field.value}\n`;
+        });
+      });
+      console.log(`Lunghezza dati per ${locale}: ${textualRecord.length}`);
       
-      const qrRecord = new QRious({
-        element: document.querySelector('#qr-record canvas'),
+      new QRious({
+        element: qrRecord,
         size: 300,
-        value: recordAsText
+        value: textualRecord
       });
     });
+  });
   
