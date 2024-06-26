@@ -56,17 +56,24 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                 a.nav-link(href="/workspace/list")
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_workspace_list")}
+        li.nav-item.dropdown.ms-auto
+            a.nav-link.dropdown-toggle.text-uppercase(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false")
+              i.bi.bi-translate
+            ul.dropdown-menu.dropdown-menu-end
+              each locale in locales.availableLocales 
+                li.dropdown-item 
+                  a.nav-link.lang-selector(href=`?lang=${locale.code}`, data-lang=`${locale.code}`) #{locale.name}
         - if (user.permissions.manage_users)
-          li.nav-item.dropdown.ms-auto
+          li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}
             ul.dropdown-menu.dropdown-menu-end
               li.dropdown-item 
                 a.nav-link(href="/manage/users/list") #{__("navbar_manage_users_list")}
         - if (user.role === 'loggedout')
-          li.nav-item.ms-auto
+          li.nav-item
             a.nav-link(href="/login") #{__("navbar_signin")}
         - else 
-          li.nav-item.dropdown.ms-auto
+          li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{user.email}
             ul.dropdown-menu.dropdown-menu-end
               li.dropdown-item 

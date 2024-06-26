@@ -15,6 +15,8 @@ const filters = require('./middleware/filters');
 const { getUserPermissions } = require('./config/permissions');
 const { passUserToRoutes } = require('./middleware/users');
 const { pageTitleLocalizationWorkaround } = require('./middleware/localization');
+const { setLangCookie } = require('./middleware/localization');
+const { passLocalesToRoutes } = require('./middleware/localization');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
@@ -65,9 +67,11 @@ app.use(session({
 app.use(i18n.init);
 app.use(flash());
 
-app.use(pageTitleLocalizationWorkaround);
+app.use(cookieParser());
 
-// app.use(passUserToRoutes);
+app.use(setLangCookie);
+app.use(passLocalesToRoutes);
+app.use(pageTitleLocalizationWorkaround);
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
@@ -104,7 +108,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(multer().none());
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use((req, res, next) => {
