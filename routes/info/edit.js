@@ -2,43 +2,38 @@ const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
 const i18n = require('i18n');
-const { MET } = require('bing-translate-api');
 const { validateInformation, translateInformation } = require('../../middleware/validation');
 
 router.use(express.json());
 
 router.get('/:id', async (req, res) => {
-    const localeCodes = i18n.getLocales();
-    let removeButtonLabels = {};
-    let placeholdersForLabels = {};
-    let placeholdersForDescriptions = {};
-    localeCodes.forEach(code => {
-        removeButtonLabels[code] = i18n.__({ phrase: 'INPUT_LBL_REMOVE', locale: code });
-        placeholdersForLabels[code] = i18n.__({ phrase: 'modal_new_field_title_placeholder', locale: code });
-        placeholdersForDescriptions[code] = i18n.__({ phrase: 'modal_new_field_description_placeholder', locale: code });
-    });
-
     try {
         const id = req.params.id;
+        const queryString = res.locals.user.permissions.manage_info ? { _id: id } : { _id: id, owner: res.locals.user._id, deleted: false };
+        const information = await Information.findOne(queryString);
 
-        let information;
-        if (res.locals.user.permissions.manage_info) {
-            information = await Information.findById(id);
+        if (information) {
+            const localeCodes = i18n.getLocales();
+            let removeButtonLabels = {};
+            let placeholdersForLabels = {};
+            let placeholdersForDescriptions = {};
+            localeCodes.forEach(code => {
+                removeButtonLabels[code] = i18n.__({ phrase: 'INPUT_LBL_REMOVE', locale: code });
+                placeholdersForLabels[code] = i18n.__({ phrase: 'modal_new_field_title_placeholder', locale: code });
+                placeholdersForDescriptions[code] = i18n.__({ phrase: 'modal_new_field_description_placeholder', locale: code });
+            });
+            
+            res.render('info/edit', {
+                title: i18n.__('edit_info_title') + ' ' + id + ' - ' + i18n.__('app_name'),
+                information,
+                removeButtonLabels,
+                placeholdersForLabels,
+                placeholdersForDescriptions
+            });
         } else {
-            information = await Information.findOne({ _id: id, deleted: false });
-        }
-
-        if (!information) {
             res.redirect('/');
         }
 
-        res.render('info/edit', {
-            title: i18n.__('edit_info_title') + ' ' + id + ' - ' + i18n.__('app_name'),
-            information,
-            removeButtonLabels,
-            placeholdersForLabels,
-            placeholdersForDescriptions
-        });
     } catch (error) {
         console.error('Errore nel recupero dell\'informazinoe dal database:', error);
         res.status(500).json({ error: 'Errore interno' });

@@ -23,6 +23,10 @@ const informationSchema = new mongoose.Schema({
     labels: [labelSchema],
     descriptions: [descriptionSchema],
     fields: [fieldSchema],
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     default: {
         type: Boolean,
         default: false

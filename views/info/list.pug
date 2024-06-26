@@ -33,9 +33,11 @@ block content
           td #{info.fields.map(field => field.labels.find(label => label.locale === locale).text).join(', ')}
           td
             .btn-group(role="group").float-end
-              a(href=`/info/view/${info._id}`).btn.btn-primary.btn-sm #{__("view_button")}
-              a(href=`/info/edit/${info._id}`).btn.btn-success.btn-sm #{__("edit_button")}
-              - if (user.permissions.delete && !info.deleted)
+              if (user.permissions.manage_info || (user.permissions.edit && (info.owner == user._id)))
+                a(href=`/info/edit/${info._id}`).btn.btn-success.btn-sm #{__("edit_button")}
+              if (user.permissions.read_public)
+                a(href=`/info/view/${info._id}`).btn.btn-primary.btn-sm #{__("view_button")}
+              if (!info.deleted && ((user.permissions.delete && (info.owner == user._id)) || user.permissions.manage_info))
                 a(href=`/info/delete/${info._id}`).btn.btn-danger.btn-sm #{__("delete_button")}
-              - else if (user.permissions.manage_documents && info.deleted)
+              if (info.deleted && user.permissions.manage_info)
                 a(href=`/info/restore/${info._id}`).btn.btn-warning.btn-sm #{__("restore_button")}

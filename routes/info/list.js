@@ -2,21 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
 const i18n = require('i18n');
-const acceptLanguageParser = require('accept-language-parser');
 
 router.get('/', async (req, res) => {
     try {
         const queryString = res.locals.user.permissions.manage_documents ? {} : { deleted: false };
-        const info = await Information.find(queryString);
-
-        const acceptLanguage = req.headers['accept-language'];
-        const languages = acceptLanguageParser.parse(acceptLanguage);
-        const locale = languages[0].code;
+        const information = await Information.find(queryString);
         
         res.render('info/list', {
             title: i18n.__('list_info') + ' - ' + i18n.__('app_name'),
-            information: info,
-            locale: locale
+            information
         });
 
     } catch (error) {
