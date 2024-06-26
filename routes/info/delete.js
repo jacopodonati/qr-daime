@@ -23,12 +23,14 @@ router.get('/:id', async (req, res) => {
                     availableLocales,
                 });
             } else {
-                res.redirect('/list');
+                res.redirect('/info/list');
             }
         } catch (error) {
             console.error('Error querying database:', error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
+    } else {
+        res.redirect('/info/list');
     }
 });
 
