@@ -1,9 +1,9 @@
 ul#langSelector.nav.nav-tabs
-  each loc in availableLocales
+  each loc in locales.availableLocales
     li.nav-item
       a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
 
-each loc in availableLocales
+each loc in locales.availableLocales
   container.localizedPanel.mt-3(data-lang=`${loc.code}`)
     p.date-of-issue.text-center.fst-italic.mb-5(data-lang=`${loc.code}`) #{document.dateOfIssue}
 
@@ -46,8 +46,6 @@ each loc in availableLocales
 script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js") 
 script.
   document.addEventListener('DOMContentLoaded', function() {
-    const browserLocale = (navigator.language || navigator.userLanguage).substring(0, 2);
-
     function changeLocaleFocus(locale) {
       const langTabs = document.querySelectorAll('.lang-tab');
       const oldActiveTab = document.querySelector('.active')
@@ -73,7 +71,7 @@ script.
       })
     })
 
-    changeLocaleFocus(browserLocale);
+    changeLocaleFocus(`!{locale}`);
 
     const dates = document.querySelectorAll('.date-of-issue');
     dates.forEach((date) => {

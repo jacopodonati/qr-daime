@@ -2,25 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
 const i18n = require('i18n');
-const iso6391 = require('iso-639-1');
 
 router.get('/:id', async (req, res) => {
-    if (res.locals.user.permissions.manage_info) {
-        const locale_codes = i18n.getLocales();
-        let availableLocales = []
-        locale_codes.forEach(code => {
-            const name = iso6391.getNativeName(code);
-            availableLocales.push({ code, name })
-        });
-        
+    if (res.locals.user.permissions.manage_info) {        
         try {
             const information = await Information.findById(req.params.id);
             
             if (information) {
                 res.render('info/delete', {
                     title: i18n.__("info_no") + ': ' + information._id + ' - ' + i18n.__('app_name'),
-                    information: information,
-                    availableLocales,
+                    information
                 });
             } else {
                 res.redirect('/info/list');

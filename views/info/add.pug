@@ -4,12 +4,12 @@ block content
   h1.mb-5 #{__("info_add_title")}
 
   ul#langSelector.nav.nav-tabs
-    each loc in availableLocales
+    each loc in locales.availableLocales
       li.nav-item
         a.lang-tab.nav-link(data-lang=`${loc.code}`) #{loc.name}
 
   form#infoForm
-    each loc in availableLocales
+    each loc in locales.availableLocales
       include ../partials/panel_info_edit.pug
     hr
     include ../partials/error_banner.pug
@@ -46,7 +46,7 @@ block content
         })
       })
 
-      changeLocaleFocus("#{currentLocale}");
+      changeLocaleFocus(`!{locale}`);
 
       function sortListByIds(list, itemIds) {
         const listLocale = list.dataset.lang;

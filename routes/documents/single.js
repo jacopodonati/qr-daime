@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
 const i18n = require('i18n');
-const iso6391 = require('iso-639-1');
 const { replaceUrlWithImg } = require('../../middleware/validation');
 
 router.get('/', async (req, res) => {
@@ -13,11 +12,8 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const locale_codes = i18n.getLocales();
-        let availableLocales = []
         let qrLabels = []
         locale_codes.forEach(code => {
-            const name = iso6391.getNativeName(code);
-            availableLocales.push({ code, name })
             qrLabels.push({code, label: 'record_no', value: i18n.__({ phrase: 'record_no', locale: code})});
             qrLabels.push({code, label: 'record_date_issue', value: i18n.__({ phrase: 'record_date_issue', locale: code})});
             qrLabels.push({code, label: 'record_date_edit', value: i18n.__({ phrase: 'record_date_edit', locale: code})});
@@ -59,7 +55,6 @@ router.get('/:id', async (req, res) => {
             res.render('documents/single', {
                 title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
                 document,
-                availableLocales,
                 qrLabels
             });
         } else {

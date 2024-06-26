@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
 const i18n = require('i18n');
-const iso6391 = require('iso-639-1');
 
 router.get('/id/:id', async (req, res) => {
     try {
@@ -15,15 +14,8 @@ router.get('/id/:id', async (req, res) => {
 });
 
 router.get('/view/:id', async (req, res) => {
-    const id = req.params.id;
-    const locale_codes = i18n.getLocales();
-    let availableLocales = []
-    locale_codes.forEach(code => {
-        const name = iso6391.getNativeName(code);
-        availableLocales.push({ code, name })
-    });
-
     try {
+        const id = req.params.id;
         let info;
         if (res.locals.user.permissions.manage_info) {
             info = await Information.findById(id);
@@ -34,8 +26,7 @@ router.get('/view/:id', async (req, res) => {
         if (info) {
             res.render('info/single', {
                 title: i18n.__("info_no") + ' ' + info._id + ' - ' + i18n.__('app_name'),
-                information: info,
-                availableLocales
+                information: info
             });
         } else {
             res.redirect('/info/list');
