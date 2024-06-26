@@ -17,10 +17,10 @@ router.get('/:id', async (req, res) => {
             $or: [
                 {
                     members: {
-                        user: res.locals.user._id,
-                        role: 'workspace_admin'
-                    },
-                    privacy: { $ne: 'personal' }
+                        $elemMatch: {
+                            user: res.locals.user._id
+                        }
+                    }
                 },
                 {
                     privacy: 'public'
