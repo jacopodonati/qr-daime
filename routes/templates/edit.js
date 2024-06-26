@@ -16,7 +16,7 @@ router.get('/:id', async function(req, res, next) {
             const workspaces = await Workspace.find({ 'members.user': res.locals.user._id });
             const fields = await Information.find({ deleted: false });
             res.render('templates/edit', {
-                title: i18n.__('template_edit_title') + ' - ' + i18n.__('app_name'),
+                title: 'template_edit_title',
                 template,
                 workspaces,
                 fields

@@ -15,7 +15,7 @@ router.get('/', async function(req, res, next) {
         const fields = await Information.find({ deleted: false });
 
         res.render('templates/add', {
-            title: i18n.__('template_add_title') + ' - ' + i18n.__('app_name'),
+            title: 'template_add_title',
             workspaces,
             fields
         });

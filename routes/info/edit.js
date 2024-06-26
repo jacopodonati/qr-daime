@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
             });
             
             res.render('info/edit', {
-                title: i18n.__('edit_info_title') + ' ' + id + ' - ' + i18n.__('app_name'),
+                title: 'edit_info_title',
                 information,
                 removeButtonLabels,
                 placeholdersForLabels,

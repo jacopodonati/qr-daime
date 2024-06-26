@@ -7,7 +7,7 @@ const Workspace = require('../../models/workspace');
 
 router.get('/', (req, res) => {
     res.render('users/login', {
-        title: i18n.__('login_title') + ' - ' + i18n.__('app_name')
+        title: 'login_title'
     });
 });
 

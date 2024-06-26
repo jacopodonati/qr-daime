@@ -12,7 +12,7 @@ router.get('/:id', async (req, res) => {
 
         if (document) {
             res.render('documents/delete', {
-                title: i18n.__("document") + ': ' + document._id + ' - ' + i18n.__('app_name'),
+                title: 'document',
                 document
             });
         } else {

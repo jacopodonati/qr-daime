@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const information = await Information.find(queryString);
         
         res.render('info/list', {
-            title: i18n.__('list_info') + ' - ' + i18n.__('app_name'),
+            title: 'list_info',
             information
         });
 

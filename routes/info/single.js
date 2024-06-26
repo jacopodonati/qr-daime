@@ -25,7 +25,7 @@ router.get('/view/:id', async (req, res) => {
 
         if (info) {
             res.render('info/single', {
-                title: i18n.__("info_no") + ' ' + info._id + ' - ' + i18n.__('app_name'),
+                title: 'info',
                 information: info
             });
         } else {

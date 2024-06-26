@@ -14,7 +14,6 @@ const filters = require('./middleware/filters');
 
 const { getUserPermissions } = require('./config/permissions');
 const { passUserToRoutes } = require('./middleware/users');
-const { pageTitleLocalizationWorkaround } = require('./middleware/localization');
 const { setLangCookie } = require('./middleware/localization');
 const { passLocalesToRoutes } = require('./middleware/localization');
 
@@ -71,7 +70,6 @@ app.use(cookieParser());
 
 app.use(setLangCookie);
 app.use(passLocalesToRoutes);
-app.use(pageTitleLocalizationWorkaround);
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'development') {

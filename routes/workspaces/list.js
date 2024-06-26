@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
         }
 
         res.render('workspaces/list', {
-            title: i18n.__('workspace_list_title') + ' - ' + i18n.__('app_name'),
+            title: 'workspace_list_title',
             workspaces
         });
 

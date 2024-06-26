@@ -4,13 +4,11 @@ const i18n = require('i18n');
 const iso6391 = require('iso-639-1');
 
 function setLangCookie(req, res, next) {
-    if (req.method === 'GET') {
-        if (req.query.lang) {
-            res.cookie('lang', req.query.lang, { maxAge: 900000, httpOnly: true });
-            res.setLocale(req.query.lang);
-        } else if (req.cookies.lang) {
-            res.setLocale(req.cookies.lang);
-        }
+    if (req.query.lang) {
+        res.cookie('lang', req.query.lang, { maxAge: 900000, httpOnly: true });
+        res.setLocale(req.query.lang);
+    } else if (req.cookies.lang) {
+        res.setLocale(req.cookies.lang);
     }
     next();
 }
@@ -38,21 +36,7 @@ async function translateText(text, sourceLanguage, targetLanguage) {
     }
 }
 
-function pageTitleLocalizationWorkaround(req, res, next) {
-    if (req.method === 'GET') {
-        const acceptLanguage = req.headers['accept-language'];
-        const languages = acceptLanguageParser.parse(acceptLanguage);
-        const primaryLanguage = languages[0].code;
-        
-        if (primaryLanguage) {
-            i18n.setLocale(primaryLanguage);
-        }
-    }
-    next();
-}
-
 module.exports = {
-    pageTitleLocalizationWorkaround,
     passLocalesToRoutes,
     setLangCookie,
     translateText

@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
         
         if (information) {
             res.render('info/delete', {
-                title: i18n.__("info_no") + ': ' + information._id + ' - ' + i18n.__('app_name'),
+                title: 'info',
                 information
             });
         } else {

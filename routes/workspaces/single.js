@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
                 });
 
             res.render('workspaces/single', {
-                title: i18n.__("workspace_view_title") + ': ' + workspace.name + ' - ' + i18n.__('app_name'),
+                title: 'workspace_view_title',
                 workspace,
                 documents
             });

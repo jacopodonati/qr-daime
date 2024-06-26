@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
             await template.populate('info owner workspace');
 
             res.render('templates/single', {
-                title: i18n.__("template_view_title") + ': ' + template.title + ' - ' + i18n.__('app_name'),
+                title: 'template_view_title',
                 template
             });
         } else {

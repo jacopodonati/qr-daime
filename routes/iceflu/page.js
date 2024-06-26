@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const documents = await Document.find(queryString);
         
         res.render('iceflu/page', {
-            title: 'ICEFLU Homepage',
+            title: 'iceflu_homepage',
             fields: {
               presentation: 'A ICEFLU PRESENTATION',
               iceflu_links: [

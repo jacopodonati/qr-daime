@@ -20,7 +20,7 @@ router.get('/', async function(req, res, next) {
 
     try {
         res.render('info/add', {
-            title: i18n.__('info_add_title') + ' - ' + i18n.__('app_name'),
+            title: 'info_add_title',
             removeButtonLabels,
             placeholdersForLabels,
             placeholdersForDescriptions

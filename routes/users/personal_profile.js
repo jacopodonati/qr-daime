@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         if (ownProfile) {
             await ownProfile.populate('workspaces');
             res.render('users/personal_profile', {
-                title: i18n.__('user_profile_title') + ' - ' + i18n.__('app_name'),
+                title: 'user_profile_title',
                 ownProfile
             });
         } else {

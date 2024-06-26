@@ -21,7 +21,7 @@ router.get('/', async function(req, res, next) {
             const templates = await Template.find({ 'deleted': false });
             
             res.render('documents/select_template', {
-                title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
+                title: 'add_doc_title',
                 templates
             });
         } catch (error) {
@@ -39,7 +39,7 @@ router.get('/', async function(req, res, next) {
             }
 
             res.render('documents/add', {
-                title: i18n.__('add_doc_title') + ' - ' + i18n.__('app_name'),
+                title: 'add_doc_title',
                 locale: req.getLocale(),
                 fallbackLocale: i18n.getLocale(),
                 fields,

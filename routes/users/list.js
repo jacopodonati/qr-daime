@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
             const users = await User.find({});
             
             res.render('users/list', {
-                title: i18n.__('user_list_title') + ' - ' + i18n.__('app_name'),
+                title: 'user_list_title',
                 users, 
                 roles: getRoles()
             });

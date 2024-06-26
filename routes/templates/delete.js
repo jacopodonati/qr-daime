@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
             await template.populate('info owner workspace');
 
             res.render('templates/delete', {
-                title: i18n.__("template_view_title") + ': ' + template.name + ' - ' + i18n.__('app_name'),
+                title: 'template_view_title',
                 template
             });
         } else {

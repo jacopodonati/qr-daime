@@ -76,7 +76,7 @@ router.get('/', async (req, res) => {
         }
 
         res.render('templates/list', {
-            title: i18n.__('template_list_title') + ' - ' + i18n.__('app_name'),
+            title: 'template_list_title',
             templates
         });
 

@@ -54,7 +54,7 @@ router.get('/:id', async (req, res) => {
                 select: 'email'
             });
             res.render('workspaces/edit', {
-                title: i18n.__('edit_workspace_title') + ' ' + id + ' - ' + i18n.__('app_name'),
+                title: 'edit_workspace_title',
                 workspace,
                 roles: await getRoles()
             });

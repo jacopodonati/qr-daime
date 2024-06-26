@@ -9,7 +9,7 @@ router.get('/', async function(req, res, next) {
         return res.status(403).send('Operazione non consentita');
     }
     res.render('workspaces/add', {
-        title: i18n.__('add_workspace_title') + ' - ' + i18n.__('app_name')
+        title: 'add_workspace_title'
     });
 });
 

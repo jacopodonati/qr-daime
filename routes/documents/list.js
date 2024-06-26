@@ -86,9 +86,10 @@ router.get('/', async (req, res) => {
                 }
             ]);
         }
-        
+        i18n.setLocale(res.locals.locale)
+        console.log(res.locals.locale, i18n.getLocale())
         res.render('documents/list', {
-            title: i18n.__('listpage_title') + ' - ' + i18n.__('app_name'),
+            title: 'listpage_title',
             documents
         });
 
