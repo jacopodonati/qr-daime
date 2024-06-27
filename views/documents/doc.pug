@@ -41,7 +41,7 @@ each loc in locales.availableLocales
       canvas
       p #{__({phrase: "doc_view_qr_document_caption", locale: loc.code})}
     
-    p#docId.text-center #{__({phrase: "document_no", locale: loc.code})} #{document._id}
+    p#docId.text-center #{__({phrase: "record_no", locale: loc.code})} #{document._id}
 
 script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js") 
 script.
