@@ -58,6 +58,8 @@
 	"information_required": "Information required",
 	"INPUT_LBL_PRIVATE": "Private",
 	"INPUT_LBL_PUBLIC": "Public",
+	"INPUT_LBL_RADIO_FALSE": "false",
+	"INPUT_LBL_RADIO_TRUE": "true",
 	"INPUT_LBL_REMOVE": "Remove",
 	"language_dropdown": "Select a language",
 	"list_docs": "List all documents",

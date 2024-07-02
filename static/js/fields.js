@@ -287,19 +287,67 @@ function addFieldToForm(fieldStructure, fieldData) {
             const fieldLabel = document.createElement('label');
             fieldLabel.classList.add('form-label', 'col-2');
             fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
-            let fieldInputElement = 'input';
-            if (field.type === 'rich') {
-                fieldInputElement = 'textarea';
-            }
-            const fieldInput = document.createElement(fieldInputElement);
-            fieldInput.type = 'text';
-            fieldInput.name = field._id;
-            fieldInput.placeholder = field.descriptions.find(description => description.locale === locale).text;
-            fieldInput.classList.add('col-form-control', 'col-10', 'rich-text-area');
-    
-            if (fieldData !== undefined) {
-                let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
-                fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
+            const singleInputFieldTypes = ['text', 'rich'];
+            let fieldInput;
+            if (singleInputFieldTypes.includes(field.type)) {
+                let fieldInputElement = 'input';
+                if (field.type === 'rich') {
+                    fieldInputElement = 'textarea';
+                }
+                fieldInput = document.createElement(fieldInputElement);
+                fieldInput.type = 'text';
+                fieldInput.name = field._id;
+                fieldInput.placeholder = field.descriptions.find(description => description.locale === locale).text;
+                fieldInput.classList.add('col-form-control', 'col-10', 'rich-text-area');
+                
+                if (fieldData !== undefined) {
+                    let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
+                    fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
+                }
+            } else {
+                if (field.type === 'bool') {
+                    fieldInput = document.createElement('div');
+                    fieldInput.classList.add('col-10');
+                    const fieldRadioTrueWrapper = document.createElement('div');
+                    fieldRadioTrueWrapper.classList.add('form-check', 'form-check-inline');
+                    const fieldRadioTrue = document.createElement('input');
+                    fieldRadioTrue.classList.add('form-check-input');
+                    fieldRadioTrue.type = 'radio';
+                    fieldRadioTrue.name = field._id;
+                    fieldRadioTrue.id = `true-${field._id}`;
+                    fieldRadioTrue.value = true;
+                    const fieldRadioTrueLabel = document.createElement('label');
+                    fieldRadioTrueLabel.classList.add('form-check-label');
+                    fieldRadioTrueLabel.for = fieldRadioTrue.id;
+                    fieldRadioTrueLabel.textContent = 'INPUT_LBL_RADIO_TRUE';
+                    const fieldRadioFalseWrapper = document.createElement('div');
+                    fieldRadioFalseWrapper.classList.add('form-check', 'form-check-inline');
+                    const fieldRadioFalse = document.createElement('input');
+                    fieldRadioFalse.classList.add('form-check-input');
+                    fieldRadioFalse.type = 'radio';
+                    fieldRadioFalse.name = field._id;
+                    fieldRadioFalse.id = `false-${field._id}`;
+                    fieldRadioFalse.value = false;
+                    const fieldRadioFalseLabel = document.createElement('label');
+                    fieldRadioFalseLabel.classList.add('form-check-label');
+                    fieldRadioFalseLabel.for = fieldRadioTrue.id;
+                    fieldRadioFalseLabel.textContent = 'INPUT_LBL_RADIO_FALSE';
+                    fieldRadioTrueWrapper.appendChild(fieldRadioTrue);
+                    fieldRadioTrueWrapper.appendChild(fieldRadioTrueLabel);
+                    fieldRadioFalseWrapper.appendChild(fieldRadioFalse);
+                    fieldRadioFalseWrapper.appendChild(fieldRadioFalseLabel);
+                    fieldInput.appendChild(fieldRadioTrueWrapper);
+                    fieldInput.appendChild(fieldRadioFalseWrapper);
+
+                    if (fieldData !== undefined) {
+                        let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
+                        if (fieldInDoc.value === 'true') {
+                            fieldRadioTrue.checked = true;
+                        } else {
+                            fieldRadioFalse.checked = true;
+                        }
+                    }
+                }
             }
     
             fieldDiv.appendChild(fieldLabel);

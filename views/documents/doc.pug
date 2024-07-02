@@ -18,16 +18,15 @@ each loc in locales.availableLocales
             each field in info.fields
               - let field_title = field.labels.find(label => label.locale === loc.code);
               - let field_desc = field.descriptions.find(label => label.locale === loc.code);
-              - let field_value = filters.sanitize(field.value)
-              - if (field.htmlSafe)
-                - field_value = field.value
+              - let field_value = field.value
+              - if (field.type == 'bool')
+                - field_value = __('INPUT_LBL_RADIO_' + field.value.toUpperCase())
+              - if (!field.htmlSafe)
+                - field_value = filters.sanitize(field.value)
               li.field
                 span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
                 | : 
-                - if (field.htmlSafe)
-                  span.field-value(data-lang=`${loc.code}`) !{field_value}
-                - else 
-                  span.field-value(data-lang=`${loc.code}`) #{filters.sanitize(field.value)}
+                span.field-value(data-lang=`${loc.code}`) !{field_value}
 
     hr.mt-5.mb-5
 

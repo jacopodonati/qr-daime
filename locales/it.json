@@ -58,6 +58,8 @@
 	"information_required": "Informazione richiesta",
 	"INPUT_LBL_PRIVATE": "Privato",
 	"INPUT_LBL_PUBLIC": "Pubblico",
+	"INPUT_LBL_RADIO_FALSE": "falso",
+	"INPUT_LBL_RADIO_TRUE": "vero",
 	"INPUT_LBL_REMOVE": "Rimuovi",
 	"language_dropdown": "Seleziona una lingua",
 	"list_docs": "Elenca tutti i record",
