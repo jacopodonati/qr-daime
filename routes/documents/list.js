@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Document = require('../../models/document');
 const User = require('../../models/user');
-const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     try {
@@ -86,8 +85,7 @@ router.get('/', async (req, res) => {
                 }
             ]);
         }
-        i18n.setLocale(res.locals.locale)
-        console.log(res.locals.locale, i18n.getLocale())
+        
         res.render('documents/list', {
             title: 'listpage_title',
             documents
