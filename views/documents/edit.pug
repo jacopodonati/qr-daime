@@ -58,8 +58,13 @@ block content
         } else if (key === 'workspace') {
           continue;
         } else {
+          let elementValue = value;
+          const element = document.querySelector(`[name="${key}"]`);
+          if (element.tagName.toLowerCase() === 'textarea') {
+            elementValue = tinymce.activeEditor.getContent(`[name="${key}"]`);
+          }
           const lastObjIndex = formDataObj['fields'].length - 1;
-          formDataObj['fields'][lastObjIndex].fields.push({ _id: key, value: value });
+          formDataObj['fields'][lastObjIndex].fields.push({ _id: key, value: elementValue });
         }
       }
 

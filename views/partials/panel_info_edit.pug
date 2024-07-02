@@ -28,9 +28,10 @@ container.localizedPanel.mt-3(data-lang=`${loc.code}`)
     thead 
       tr 
         th
-        th #{__({ phrase: "info_field_title", locale: loc.code })}
-        th #{__({ phrase: "info_description", locale: loc.code })}
-        th #{__({ phrase: "info_html_safe", locale: loc.code })}
+        th #{__({ phrase: "th_field_label", locale: loc.code })}
+        th #{__({ phrase: "th_field_description", locale: loc.code })}
+        th #{__({ phrase: "th_field_type", locale: loc.code })}
+        th #{__({ phrase: "th_field_html_safe", locale: loc.code })}
         th
     tbody
       - if (information)
@@ -41,14 +42,21 @@ container.localizedPanel.mt-3(data-lang=`${loc.code}`)
             td.text-center
               i.bi.bi-grip-vertical.field-handle
             td
-              input.form-control.form-control-sm.field-label(type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`, placeholder=`${__({ phrase: "modal_new_field_title_placeholder", locale: loc.code })}`)
+              input.form-control.form-control-sm.field-label(data-id=`${field._id}`, type="text", name=`${loc.code}-${field._id}`, value=`${field_label.text}`, placeholder=`${__({ phrase: "modal_new_field_title_placeholder", locale: loc.code })}`)
             td
-              input.form-control.form-control-sm.field-description(type="text", name=`${loc.code}-${field._id}-field-description`, value=`${field_description.text}`, placeholder=`${__({ phrase: "modal_new_field_description_placeholder", locale: loc.code })}`)
+              input.form-control.form-control-sm.field-description(data-id=`${field._id}`, type="text", name=`${loc.code}-${field._id}-field-description`, value=`${field_description.text}`, placeholder=`${__({ phrase: "modal_new_field_description_placeholder", locale: loc.code })}`)
+            td
+              select.form-select.form-select-sm.field-type(data-id=`${field._id}`, name=`${loc.code}-${field._id}-field-type`)
+                each type in fieldTypes
+                  if type == field.type
+                    option(value=`${type}`, selected)= __({ phrase: "field_type_" + type, locale: loc.code })
+                  else
+                    option(value=`${type}`)= __({ phrase: "field_type_" + type, locale: loc.code })
             td
               if field.htmlSafe
-                input.form-check-input.field-html(type="checkbox", name=`${loc.code}-${field._id}-field-html`, checked)
+                input.form-check-input.field-html(data-id=`${field._id}`, type="checkbox", name=`${loc.code}-${field._id}-field-html`, checked)
               else
-                input.form-check-input.field-html(type="checkbox", name=`${loc.code}-${field._id}-field-html`)
+                input.form-check-input.field-html(data-id=`${field._id}`, type="checkbox", name=`${loc.code}-${field._id}-field-html`)
             td.text-center
               span.btn.btn-danger.btn-sm.remove-button #{__({ phrase: "INPUT_LBL_REMOVE", locale: loc.code })}
 

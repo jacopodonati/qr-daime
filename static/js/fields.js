@@ -287,11 +287,15 @@ function addFieldToForm(fieldStructure, fieldData) {
             const fieldLabel = document.createElement('label');
             fieldLabel.classList.add('form-label', 'col-2');
             fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
-            const fieldInput = document.createElement('input');
+            let fieldInputElement = 'input';
+            if (field.type === 'rich') {
+                fieldInputElement = 'textarea';
+            }
+            const fieldInput = document.createElement(fieldInputElement);
             fieldInput.type = 'text';
             fieldInput.name = field._id;
             fieldInput.placeholder = field.descriptions.find(description => description.locale === locale).text;
-            fieldInput.classList.add('col-form-control', 'col-10');
+            fieldInput.classList.add('col-form-control', 'col-10', 'rich-text-area');
     
             if (fieldData !== undefined) {
                 let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
@@ -301,6 +305,11 @@ function addFieldToForm(fieldStructure, fieldData) {
             fieldDiv.appendChild(fieldLabel);
             fieldDiv.appendChild(fieldInput);
             fieldBody.appendChild(fieldDiv);
+
+            if (field.type === 'rich') {
+                const newConfig = Object.assign({}, tinyMCEConfig, { target: fieldInput });
+                tinymce.init(newConfig);
+            }
         });
     
         const footer = document.createElement('div');

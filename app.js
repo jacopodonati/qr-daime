@@ -106,27 +106,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(multer().none());
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use((req, res, next) => {
-//     if (process.env.NODE_ENV === 'development') {
-//         req.session.user = {
-//             id: '123456',
-//             email: 'test@example.com',
-//             role: 'admin',
-//             permissions: getUserPermissions('admin')
-//         };
-//     }
-// 
-//     if (!req.session.user) {
-//         req.session.user = {
-//             role: 'loggedout',
-//             permissions: getUserPermissions('loggedout')
-//         };
-//     }
-// 
-//     next();
-// });
 
 app.use('/static', express.static('static'));
 

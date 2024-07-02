@@ -96,6 +96,21 @@ block content
         });
       }
 
+      function syncHtmlCheckbox(item) {
+        const checkedStatus = item.checked;
+        const otherCheckboxes = document.querySelectorAll(`[name*="${item.dataset.id}"]`);
+        otherCheckboxes.forEach((otherCheckbox) => {
+          otherCheckbox.checked = checkedStatus;
+        }); 
+      }
+
+      function syncTypeSelect(item) {
+        const otherTypeSelects = document.querySelectorAll(`.field-type[data-id*="${item.dataset.id}"]`);
+        otherTypeSelects.forEach((otherTypeSelect) => {
+          otherTypeSelect.value = item.value;
+        })
+      }
+
       let removeButtons = document.querySelectorAll('.remove-button');
       removeButtons.forEach(function(button) {
         button.addEventListener('click', function() {
@@ -127,6 +142,7 @@ block content
             labelInput.classList.add('form-control', 'form-control-sm', 'field-label');
             labelInput.type = 'text';
             labelInput.name = newItemId + '-label';
+            labelInput.dataset.id = newItemId.substring(3);
             labelInput.placeholder = placeholdersForLabels[currentLocale];
             labelCell.appendChild(labelInput);
 
@@ -135,8 +151,39 @@ block content
             descriptionInput.classList.add('form-control', 'form-control-sm', 'field-description');
             descriptionInput.type = 'text';
             descriptionInput.name = newItemId + '-field-description';
+            descriptionInput.dataset.id = newItemId.substring(3);
             descriptionInput.placeholder = placeholdersForDescriptions[currentLocale];
             descriptionCell.appendChild(descriptionInput);
+
+            const typeCell = document.createElement('td');
+            const typeInput = document.createElement('select');
+            typeInput.classList.add('form-select', 'form-select-sm', 'field-type');
+            typeInput.name = newItemId + '-field-type';
+            typeInput.dataset.id = newItemId.substring(3);
+            const fieldTypes = JSON.parse(`!{JSON.stringify(fieldTypes)}`);
+            const fieldTypeLocalizations = JSON.parse(`!{JSON.stringify(fieldTypeLocalizations)}`);
+            fieldTypes.forEach((fieldType) => {
+              const typeOption = document.createElement('option');
+              typeOption.value = fieldType;
+              typeOption.textContent = fieldTypeLocalizations[currentLocale][fieldType];
+              typeInput.appendChild(typeOption);
+            });
+            typeInput.addEventListener('change', function() {
+              syncTypeSelect(typeInput);
+            });
+            typeCell.appendChild(typeInput);
+
+            const htmlCell = document.createElement('td');
+            const htmlInput = document.createElement('input');
+            htmlInput.classList.add('form-check-input', 'field-html');
+            htmlInput.type = 'checkbox';
+            htmlInput.name = `${newItemId}-field-html`;
+            htmlInput.dataset.id = newItemId.substring(3);
+            htmlInput.checked = 'checked';
+            htmlInput.addEventListener('change', function() {
+              syncHtmlCheckbox(htmlInput);
+            });
+            htmlCell.appendChild(htmlInput);
 
             const buttonCell = document.createElement('td');
             buttonCell.classList.add('text-center');
@@ -152,6 +199,8 @@ block content
             itemRow.appendChild(handleCell);
             itemRow.appendChild(labelCell);
             itemRow.appendChild(descriptionCell);
+            itemRow.appendChild(typeCell);
+            itemRow.appendChild(htmlCell);
             itemRow.appendChild(buttonCell);
 
             infoList.querySelector('tbody').appendChild(itemRow);
@@ -159,14 +208,17 @@ block content
         });
       });
 
-      let checkboxes = document.querySelectorAll('.form-check-input');
-      checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-          const checkedStatus = this.checked;
-          const otherCheckboxes = document.querySelectorAll(`[name*="${this.name.substring(3)}"]`);
-          otherCheckboxes.forEach(function(otherCheckbox) {
-            otherCheckbox.checked = checkedStatus;
-          });
+      const htmlCheckboxes = document.querySelectorAll('.field-html');
+      htmlCheckboxes.forEach(function(htmlCheckbox) {
+        htmlCheckbox.addEventListener('change', function() {
+          syncHtmlCheckbox(this);
+        })
+      });
+
+      const typeSelects = document.querySelectorAll('.field-type');
+      typeSelects.forEach(function(typeSelect) {
+        typeSelect.addEventListener('change', function() {
+          syncTypeSelect(this);
         })
       });
     });
@@ -206,32 +258,35 @@ block content
           const fieldIndex = dataToSubmit.fields.findIndex(function(field) {
             return field._id === fieldId;
           });
-          const label = field.querySelector('.field-label').value;
-          const description = field.querySelector('.field-description').value;
-          const htmlSafe = field.querySelector('.field-html').checked;
+          const field_label = field.querySelector('.field-label').value;
+          const field_description = field.querySelector('.field-description').value;
+          const field_type = field.querySelector('.field-type').value;
+          const field_htmlSafe = field.querySelector('.field-html').checked;
 
           if (fieldIndex !== -1) {
             dataToSubmit.fields[fieldIndex].labels.push({
               locale: panelLocale,
-              text: label
+              text: field_label
             });
             dataToSubmit.fields[fieldIndex].descriptions.push({
               locale: panelLocale,
-              text: description
+              text: field_description
             });
-            dataToSubmit.fields[fieldIndex].htmlSafe = htmlSafe;
+            dataToSubmit.fields[fieldIndex].htmlSafe = field_htmlSafe;
+            dataToSubmit.fields[fieldIndex].type = field_type;
           } else {
             dataToSubmit.fields.push({
               _id: fieldId,
               labels: [{
                 locale: panelLocale,
-                text: label
+                text: field_label
               }],
               descriptions: [{
                 locale: panelLocale,
-                text: description
+                text: field_description
               }],
-              htmlSafe: htmlSafe
+              type: field_htmlSafe,
+              htmlSafe: field_type
             });
           }
         });

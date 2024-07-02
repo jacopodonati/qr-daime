@@ -16,6 +16,11 @@ const fieldSchema = new mongoose.Schema({
     htmlSafe: {
         type: Boolean,
         default: true
+    },
+    type: {
+        type: String,
+        enum: ['text', 'rich'], //'bool', 'list', 'dict'
+        default: 'text'
     }
 });
 

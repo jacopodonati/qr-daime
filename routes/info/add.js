@@ -12,10 +12,19 @@ router.get('/', async function(req, res, next) {
     let removeButtonLabels = {};
     let placeholdersForLabels = {};
     let placeholdersForDescriptions = {};
+    const fieldTypes = Information.schema.path('fields.type').enumValues;
+    let fieldTypeLocalizations = {};
     localeCodes.forEach(code => {
         removeButtonLabels[code] = i18n.__({ phrase: 'INPUT_LBL_REMOVE', locale: code });
         placeholdersForLabels[code] = i18n.__({ phrase: 'modal_new_field_title_placeholder', locale: code });
         placeholdersForDescriptions[code] = i18n.__({ phrase: 'modal_new_field_description_placeholder', locale: code });
+
+        if (!fieldTypeLocalizations[code]) {
+            fieldTypeLocalizations[code] = {};
+        }
+        fieldTypes.forEach((fieldType) => {
+            fieldTypeLocalizations[code][fieldType] = i18n.__({ phrase: 'field_type_' + fieldType, locale: code });
+        });
     });
 
     try {
@@ -23,7 +32,9 @@ router.get('/', async function(req, res, next) {
             title: 'info_add_title',
             removeButtonLabels,
             placeholdersForLabels,
-            placeholdersForDescriptions
+            placeholdersForDescriptions,
+            fieldTypes,
+            fieldTypeLocalizations
         });
     } catch (error) {
         console.error('Errore durante il recupero dei campi:', error);
