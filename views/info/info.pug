@@ -23,7 +23,7 @@ each loc in locales.availableLocales
           th #{__("th_field_label")}
           th #{__("th_field_description")}
           th #{__("th_field_type")}
-          th #{__("th_info_html_safe")}
+          th #{__("th_field_html_safe")}
       tbody
         each field in information.fields
           - let field_label = field.labels.find(label => label.locale === loc.code);
