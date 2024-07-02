@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Workspace = require('../../models/workspace');
-const i18n = require('i18n');
 const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const i18n = require('i18n');
 const Template = require('../../models/template');
 const Workspace = require('../../models/workspace');
 const Information = require('../../models/information');

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Information = require('../../models/information');
-const i18n = require('i18n');
 
 router.get('/id/:id', async (req, res) => {
     try {

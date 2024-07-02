@@ -3,7 +3,6 @@ const router = express.Router();
 const Workspace = require('../../models/workspace');
 const User = require('../../models/user');
 const Document = require('../../models/document');
-const i18n = require('i18n');
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;

@@ -1,5 +1,4 @@
 const { MET } = require('bing-translate-api');
-const acceptLanguageParser = require('accept-language-parser');
 const i18n = require('i18n');
 const iso6391 = require('iso-639-1');
 

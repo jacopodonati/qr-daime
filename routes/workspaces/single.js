@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Workspace = require('../../models/workspace');
 const Document = require('../../models/document');
-const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     res.redirect('/workspace/list');

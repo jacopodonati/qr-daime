@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Template = require('../../models/template');
-const i18n = require('i18n');
 
 router.get('/', async (req, res) => {
     try {
