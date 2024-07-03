@@ -396,7 +396,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                     const hiddenList = document.createElement('input');
                     hiddenList.type = 'hidden';
                     hiddenList.name = field._id;
-                    hiddenList.value = 'test';
+                    hiddenList.value = '';
                     const fieldListAddButton = document.createElement('button');
                     fieldListAddButton.classList.add('btn', 'btn-primary', 'btn-sm');
                     fieldListAddButton.innerHTML = '<i class="bi bi-plus-circle-fill"></i>';
@@ -413,10 +413,15 @@ function addFieldToForm(fieldStructure, fieldData) {
 
                     if (fieldData !== undefined) {
                         let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
-                        const items = JSON.parse(fieldInDoc.value);
-                        items.forEach(item => {
-                            addElementToTheList(fieldListWrapper, item);
-                        });
+                        if (fieldInDoc) {
+                            if (fieldInDoc.value) {
+                                const items = JSON.parse(fieldInDoc.value);
+                                hiddenList.value = JSON.stringify(items);
+                                items.forEach(item => {
+                                    addElementToTheList(fieldListWrapper, item, field.type);
+                                });
+                            }
+                        }
                     }
                 }
             }
