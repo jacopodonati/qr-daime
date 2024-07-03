@@ -137,7 +137,6 @@ script.
               break;
             case 'list':
               textualRecord += `  - ${fieldTitle}:\n`;
-              console.log(field.value)
               const listItems = JSON.parse(field.value);
               listItems.forEach((item) => {
                 textualRecord += `    - ${item}\n`;
@@ -157,7 +156,6 @@ script.
         });
       });
       console.log(`Lunghezza dati per ${locale}: ${textualRecord.length}`);
-      console.log(textualRecord);
 
       new QRious({
         element: qrRecord,
