@@ -153,7 +153,7 @@ block content
         })
         const tds = document.querySelectorAll('td.summary');
         tds.forEach(td => {
-          td.textContent = td.textContent.substring(0, 150) + '…'
+          td.textContent = td.textContent.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 150) + '…'
         })
       })
       .catch(error => {
