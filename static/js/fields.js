@@ -347,6 +347,77 @@ function addFieldToForm(fieldStructure, fieldData) {
                             fieldRadioFalse.checked = true;
                         }
                     }
+                } else if (field.type === 'list') {
+                    function updateHiddenList(listElement, hiddenInput) {
+                        const listItems = listElement.querySelectorAll('.list-element');
+                        const list = [];
+                        listItems.forEach((item) => {
+                            list.push(item.value);
+                        });
+                        hiddenInput.value = JSON.stringify(list);
+                    }
+
+                    function addElementToTheList(listElement, value) {
+                        const listItemWrapper = document.createElement('div');
+                        listItemWrapper.classList.add('row', 'mb-1');
+                        const listItemHandle = document.createElement('i');
+                        listItemHandle.classList.add('bi', 'bi-grip-vertical', 'list-handle', 'col-sm-1');
+                        const listItemInputWrapper = document.createElement('div');
+                        listItemInputWrapper.classList.add('col-sm-9');
+                        const listItem = document.createElement('input');
+                        listItem.classList.add('form-control', 'form-control-sm', 'list-element');
+                        listItem.value = value;
+                        listItem.addEventListener('input', function() {
+                            updateHiddenList(fieldListWrapper, hiddenList);
+                        });
+                        const listItemDeleteButton = document.createElement('button');
+                        listItemDeleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'col-sm-2');
+                        listItemDeleteButton.textContent = 'INPUT_LBL_REMOVE';
+                        listItemDeleteButton.addEventListener('click', function() {
+                            listItemWrapper.remove();
+                            updateHiddenList(fieldListWrapper, hiddenList);
+                        })
+                        listItemWrapper.appendChild(listItemHandle);
+                        listItemInputWrapper.appendChild(listItem);
+                        listItemWrapper.appendChild(listItemInputWrapper);
+                        listItemWrapper.appendChild(listItemDeleteButton);
+                        fieldListWrapper.appendChild(listItemWrapper);
+
+                        new Sortable(fieldListWrapper, {
+                            handle: '.list-handle',
+                            onUpdate: function() {
+                                updateHiddenList(fieldListWrapper, hiddenList);
+                            }
+                        });
+                    }
+                    
+                    fieldInput = document.createElement('div');
+                    fieldInput.classList.add('col-10', 'field-list');
+                    const hiddenList = document.createElement('input');
+                    hiddenList.type = 'hidden';
+                    hiddenList.name = field._id;
+                    hiddenList.value = 'test';
+                    const fieldListAddButton = document.createElement('button');
+                    fieldListAddButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                    fieldListAddButton.innerHTML = '<i class="bi bi-plus-circle-fill"></i>';
+                    const fieldListWrapper = document.createElement('div');
+                    fieldListWrapper.classList.add('field-list');
+                    fieldListAddButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        addElementToTheList(fieldListWrapper, '');
+                    });
+
+                    fieldInput.appendChild(hiddenList);
+                    fieldInput.appendChild(fieldListWrapper);
+                    fieldInput.appendChild(fieldListAddButton);
+
+                    if (fieldData !== undefined) {
+                        let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
+                        const items = JSON.parse(fieldInDoc.value);
+                        items.forEach(item => {
+                            addElementToTheList(fieldListWrapper, item);
+                        });
+                    }
                 }
             }
     
@@ -535,7 +606,7 @@ if (docForm) {
 
 const templateForm = document.querySelector('#template-form');
 if (templateForm) {
-    const sort_infos = new Sortable(document.querySelector('#infoList'), { 
+    new Sortable(document.querySelector('#infoList'), { 
         onSort: function (event) {
             const hiddenInputs = document.querySelectorAll('input[name="sort"]');
             hiddenInputs.forEach((input, index) => {
@@ -545,6 +616,6 @@ if (templateForm) {
     });
 }
 
-const sort_fields = new Sortable(document.querySelector('#addedInfoList tbody'), {
+new Sortable(document.querySelector('#addedInfoList tbody'), {
     handle: '.field-handle'
 });

@@ -19,7 +19,7 @@ const fieldSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['text', 'rich', 'bool'], // 'list', 'dict'
+        enum: ['text', 'rich', 'bool', 'list'], // 'dict'
         default: 'text'
     }
 });

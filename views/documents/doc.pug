@@ -23,10 +23,19 @@ each loc in locales.availableLocales
                 - field_value = __('INPUT_LBL_RADIO_' + field.value.toUpperCase())
               - if (!field.htmlSafe)
                 - field_value = filters.sanitize(field.value)
-              li.field
-                span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
-                | : 
-                span.field-value(data-lang=`${loc.code}`) !{field_value}
+              - if (field.type == 'list')
+                - field_value = JSON.parse(field.value)
+                li.field
+                  span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
+                  | : 
+                  ul.field-value(data-lang=`${loc.code}`)
+                    each value in JSON.parse(field.value)
+                      li= value
+              - else
+                li.field
+                  span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
+                  | : 
+                  span.field-value(data-lang=`${loc.code}`) !{field_value}
 
     hr.mt-5.mb-5
 
