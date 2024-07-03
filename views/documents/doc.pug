@@ -31,6 +31,15 @@ each loc in locales.availableLocales
                   ul.field-value(data-lang=`${loc.code}`)
                     each value in JSON.parse(field.value)
                       li= value
+              - else if (field.type == 'dict')
+                - field_value = JSON.parse(field.value)
+                li.field
+                  span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
+                  | : 
+                  ul.field-value(data-lang=`${loc.code}`)
+                    each item in JSON.parse(field.value)
+                      each value, key in item
+                        li #{key}: #{value}
               - else
                 li.field
                   span.field-title.fw-semibold(data-lang=`${loc.code}`, title=`${field_desc.text}`) #{field_title.text}
@@ -51,7 +60,7 @@ each loc in locales.availableLocales
     
     p#docId.text-center #{__({phrase: "record_no", locale: loc.code})} #{document._id}
 
-script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js") 
+script(src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js")
 script.
   document.addEventListener('DOMContentLoaded', function() {
     function changeLocaleFocus(locale) {
@@ -110,23 +119,45 @@ script.
     const qrRecords = document.querySelectorAll('.qr-record canvas');
     qrRecords.forEach((qrRecord) => {
       const locale = qrRecord.parentElement.dataset.lang;
-      const record_no = localizedLabels.find(label => label.code === locale && label.label === 'record_no').value;
-      const record_date_issue = localizedLabels.find(label => label.code === locale && label.label === 'record_date_issue').value;
-      const record_date_edit = localizedLabels.find(label => label.code === locale && label.label === 'record_date_edit').value;
-      const record_information = localizedLabels.find(label => label.code === locale && label.label === 'record_information').value;
-      let textualRecord = `${record_no} ${doc.id}\n`;
-      textualRecord += `${record_date_issue}: !{document.dateOfIssue}\n`;
-      textualRecord += `${record_date_edit}: !{document.lastEdit}\n`;
-      textualRecord += `${record_information}:\n`;
+      let textualRecord = `${localizedLabels[locale]['record_no']} ${doc.id}\n`;
+      textualRecord += `${localizedLabels[locale]['record_date_issue']}: !{document.dateOfIssue}\n`;
+      textualRecord += `${localizedLabels[locale]['record_date_edit']}: !{document.lastEdit}\n`;
+      textualRecord += `${localizedLabels[locale]['record_information']}:\n`;
       doc.information.forEach((info) => {
         const infoTitle = info.labels.find(label => label.locale === locale).text;
         textualRecord += `- ${infoTitle}:\n`;
         info.fields.forEach((field) => {
           const fieldTitle = field.labels.find(label => label.locale === locale).text;
-          textualRecord += `  - ${fieldTitle}: ${field.value}\n`;
+          switch (field.type) {
+            case 'rich':
+              textualRecord += `  - ${fieldTitle}: ${field.value.replace(/<\/?[^>]+(>|$)/g, '')}\n`;
+              break;
+            case 'bool':
+              textualRecord += `  - ${fieldTitle}: ${localizedLabels[locale][field.value]}\n`;
+              break;
+            case 'list':
+              textualRecord += `  - ${fieldTitle}:\n`;
+              console.log(field.value)
+              const listItems = JSON.parse(field.value);
+              listItems.forEach((item) => {
+                textualRecord += `    - ${item}\n`;
+              });
+              break;
+            case 'dict':
+              textualRecord += `  - ${fieldTitle}:\n`;
+              const dictItems = JSON.parse(field.value);
+              dictItems.forEach((item) => {
+                const valueKey = Object.keys(item)[0];
+                textualRecord += `    - ${valueKey}: ${item[valueKey]}\n`;
+              });
+              break;
+            default:
+              textualRecord += `  - ${fieldTitle}: ${field.value}\n`;
+          }
         });
       });
       console.log(`Lunghezza dati per ${locale}: ${textualRecord.length}`);
+      console.log(textualRecord);
 
       new QRious({
         element: qrRecord,

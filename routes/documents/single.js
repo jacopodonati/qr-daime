@@ -11,16 +11,16 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const locale_codes = i18n.getLocales();
-        let qrLabels = []
-        locale_codes.forEach(code => {
-            qrLabels.push({code, label: 'record_no', value: i18n.__({ phrase: 'record_no', locale: code})});
-            qrLabels.push({code, label: 'record_date_issue', value: i18n.__({ phrase: 'record_date_issue', locale: code})});
-            qrLabels.push({code, label: 'record_date_edit', value: i18n.__({ phrase: 'record_date_edit', locale: code})});
-            qrLabels.push({code, label: 'record_information', value: i18n.__({ phrase: 'record_information', locale: code})});
+        const localeCodes = i18n.getLocales();
+        let qrLabels = {};
+        const labelsNeeded = ['record_no', 'record_date_issue', 'record_date_edit', 'record_information', 'true', 'false'];
+        localeCodes.forEach(code => {
+            qrLabels[code] = {};
+            labelsNeeded.forEach(label => {
+                qrLabels[code][label] = i18n.__({ phrase: label, locale: code});
+            });
         });
-
-
+        
         const queryString = res.locals.user.permissions.manage_documents ? { _id: id } : { _id: id, deleted: false };
         let document = await Document.findOne(queryString);
 
