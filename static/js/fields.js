@@ -347,46 +347,89 @@ function addFieldToForm(fieldStructure, fieldData) {
                             fieldRadioFalse.checked = true;
                         }
                     }
-                } else if (field.type === 'list') {
+                } else if (field.type === 'list' || field.type === 'dict') {
                     function updateHiddenList(listElement, hiddenInput) {
-                        const listItems = listElement.querySelectorAll('.list-element');
+                        const listItems = listElement.querySelectorAll('[data-type="list-item"]');
                         const list = [];
-                        listItems.forEach((item) => {
-                            list.push(item.value);
-                        });
+                        if (listElement.dataset.type == 'list') {
+                            listItems.forEach((item) => {
+                                list.push(item.value);
+                            });
+                        } else if (listElement.dataset.type == 'dict') {
+                            listItems.forEach(item => {
+                                const keyValue = item.querySelector('[data-type="key"').value;
+                                const valueValue = item.querySelector('[data-type="value"').value;
+                                list.push({[keyValue]: valueValue});
+                            });
+                        }
                         hiddenInput.value = JSON.stringify(list);
                     }
 
-                    function addElementToTheList(listElement, value) {
+                    function addElementToTheList(listElement, value, type) {
                         const listItemWrapper = document.createElement('div');
                         listItemWrapper.classList.add('row', 'mb-1');
                         const listItemHandle = document.createElement('i');
                         listItemHandle.classList.add('bi', 'bi-grip-vertical', 'list-handle', 'col-sm-1');
-                        const listItemInputWrapper = document.createElement('div');
-                        listItemInputWrapper.classList.add('col-sm-9');
-                        const listItem = document.createElement('input');
-                        listItem.classList.add('form-control', 'form-control-sm', 'list-element');
-                        listItem.value = value;
-                        listItem.addEventListener('input', function() {
-                            updateHiddenList(fieldListWrapper, hiddenList);
-                        });
+                        listItemWrapper.appendChild(listItemHandle);
+                        if (type == 'list') {
+                            const listItemInputWrapper = document.createElement('div');
+                            listItemInputWrapper.classList.add('col-sm-8');
+                            const listItem = document.createElement('input');
+                            listItem.classList.add('form-control', 'form-control-sm');
+                            listItem.dataset.type = 'list-item';
+                            listItem.value = value;
+                            listItem.addEventListener('input', function() {
+                                updateHiddenList(listElement, hiddenList);
+                            });
+                            listItemInputWrapper.appendChild(listItem);
+                            listItemWrapper.appendChild(listItemInputWrapper);
+                        } else if (type == 'dict') {
+                            listItemWrapper.dataset.type = 'list-item';
+                            const listItemKeyWrapper = document.createElement('div');
+                            listItemKeyWrapper.classList.add('col-sm-4');
+                            const listItemValueWrapper = document.createElement('div');
+                            listItemValueWrapper.classList.add('col-sm-4');
+                            const listItemKeyInput = document.createElement('input');
+                            listItemKeyInput.classList.add('form-control', 'form-control-sm');
+                            listItemKeyInput.dataset.type = 'key';
+                            listItemKeyInput.type = 'text';
+                            listItemKeyInput.value = '';
+                            listItemKeyInput.addEventListener('input', function() {
+                                updateHiddenList(listElement, hiddenList);
+                            });
+                            const listItemValueInput = document.createElement('input');
+                            listItemValueInput.classList.add('form-control', 'form-control-sm');
+                            listItemValueInput.dataset.type = 'value';
+                            listItemValueInput.type = 'text';
+                            listItemValueInput.value = '';
+                            listItemValueInput.addEventListener('input', function() {
+                                updateHiddenList(listElement, hiddenList);
+                            });
+                            listItemKeyWrapper.appendChild(listItemKeyInput);
+                            listItemValueWrapper.appendChild(listItemValueInput);
+                            listItemWrapper.appendChild(listItemKeyWrapper);
+                            listItemWrapper.appendChild(listItemValueWrapper);
+
+                            if (typeof value === 'object') {
+                                const valueKey = Object.keys(value)[0];
+                                listItemValueInput.value = value[valueKey];
+                                listItemKeyInput.value = valueKey;
+                            }
+                        }
                         const listItemDeleteButton = document.createElement('button');
                         listItemDeleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'col-sm-2');
                         listItemDeleteButton.textContent = 'INPUT_LBL_REMOVE';
                         listItemDeleteButton.addEventListener('click', function() {
                             listItemWrapper.remove();
-                            updateHiddenList(fieldListWrapper, hiddenList);
+                            updateHiddenList(listElement, hiddenList);
                         })
-                        listItemWrapper.appendChild(listItemHandle);
-                        listItemInputWrapper.appendChild(listItem);
-                        listItemWrapper.appendChild(listItemInputWrapper);
                         listItemWrapper.appendChild(listItemDeleteButton);
-                        fieldListWrapper.appendChild(listItemWrapper);
+                        listElement.appendChild(listItemWrapper);
 
-                        new Sortable(fieldListWrapper, {
+                        new Sortable(listElement, {
                             handle: '.list-handle',
                             onUpdate: function() {
-                                updateHiddenList(fieldListWrapper, hiddenList);
+                                updateHiddenList(listElement, hiddenList);
                             }
                         });
                     }
@@ -402,9 +445,10 @@ function addFieldToForm(fieldStructure, fieldData) {
                     fieldListAddButton.innerHTML = '<i class="bi bi-plus-circle-fill"></i>';
                     const fieldListWrapper = document.createElement('div');
                     fieldListWrapper.classList.add('field-list');
+                    fieldListWrapper.dataset.type = field.type;
                     fieldListAddButton.addEventListener('click', function(event) {
                         event.preventDefault();
-                        addElementToTheList(fieldListWrapper, '');
+                        addElementToTheList(fieldListWrapper, '', field.type);
                     });
 
                     fieldInput.appendChild(hiddenList);
