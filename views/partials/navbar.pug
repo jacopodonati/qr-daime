@@ -57,12 +57,12 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                   i.bi.bi-list-ul.me-3
                   | #{__("navbar_workspace_list")}
         li.nav-item.dropdown.ms-auto
-            a.nav-link.dropdown-toggle.text-uppercase(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false")
-              i.bi.bi-translate
+            a.nav-link.dropdown-toggle.text-uppercase(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false")= locale
+              //- i.bi.bi-translate
             ul.dropdown-menu.dropdown-menu-end
-              each locale in locales.availableLocales 
+              each availableLocale in locales.availableLocales 
                 li.dropdown-item 
-                  a.nav-link.lang-selector(href=`?lang=${locale.code}`, data-lang=`${locale.code}`) #{locale.name}
+                  a.nav-link.lang-selector(href=`?lang=${availableLocale.code}`, data-lang=`${availableLocale.code}`) #{availableLocale.name}
         - if (user.permissions.manage_users)
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") #{__("navbar_manage")}
