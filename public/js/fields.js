@@ -385,7 +385,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                         listItemWrapper.appendChild(listItemHandle);
                         if (type == 'list') {
                             const listItemInputWrapper = document.createElement('div');
-                            listItemInputWrapper.classList.add('col-sm-8');
+                            listItemInputWrapper.classList.add('col-sm-10');
                             const listItem = document.createElement('input');
                             listItem.classList.add('form-control', 'form-control-sm');
                             listItem.dataset.type = 'list-item';
@@ -398,9 +398,9 @@ function addFieldToForm(fieldStructure, fieldData) {
                         } else if (type == 'dict') {
                             listItemWrapper.dataset.type = 'list-item';
                             const listItemKeyWrapper = document.createElement('div');
-                            listItemKeyWrapper.classList.add('col-sm-4');
+                            listItemKeyWrapper.classList.add('col-sm-5');
                             const listItemValueWrapper = document.createElement('div');
-                            listItemValueWrapper.classList.add('col-sm-4');
+                            listItemValueWrapper.classList.add('col-sm-5');
                             const listItemKeyInput = document.createElement('input');
                             listItemKeyInput.classList.add('form-control', 'form-control-sm');
                             listItemKeyInput.dataset.type = 'key';
@@ -433,14 +433,18 @@ function addFieldToForm(fieldStructure, fieldData) {
                                 listItemKeyInput.value = valueKey;
                             }
                         }
+                        const listItemDeleteButtonWrapper = document.createElement('div');
+                        listItemDeleteButtonWrapper.classList.add('col-sm-1');
                         const listItemDeleteButton = document.createElement('button');
-                        listItemDeleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'col-sm-2');
-                        listItemDeleteButton.textContent = localizedLabels['INPUT_LBL_REMOVE'];
+                        listItemDeleteButton.classList.add('btn', 'btn-sm', 'btn-danger');
+                        listItemDeleteButton.innerHTML = '<i class="bi bi-trash"></i>';
+                        // listItemDeleteButton.textContent = localizedLabels['INPUT_LBL_REMOVE'];
                         listItemDeleteButton.addEventListener('click', function () {
                             listItemWrapper.remove();
                             updateHiddenList(listElement, hiddenList);
-                        })
-                        listItemWrapper.appendChild(listItemDeleteButton);
+                        });
+                        listItemDeleteButtonWrapper.appendChild(listItemDeleteButton);
+                        listItemWrapper.appendChild(listItemDeleteButtonWrapper);
                         listElement.appendChild(listItemWrapper);
 
                         new Sortable(listElement, {
