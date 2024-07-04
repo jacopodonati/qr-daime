@@ -5,7 +5,7 @@ block content
 
   include ../partials/form_search_field.pug
 
-  form(id="doc-form" action=`/doc/edit` method="post")
+  form(id="doc-form" action=`/doc/edit` method="post", novalidate)
     hr
 
     hr#form-sep
@@ -39,6 +39,27 @@ block content
     const form = document.getElementById('doc-form');
     form.addEventListener('submit', function(event) {
       event.preventDefault();
+      
+      const dicts = document.querySelectorAll('[data-type="dict"]');
+      if (dicts.length > 0) {
+        let errorFound = false;
+        dicts.forEach((dict) => {
+          const keys = dict.querySelectorAll('[data-type="key"]');
+          let allKeys = [];
+          keys.forEach((key) => {
+            key.classList.remove('is-invalid');
+            if (allKeys.includes(key.value)) {
+              key.classList.add('is-invalid');
+              errorFound = true;
+            }
+            allKeys.push(key.value);
+          });
+        });
+        if (errorFound) {
+          return;
+        }
+      }
+
       const formData = new FormData(form);
       const formDataObj = {
         'workspace': formData.get('workspace'),

@@ -62,6 +62,7 @@
 	"INPUT_LBL_RADIO_FALSE": "false",
 	"INPUT_LBL_RADIO_TRUE": "true",
 	"INPUT_LBL_REMOVE": "Remove",
+	"KEY_MUST_BE_UNIQUE": "Each key must be unique.",
 	"language_dropdown": "Select a language",
 	"list_docs": "List all documents",
 	"list_info": "List all information",
