@@ -147,6 +147,12 @@ app.use('/manage/users/toggle-activation', userActivationRouter);
 app.use('/manage/users/role', userRoleRouter);
 app.use('/manage/you', userPersonalProfileRouter);
 
+app.get('/translate', (req, res) => {
+    const { key, locale } = req.query;
+    const translation = i18n.__({phrase: key, locale: locale});
+    res.json({ translation });
+  });
+
 app.use(function (req, res, next) {
     next(createError(404));
 });
