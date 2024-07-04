@@ -19,7 +19,6 @@ const { passLocalesToRoutes } = require('./middleware/localization');
 
 const indexRouter = require('./routes/index');
 const setupRouter = require('./routes/setup');
-const staticRouter = require('./routes/static');
 const userSingleRouter = require('./routes/users/single');
 const userListRouter = require('./routes/users/list');
 const userDeleteRouter = require('./routes/users/delete');
@@ -113,7 +112,6 @@ app.use('/static', express.static('static'));
 
 app.use('/', indexRouter);
 app.use('/setup', setupRouter);
-app.use('/static', staticRouter);
 app.use('/login', userLoginRouter);
 app.use('/logout', userLogoutRouter);
 app.use('/doc/list', docListRouter);

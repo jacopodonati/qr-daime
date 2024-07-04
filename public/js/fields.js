@@ -1,7 +1,16 @@
 var number_of_info = 0;
 var fields_added = [];
+var localizedLabels = {}
+let requiredLabels = ['LBL_PLACEHOLDER', 'DESC_PLACEHOLDER', 'INPUT_LBL_REMOVE', 'NO_FIELD_FOUND', 'INPUT_LBL_RADIO_TRUE', 'INPUT_LBL_RADIO_FALSE', 'KEY_MUST_BE_UNIQUE', 'INPUT_LBL_PUBLIC'];
+requiredLabels.forEach(label => {
+    getCachedTranslation(label, globalLocale)
+        .then(translation => {
+            localizedLabels[label] = translation;
+        });
+});
 
 function addInfoField() {
+    
     const addedInfoList = document.querySelector('#addedInfoList');
     if (addedInfoList.classList.contains('d-none')) {
         addedInfoList.classList.remove('d-none');
@@ -25,7 +34,7 @@ function addInfoField() {
     labelInput.classList.add('form-control', 'form-control-sm', 'field-label');
     labelInput.type = 'text';
     labelInput.name = newItemId + '-label';
-    labelInput.placeholder = 'LBL_PLACEHOLDER';
+    labelInput.placeholder = localizedLabels['LBL_PLACEHOLDER'];
     labelInput.setAttribute('required', '');
     labelCell.appendChild(labelInput);
 
@@ -34,17 +43,17 @@ function addInfoField() {
     descriptionInput.classList.add('form-control', 'form-control-sm', 'field-description');
     descriptionInput.type = 'text';
     descriptionInput.name = newItemId + '-field-description';
-    descriptionInput.placeholder = 'DESC_PLACEHOLDER';
+    descriptionInput.placeholder = localizedLabels['DESC_PLACEHOLDER'];
     descriptionInput.setAttribute('required', '');
     descriptionCell.appendChild(descriptionInput);
 
     const buttonCell = document.createElement('td');
     buttonCell.classList.add('text-center');
     const removeButton = document.createElement('span');
-    removeButton.innerHTML = 'INPUT_LBL_REMOVE';
+    removeButton.innerHTML = localizedLabels['INPUT_LBL_REMOVE'];
     removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
     removeButton.style.cursor = 'pointer';
-    removeButton.addEventListener('click', function() {
+    removeButton.addEventListener('click', function () {
         itemRow.remove();
         if (addedInfoList.rows.length < 2) {
             addedInfoList.classList.add('d-none');
@@ -101,20 +110,20 @@ function saveField() {
         }),
         fields: subFields.map(field => {
             const localizedField = {
-              labels: langs.map(locale => {
-                  const localizedFieldLabel = {
-                      locale: locale,
-                      text: ((locale === fieldLocale) ? field.label : '')
-                  };
-                  return localizedFieldLabel;
-              }),
-              descriptions: langs.map(locale => {
-                  const localizedDescriptionLabel = {
-                      locale: locale,
-                      text: ((locale === fieldLocale) ? field.description : '')
-                  };
-                  return localizedDescriptionLabel;
-              })
+                labels: langs.map(locale => {
+                    const localizedFieldLabel = {
+                        locale: locale,
+                        text: ((locale === fieldLocale) ? field.label : '')
+                    };
+                    return localizedFieldLabel;
+                }),
+                descriptions: langs.map(locale => {
+                    const localizedDescriptionLabel = {
+                        locale: locale,
+                        text: ((locale === fieldLocale) ? field.description : '')
+                    };
+                    return localizedDescriptionLabel;
+                })
             };
             return localizedField;
         })
@@ -127,43 +136,43 @@ function saveField() {
         },
         body: JSON.stringify(dataToSend)
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return response.json().then(error => {
-                const errorBanner = document.querySelector('#error-banner');
-                errorBanner.textContent = error.error;
-                throw new Error('Errore durante il salvataggio del campo: ' + error.error);
-            });
-        }
-    })
-    .then(data => {
-        const insertedId = data.id;
-    
-        fetch(`/info/id/${insertedId}`)
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                throw new Error('Errore durante il recupero del campo appena salvato');
+                return response.json().then(error => {
+                    const errorBanner = document.querySelector('#error-banner');
+                    errorBanner.textContent = error.error;
+                    throw new Error('Errore durante il salvataggio del campo: ' + error.error);
+                });
             }
         })
-        .then(field => {
-            addFieldToForm(field);
-            closeModal();
+        .then(data => {
+            const insertedId = data.id;
+
+            fetch(`/info/id/${insertedId}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Errore durante il recupero del campo appena salvato');
+                    }
+                })
+                .then(field => {
+                    addFieldToForm(field);
+                    closeModal();
+                })
+                .catch(error => {
+                    console.error('Errore durante il recupero del campo appena salvato:', error);
+                });
         })
         .catch(error => {
-            console.error('Errore durante il recupero del campo appena salvato:', error);
+            console.error('Errore:', error);
+            errorMessage.classList.remove('d-none');
+            errorMessage.classList.add('d-block');
+            errorSeparator.classList.remove('d-none');
+            errorSeparator.classList.add('d-block');
         });
-    })
-    .catch(error => {
-        console.error('Errore:', error);
-        errorMessage.classList.remove('d-none');
-        errorMessage.classList.add('d-block');
-        errorSeparator.classList.remove('d-none');
-        errorSeparator.classList.add('d-block');
-    });    
 }
 
 function closeModal() {
@@ -238,7 +247,7 @@ function displaySearchResults(data) {
     } else {
         const noResultsItem = document.createElement('li');
         noResultsItem.classList.add('list-group-item', 'fst-italic');
-        noResultsItem.textContent = 'NO_FIELD_FOUND';
+        noResultsItem.textContent = localizedLabels['NO_FIELD_FOUND'];
         searchResultsList.appendChild(noResultsItem);
         searchResults.classList.remove('d-none');
         searchResults.classList.add('d-block');
@@ -251,8 +260,10 @@ function addFieldToForm(fieldStructure, fieldData) {
         return;
     }
 
-    const userLanguage = navigator.language || navigator.userLanguage;
-    const locale = userLanguage.substr(0, 2);
+    // const userLanguage = navigator.language || navigator.userLanguage;
+    // const locale = userLanguage.substr(0, 2);
+
+    const locale = globalLocale;
 
     const formSep = document.querySelector('#form-sep');
 
@@ -264,10 +275,10 @@ function addFieldToForm(fieldStructure, fieldData) {
         fieldContainer.id = 'id' + fieldStructure._id;
         fieldContainer.classList.add('card', 'mb-2');
         fieldContainer.appendChild(fieldBody);
-    
+
         const rootLabel = document.createElement('h5');
         const rootLabelText = fieldStructure.labels.find(label => label.locale === locale).text;
-        rootLabel.innerHTML = '<i class="bi bi-grip-vertical field-handle"></i>' +  rootLabelText;
+        rootLabel.innerHTML = '<i class="bi bi-grip-vertical field-handle"></i>' + rootLabelText;
         rootLabel.classList.add('card-title');
         fieldBody.appendChild(rootLabel);
         const hiddenId = document.createElement('input');
@@ -280,10 +291,11 @@ function addFieldToForm(fieldStructure, fieldData) {
         hiddenSort.name = 'sort';
         hiddenSort.value = number_of_info++;
         fieldBody.appendChild(hiddenSort);
-    
+
         fieldStructure.fields.forEach(field => {
             const fieldDiv = document.createElement('div');
             fieldDiv.classList.add('mb-3', 'row', 'mx-1');
+            fieldDiv.dataset.fieldType = field.type;
             const fieldLabel = document.createElement('label');
             fieldLabel.classList.add('form-label', 'col-2');
             fieldLabel.textContent = field.labels.find(label => label.locale === locale).text + ':';
@@ -299,7 +311,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                 fieldInput.name = field._id;
                 fieldInput.placeholder = field.descriptions.find(description => description.locale === locale).text;
                 fieldInput.classList.add('col-form-control', 'col-10', 'rich-text-area');
-                
+
                 if (fieldData !== undefined) {
                     let fieldInDoc = fieldData.fields.find(fieldD => fieldD._id === field._id);
                     fieldInput.value = fieldInDoc ? fieldInDoc.value : null;
@@ -319,7 +331,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                     const fieldRadioTrueLabel = document.createElement('label');
                     fieldRadioTrueLabel.classList.add('form-check-label');
                     fieldRadioTrueLabel.for = fieldRadioTrue.id;
-                    fieldRadioTrueLabel.textContent = 'INPUT_LBL_RADIO_TRUE';
+                    fieldRadioTrueLabel.textContent = localizedLabels['INPUT_LBL_RADIO_TRUE'];
                     const fieldRadioFalseWrapper = document.createElement('div');
                     fieldRadioFalseWrapper.classList.add('form-check', 'form-check-inline');
                     const fieldRadioFalse = document.createElement('input');
@@ -331,7 +343,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                     const fieldRadioFalseLabel = document.createElement('label');
                     fieldRadioFalseLabel.classList.add('form-check-label');
                     fieldRadioFalseLabel.for = fieldRadioTrue.id;
-                    fieldRadioFalseLabel.textContent = 'INPUT_LBL_RADIO_FALSE';
+                    fieldRadioFalseLabel.textContent = localizedLabels['INPUT_LBL_RADIO_FALSE'];
                     fieldRadioTrueWrapper.appendChild(fieldRadioTrue);
                     fieldRadioTrueWrapper.appendChild(fieldRadioTrueLabel);
                     fieldRadioFalseWrapper.appendChild(fieldRadioFalse);
@@ -359,7 +371,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                             listItems.forEach(item => {
                                 const keyValue = item.querySelector('[data-type="key"').value;
                                 const valueValue = item.querySelector('[data-type="value"').value;
-                                list.push({[keyValue]: valueValue});
+                                list.push({ [keyValue]: valueValue });
                             });
                         }
                         hiddenInput.value = JSON.stringify(list);
@@ -378,7 +390,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                             listItem.classList.add('form-control', 'form-control-sm');
                             listItem.dataset.type = 'list-item';
                             listItem.value = value;
-                            listItem.addEventListener('input', function() {
+                            listItem.addEventListener('input', function () {
                                 updateHiddenList(listElement, hiddenList);
                             });
                             listItemInputWrapper.appendChild(listItem);
@@ -394,18 +406,23 @@ function addFieldToForm(fieldStructure, fieldData) {
                             listItemKeyInput.dataset.type = 'key';
                             listItemKeyInput.type = 'text';
                             listItemKeyInput.value = '';
-                            listItemKeyInput.addEventListener('input', function() {
+                            listItemKeyInput.addEventListener('input', function () {
                                 updateHiddenList(listElement, hiddenList);
                             });
+                            const listItemKeyValidation = document.createElement('div');
+                            listItemKeyValidation.classList.add('invalid-feedback');
+                            listItemKeyValidation.textContent = localizedLabels['KEY_MUST_BE_UNIQUE'];
+
                             const listItemValueInput = document.createElement('input');
                             listItemValueInput.classList.add('form-control', 'form-control-sm');
                             listItemValueInput.dataset.type = 'value';
                             listItemValueInput.type = 'text';
                             listItemValueInput.value = '';
-                            listItemValueInput.addEventListener('input', function() {
+                            listItemValueInput.addEventListener('input', function () {
                                 updateHiddenList(listElement, hiddenList);
                             });
                             listItemKeyWrapper.appendChild(listItemKeyInput);
+                            listItemKeyWrapper.appendChild(listItemKeyValidation);
                             listItemValueWrapper.appendChild(listItemValueInput);
                             listItemWrapper.appendChild(listItemKeyWrapper);
                             listItemWrapper.appendChild(listItemValueWrapper);
@@ -418,8 +435,8 @@ function addFieldToForm(fieldStructure, fieldData) {
                         }
                         const listItemDeleteButton = document.createElement('button');
                         listItemDeleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'col-sm-2');
-                        listItemDeleteButton.textContent = 'INPUT_LBL_REMOVE';
-                        listItemDeleteButton.addEventListener('click', function() {
+                        listItemDeleteButton.textContent = localizedLabels['INPUT_LBL_REMOVE'];
+                        listItemDeleteButton.addEventListener('click', function () {
                             listItemWrapper.remove();
                             updateHiddenList(listElement, hiddenList);
                         })
@@ -428,12 +445,12 @@ function addFieldToForm(fieldStructure, fieldData) {
 
                         new Sortable(listElement, {
                             handle: '.list-handle',
-                            onUpdate: function() {
+                            onUpdate: function () {
                                 updateHiddenList(listElement, hiddenList);
                             }
                         });
                     }
-                    
+
                     fieldInput = document.createElement('div');
                     fieldInput.classList.add('col-10', 'field-list');
                     const hiddenList = document.createElement('input');
@@ -446,7 +463,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                     const fieldListWrapper = document.createElement('div');
                     fieldListWrapper.classList.add('field-list');
                     fieldListWrapper.dataset.type = field.type;
-                    fieldListAddButton.addEventListener('click', function(event) {
+                    fieldListAddButton.addEventListener('click', function (event) {
                         event.preventDefault();
                         addElementToTheList(fieldListWrapper, '', field.type);
                     });
@@ -469,7 +486,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                     }
                 }
             }
-    
+
             fieldDiv.appendChild(fieldLabel);
             fieldDiv.appendChild(fieldInput);
             fieldBody.appendChild(fieldDiv);
@@ -479,7 +496,7 @@ function addFieldToForm(fieldStructure, fieldData) {
                 tinymce.init(newConfig);
             }
         });
-    
+
         const footer = document.createElement('div');
         footer.classList.add('row', 'mx-1');
         const fieldInputWrapper = document.createElement('div');
@@ -492,9 +509,9 @@ function addFieldToForm(fieldStructure, fieldData) {
         const fieldLabel = document.createElement('label');
         fieldLabel.classList.add('form-check-label');
         fieldLabel.setAttribute('for', `check-${fieldStructure._id}`);
-        fieldLabel.textContent = 'INPUT_LBL_PUBLIC';
+        fieldLabel.textContent = localizedLabels['INPUT_LBL_PUBLIC'];
         fieldInput.checked = true;
-        
+
         if (fieldData !== undefined && !fieldData.public) {
             fieldInput.checked = false;
         }
@@ -502,11 +519,11 @@ function addFieldToForm(fieldStructure, fieldData) {
         fieldInputWrapper.appendChild(fieldInput);
         fieldInputWrapper.appendChild(fieldLabel);
         footer.appendChild(fieldInputWrapper);
-    
+
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'INPUT_LBL_REMOVE';
+        removeButton.textContent = localizedLabels['INPUT_LBL_REMOVE'];
         removeButton.classList.add('btn', 'btn-danger', 'col-md-2', 'offset-md-8');
-        removeButton.addEventListener('mouseup', function() {
+        removeButton.addEventListener('mouseup', function () {
             fieldContainer.remove();
             fields_added = fields_added.filter(id => id !== fieldStructure._id);
             toggleFieldInDropdown(`dd-${fieldStructure._id}`);
@@ -518,7 +535,7 @@ function addFieldToForm(fieldStructure, fieldData) {
         footer.appendChild(removeButton);
 
         fieldBody.appendChild(footer);
-    
+
         docForm.insertBefore(fieldContainer, formSep);
         if (formSep.classList.contains('d-none')) {
             formSep.classList.remove('d-none');
@@ -551,8 +568,8 @@ function addFieldToForm(fieldStructure, fieldData) {
         fieldWrapper.appendChild(buttonWrapper);
         const button = document.createElement('span');
         button.classList.add('btn', 'btn-danger', 'btn-sm', 'remove-button');
-        button.textContent = 'INPUT_LBL_REMOVE';
-        button.addEventListener('mouseup', function() {
+        button.textContent = localizedLabels['INPUT_LBL_REMOVE'];
+        button.addEventListener('mouseup', function () {
             listItem.remove();
         });
         buttonWrapper.appendChild(button);
@@ -573,7 +590,7 @@ function toggleFieldInDropdown(id) {
     }
 }
 
-document.querySelector('#searchResultsList').addEventListener('mouseup', function(event) {
+document.querySelector('#searchResultsList').addEventListener('mouseup', function (event) {
     const listItem = event.target.closest('li');
     if (listItem) {
         const objectString = listItem.dataset.object;
@@ -585,7 +602,7 @@ document.querySelector('#searchResultsList').addEventListener('mouseup', functio
 
 const dropdownItems = document.querySelectorAll('#findField li a');
 dropdownItems.forEach((item) => {
-    item.addEventListener('mouseup', function(event) {
+    item.addEventListener('mouseup', function (event) {
         const listItem = event.target.closest('li');
         if (listItem) {
             const objectString = listItem.dataset.object;
@@ -642,7 +659,7 @@ function getField(id, value) {
 
 const docForm = document.querySelector('#doc-form');
 if (docForm) {
-    const sort_infos = new Sortable(docForm, { 
+    const sort_infos = new Sortable(docForm, {
         handle: '.field-handle',
         onSort: function (event) {
             const hiddenInputs = document.querySelectorAll('input[name="sort"]');
@@ -655,7 +672,7 @@ if (docForm) {
 
 const templateForm = document.querySelector('#template-form');
 if (templateForm) {
-    new Sortable(document.querySelector('#infoList'), { 
+    new Sortable(document.querySelector('#infoList'), {
         onSort: function (event) {
             const hiddenInputs = document.querySelectorAll('input[name="sort"]');
             hiddenInputs.forEach((input, index) => {
