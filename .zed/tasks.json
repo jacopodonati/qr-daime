@@ -1,0 +1,8 @@
+[
+  {
+    "label": "Launch server",
+    "command": "nodemon",
+    "use_new_terminal": true,
+    "reveal": "always"
+  }
+]
